@@ -28,7 +28,9 @@ export default function SearchPage() {
                     <h1 className="text-2xl font-bold mb-8 text-slate-900 dark:text-white">Suche</h1>
 
                     <div className="relative mb-12">
-                        <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                        <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                            search
+                        </span>
                         <input
                             type="text"
                             value={query}
@@ -49,7 +51,6 @@ export default function SearchPage() {
                                     title={article.title}
                                     excerpt={article.excerpt}
                                     category={article.category}
-                                    date={article.date}
                                     datePublished={article.datePublished}
                                     image={article.image}
                                     slug={article.slug}
@@ -62,7 +63,9 @@ export default function SearchPage() {
                             <div className="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <span className="material-symbols-outlined text-3xl text-slate-300">search_off</span>
                             </div>
-                            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Keine Ergebnisse gefunden</h3>
+                            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
+                                Keine Ergebnisse gefunden
+                            </h3>
                             <p className="text-slate-500 text-sm max-w-xs mx-auto leading-relaxed">
                                 Für "{query}" wurden leider keine passenden Artikel gefunden. Versuchen Sie es mit anderen Suchbegriffen.
                             </p>

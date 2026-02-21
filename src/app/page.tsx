@@ -36,7 +36,9 @@ export default function Home() {
                   <span className="bg-primary/10 text-primary text-[11px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-sm">
                     {FEATURED_ARTICLE.category}
                   </span>
-                  <span className="text-slate-400 dark:text-slate-500 text-xs font-medium">{formatSwissDate(FEATURED_ARTICLE.datePublished)}</span>
+                  <span className="text-slate-400 dark:text-slate-500 text-xs font-medium">
+                    {formatSwissDate(FEATURED_ARTICLE.datePublished)}
+                  </span>
                 </div>
                 <h2 className="text-3xl md:text-4xl font-bold leading-[1.15] mb-6 group-hover:text-primary transition-colors decoration-primary/30 decoration-2 underline-offset-4 group-hover:underline">
                   {FEATURED_ARTICLE.title}
@@ -56,7 +58,9 @@ export default function Home() {
         <div className="space-y-10">
           <section>
             <div className="flex items-center gap-4 mb-8">
-              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-primary whitespace-nowrap">Analysen & Meldungen</h3>
+              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-primary whitespace-nowrap">
+                Analysen & Meldungen
+              </h3>
               <div className="h-px w-full bg-slate-200 dark:bg-slate-800" />
             </div>
 
@@ -68,10 +72,10 @@ export default function Home() {
                   title={article.title}
                   excerpt={article.excerpt}
                   category={article.category}
-                  date={article.date}
                   datePublished={article.datePublished}
                   image={article.image}
                   slug={article.slug}
+                  priority
                 />
               ))}
 
@@ -85,7 +89,6 @@ export default function Home() {
                   title={article.title}
                   excerpt={article.excerpt}
                   category={article.category}
-                  date={article.date}
                   datePublished={article.datePublished}
                   image={article.image}
                   slug={article.slug}

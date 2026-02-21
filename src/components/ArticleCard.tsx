@@ -6,36 +6,64 @@ interface ArticleCardProps {
     title: string;
     excerpt: string;
     category: string;
-    date: string;
-    datePublished: string;
+    datePublished: string; // ISO string
     image: string;
     slug: string;
+    priority?: boolean; // opcional para el primer bloque / featured
 }
 
-export default function ArticleCard({ title, excerpt, category, date, datePublished, image, slug }: ArticleCardProps) {
+export default function ArticleCard({
+    title,
+    excerpt,
+    category,
+    datePublished,
+    image,
+    slug,
+    priority = false,
+}: ArticleCardProps) {
     return (
-        <Link href={`/artikel/${slug}`}>
-            <article className="bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row gap-4 items-start hover:shadow-md transition-shadow cursor-pointer group">
-                <div className="w-full md:w-32 h-24 flex-shrink-0 rounded bg-slate-100 dark:bg-slate-800 overflow-hidden relative">
+        <Link href={`/artikel/${slug}`} className="group block">
+            <article className="bg-white dark:bg-slate-900 p-5 rounded-lg border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row gap-5 items-start hover:shadow-md transition-shadow duration-200">
+                {/* Image */}
+                <div className="w-full md:w-36 h-28 flex-shrink-0 rounded-md bg-slate-100 dark:bg-slate-800 overflow-hidden relative">
                     <Image
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
                         src={image}
                         alt={title}
                         fill
-                        sizes="(max-width: 768px) 100vw, 128px"
+                        className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                        sizes="(max-width: 768px) 100vw, 144px"
+                        priority={priority}
                     />
                 </div>
+
+                {/* Content */}
                 <div className="flex-1">
-                    <div className="flex items-center justify-between mb-1">
-                        <span className="text-[10px] font-bold text-primary uppercase">{category}</span>
-                        <span className="text-[10px] text-slate-400">{formatSwissDate(datePublished)}</span>
+                    {/* Meta Row */}
+                    <div className="flex items-center justify-between mb-2">
+                        <span className="text-[11px] font-semibold tracking-wide text-blue-700 uppercase">
+                            {category}
+                        </span>
+                        <time
+                            className="text-[11px] text-slate-400"
+                            dateTime={datePublished}
+                            suppressHydrationWarning
+                        >
+                            {formatSwissDate(datePublished)}
+                        </time>
                     </div>
-                    <h4 className="text-lg font-bold leading-snug mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-                        {title}
-                    </h4>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-1">
-                        {excerpt}
-                    </p>
+
+                    {/* Headline */}
+                    <h3
+                        className="text-lg md:text-xl font-bold leading-snug mb-2 
+                       text-slate-900 dark:text-white
+                       transition-colors duration-200
+                       group-hover:text-blue-700"
+                    >
+                        <span className="underline-offset-4 group-hover:underline">{title}</span>
+                    </h3>
+
+                    {/* Excerpt */}
+                    <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">{excerpt}</p>
                 </div>
             </article>
         </Link>

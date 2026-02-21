@@ -38,7 +38,6 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
                                 title={article.title}
                                 excerpt={article.excerpt}
                                 category={article.category}
-                                date={article.date}
                                 datePublished={article.datePublished}
                                 image={article.image}
                                 slug={article.slug}

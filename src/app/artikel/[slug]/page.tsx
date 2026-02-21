@@ -15,7 +15,7 @@ type Props = {
 // Search in both featured and list articles
 function getArticle(slug: string): Article | undefined {
     const allArticles: Article[] = [FEATURED_ARTICLE, ...ARTICLES];
-    return allArticles.find(a => a.slug === slug);
+    return allArticles.find((a) => a.slug === slug);
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -75,33 +75,34 @@ export default async function ArticlePage({ params }: Props) {
         headline: article.title,
         description: article.excerpt,
         image: [article.image],
-        datePublished: article.date === 'Aktuell' ? '2026-05-20T08:00:00+02:00' : '2026-05-20T08:00:00+02:00', // Mock dates
-        dateModified: article.date === 'Aktuell' ? '2026-05-20T08:00:00+02:00' : '2026-05-20T08:00:00+02:00',
-        author: [{
-            '@type': 'Person',
-            name: article.author.name,
-            url: `${SITE_CONFIG.url}/ueber-uns`,
-        }],
+        datePublished:
+            article.date === 'Aktuell' ? '2026-05-20T08:00:00+02:00' : '2026-05-20T08:00:00+02:00', // Mock dates
+        dateModified:
+            article.date === 'Aktuell' ? '2026-05-20T08:00:00+02:00' : '2026-05-20T08:00:00+02:00',
+        author: [
+            {
+                '@type': 'Person',
+                name: article.author.name,
+                url: `${SITE_CONFIG.url}/ueber-uns`,
+            },
+        ],
         publisher: {
             '@type': 'Organization',
             name: 'SwissTech Briefing',
             logo: {
                 '@type': 'ImageObject',
                 url: `${SITE_CONFIG.url}/logo.png`,
-            }
+            },
         },
         mainEntityOfPage: {
             '@type': 'WebPage',
             '@id': `${SITE_CONFIG.url}/artikel/${article.slug}`,
-        }
+        },
     };
 
     return (
         <>
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-            />
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
             <Header />
             {/* Reading Progress Bar (Simulated) */}
             <div className="sticky top-16 z-50 h-1 bg-slate-200 dark:bg-slate-800">
@@ -122,7 +123,9 @@ export default async function ArticlePage({ params }: Props) {
                         <span className="material-symbols-outlined text-base">calendar_today</span>
                         <span>{formatSwissDate(article.datePublished)}</span>
                         <span className="mx-1 font-light opacity-30">|</span>
-                        <span className="uppercase text-[10px] font-bold tracking-widest text-slate-400">Von {article.author.name}</span>
+                        <span className="uppercase text-[10px] font-bold tracking-widest text-slate-400">
+                            Von {article.author.name}
+                        </span>
                     </div>
 
                     {/* Box Section: In 30 Sekunden erklärt */}
@@ -130,7 +133,9 @@ export default async function ArticlePage({ params }: Props) {
                         <section className="bg-background-light dark:bg-slate-800 p-6 rounded-xl border-l-4 border-primary mb-10">
                             <div className="flex items-center gap-2 mb-4">
                                 <span className="material-symbols-outlined text-primary">bolt</span>
-                                <h2 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tight">In 30 Sekunden erklärt</h2>
+                                <h2 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tight">
+                                    In 30 Sekunden erklärt
+                                </h2>
                             </div>
                             <ul className="space-y-3 text-slate-700 dark:text-slate-300">
                                 {article.summaryPoints.map((point, idx) => (
@@ -160,9 +165,9 @@ export default async function ArticlePage({ params }: Props) {
                         <p className="text-xs text-slate-500 p-3 italic">Quelle: SwissTech Briefing (Symbolbild)</p>
 
                         <p>
-                            Die Schweiz festigt ihre Position als globaler Vorreiter in der künstlichen Intelligenz.
-                            Mit der offiziellen Einweihung neuer Infrastruktur beginnt eine neue Ära der Forschung.
-                            Dies sichert nicht nur die Qualität, sondern auch den Schutz sensibler Daten gemäss Schweizer Standards.
+                            Die Schweiz festigt ihre Position als globaler Vorreiter in der künstlichen Intelligenz. Mit der offiziellen
+                            Einweihung neuer Infrastruktur beginnt eine neue Ära der Forschung. Dies sichert nicht nur die Qualität,
+                            sondern auch den Schutz sensibler Daten gemäss Schweizer Standards.
                         </p>
 
                         {/* Impact Box */}
@@ -175,12 +180,7 @@ export default async function ArticlePage({ params }: Props) {
                                     </h3>
                                     <div className="grid gap-6">
                                         {article.impactItems.map((item, idx) => (
-                                            <ImpactItem
-                                                key={idx}
-                                                icon={item.icon}
-                                                title={item.title}
-                                                desc={item.desc}
-                                            />
+                                            <ImpactItem key={idx} icon={item.icon} title={item.title} desc={item.desc} />
                                         ))}
                                     </div>
                                 </div>
@@ -213,22 +213,19 @@ export default async function ArticlePage({ params }: Props) {
                 <section className="bg-slate-50 dark:bg-slate-900/50 px-6 py-12 border-t border-slate-100 dark:border-slate-800">
                     <h3 className="text-xl font-bold mb-8">Das könnte Sie auch interessieren</h3>
                     <div className="grid gap-6">
-                        {ARTICLES
-                            .filter(a => a.categorySlug === article.categorySlug && a.id !== article.id)
+                        {ARTICLES.filter((a) => a.categorySlug === article.categorySlug && a.id !== article.id)
                             .slice(0, 3)
-                            .map(related => (
+                            .map((related) => (
                                 <ArticleCard
                                     key={related.id}
                                     title={related.title}
                                     excerpt={related.excerpt}
                                     category={related.category}
-                                    date={related.date}
                                     datePublished={related.datePublished}
                                     image={related.image}
                                     slug={related.slug}
                                 />
-                            ))
-                        }
+                            ))}
                     </div>
                 </section>
             </main>
@@ -238,7 +235,7 @@ export default async function ArticlePage({ params }: Props) {
     );
 }
 
-function ImpactItem({ icon, title, desc }: { icon: string, title: string, desc: string }) {
+function ImpactItem({ icon, title, desc }: { icon: string; title: string; desc: string }) {
     return (
         <div className="flex gap-4">
             <div className="bg-primary/10 text-primary p-2 rounded-lg h-fit">
