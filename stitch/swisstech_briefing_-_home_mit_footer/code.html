@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html lang="de-CH"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SwissTech Briefing - Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1754cf",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-background-dark text-white px-4 h-16 flex items-center justify-between shadow-md">
+<div class="flex items-center gap-2">
+<h1 class="text-xl font-bold tracking-tight text-white uppercase">SwissTech Briefing</h1>
+</div>
+<button class="flex items-center justify-center p-2 hover:bg-white/10 rounded-full transition-colors">
+<span class="material-symbols-outlined text-2xl">search</span>
+</button>
+</header>
+<!-- Navigation Scroller -->
+<nav class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-16 z-40">
+<div class="flex overflow-x-auto hide-scrollbar px-4 gap-6 py-3 items-center">
+<a class="whitespace-nowrap text-sm font-bold text-primary border-b-2 border-primary pb-1" href="#">KI</a>
+<a class="whitespace-nowrap text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors pb-1 border-b-2 border-transparent" href="#">Startups</a>
+<a class="whitespace-nowrap text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors pb-1 border-b-2 border-transparent" href="#">Regulierung</a>
+<a class="whitespace-nowrap text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary transition-colors pb-1 border-b-2 border-transparent" href="#">Defense &amp; Security Tech</a>
+</div>
+</nav>
+<main class="flex-1 max-w-4xl mx-auto w-full px-4 py-6">
+<!-- Featured Article (Hero) -->
+<section class="mb-8">
+<div class="relative group cursor-pointer overflow-hidden rounded-xl bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800">
+<div class="aspect-video w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Futuristischer Supercomputer in einem modernem Rechenzentrum" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6v95fZEd3c6GgzKG2zmSuqOvHMySONG3RcdcEXjxfAlmvetyvUQMnRUqQVMuovsRWfTXmcld4J33bcDVCsE36DhorWqT5uuvGey4TQj6vFSNGYtlwIlhtjjQVPYK_-fapkVnrqNpN0mmUKYzYTDp5tA1ZLNtQLvH7QQWDKPZLyQDHLJ453CQ_GJh0F9vqfZMT2mLE52ExXbnPr-5iurMQxN1hGlnmj7zGyVYLqkPqhA6eTIZDEGmcA42pntsw32RGA8nJFeRhqHj3"/>
+</div>
+<div class="p-6">
+<div class="flex items-center gap-2 mb-3">
+<span class="bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">KI</span>
+<span class="text-slate-400 text-xs">Aktuell</span>
+</div>
+<h2 class="text-2xl md:text-3xl font-bold leading-tight mb-3 group-hover:text-primary transition-colors">
+                        ETH Zürich stellt neuen Supercomputer für KI-Forschung vor
+                    </h2>
+<p class="text-slate-600 dark:text-slate-400 text-base leading-relaxed line-clamp-2">
+                        Die Forschung an künstlicher Intelligenz in der Schweiz erhält massiven Schub durch neue Infrastruktur am CSCS.
+                    </p>
+<div class="mt-4 flex items-center text-primary font-semibold text-sm">
+                        Mehr lesen <span class="material-symbols-outlined ml-1 text-sm">arrow_forward</span>
+</div>
+</div>
+</div>
+</section>
+<!-- List Header -->
+<div class="flex items-center justify-between mb-4 border-b border-slate-200 dark:border-slate-800 pb-2">
+<h3 class="text-sm font-bold uppercase tracking-widest text-slate-500">Neueste Meldungen</h3>
+</div>
+<!-- Article List -->
+<div class="space-y-4">
+<!-- Card 1 -->
+<article class="bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row gap-4 items-start hover:shadow-md transition-shadow cursor-pointer">
+<div class="w-full md:w-32 h-24 flex-shrink-0 rounded bg-slate-100 dark:bg-slate-800 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Moderne Skyline von Zürich am See" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMI_Pa0fzLpfWe7SyhpELOOfy1xZ57yUA5B5wiEON1aG1eUS1fr-Itf2c4w8iKzwmYIlWNutU5wak9fgj-C9IXb9h8gNLvCqexU21vVQPRNRv9INj-VFvfViNbTRukRljBelV04C5hekCakghWt_ilGV7VKH3kbQaqIM8HpcAU8NMhU0nJJCSRGZQrSmZPWxkNDfcMfm8tuDLHp4WbQGMohezlNfyLsIkutP4teDIimAUwKmKI5bo0Av7YuMOTrJb8qyl5S6AcgoUR"/>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<span class="text-[10px] font-bold text-primary uppercase">Startups</span>
+<span class="text-[10px] text-slate-400">20. Mai 2026</span>
+</div>
+<h4 class="text-lg font-bold leading-snug mb-2 line-clamp-2">
+                        Fintech-Hub Zürich wächst trotz globaler Unsicherheit
+                    </h4>
+<p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-1">
+                        Schweizer Startups im Finanzbereich verzeichnen im ersten Quartal Rekordinvestitionen.
+                    </p>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row gap-4 items-start hover:shadow-md transition-shadow cursor-pointer">
+<div class="w-full md:w-32 h-24 flex-shrink-0 rounded bg-slate-100 dark:bg-slate-800 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Server-Racks in einem Rechenzentrum blau beleuchtet" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuY4_czo4K-OfJFKZRovCXJSmx_jrtz0Adji9qWwoh80STP2_wsaD_xxWl_jh2Sxyr73EZr2LDt1l86aQplLn451tgJyU73XNavtZx1zBUTwVzJFSTRxp_WqhSitorbqCIRQFfikjtnYl-lBf0tek20zLrRFNXULpJMBFkc_aQyoyqPZNFUj-4OsBYZKHtbFAy2FdvAWDr6uI4w4XkvSzPM67kOlysZ1ttcvcjDZPDHRG3FVdM2e7kNvru-SYqhwok-J8IoAYiRWQV"/>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<span class="text-[10px] font-bold text-primary uppercase">Regulierung</span>
+<span class="text-[10px] text-slate-400">19. Mai 2026</span>
+</div>
+<h4 class="text-lg font-bold leading-snug mb-2 line-clamp-2">
+                        Bundesrat diskutiert neue Regeln für Datenhoheit
+                    </h4>
+<p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-1">
+                        Ein neuer Gesetzesentwurf soll den Schutz sensibler Schweizer Daten in der Cloud verbessern.
+                    </p>
+</div>
+</article><section class="my-8 p-6 md:p-8 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="max-w-2xl mx-auto text-center">
+<h2 class="text-xl md:text-2xl font-bold mb-2 text-slate-900 dark:text-white">Woechentliche Einordnung zu KI, Startups und Technologie in der Schweiz</h2>
+<p class="text-slate-600 dark:text-slate-400 text-sm mb-6 leading-relaxed">Ein kuratierter Ueberblick mit relevanten Entwicklungen, Einordnung und Hintergruenden aus der Schweizer Tech-Szene. Kein Spam. Kein Clickbait.</p>
+<form class="flex flex-col sm:flex-row gap-3 mb-4" onsubmit="return false;">
+<input class="flex-1 px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="Ihre E-Mail-Adresse" required="" type="email"/>
+<button class="px-6 py-2.5 bg-primary hover:bg-primary/90 text-white font-bold rounded-lg text-sm transition-colors whitespace-nowrap" type="submit">Jetzt abonnieren</button>
+</form>
+<p class="text-[11px] text-slate-500 dark:text-slate-500 italic">
+            Wir respektieren Ihre Privatsphaere. Abmeldung jederzeit moeglich.
+        </p>
+</div>
+</section>
+<!-- Card 3 -->
+<article class="bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row gap-4 items-start hover:shadow-md transition-shadow cursor-pointer">
+<div class="w-full md:w-32 h-24 flex-shrink-0 rounded bg-slate-100 dark:bg-slate-800 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Abstrakte Darstellung von Cybersicherheit und digitalen Schild" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCwUJxdUhtbupAHVa8bX1mhOmEsg6P6Yrk7x7DyYd1rf5e-X2e3wSNsMwCPC5v2oGqN_5-9i6FP0B2ec9Ag0NnUsd5zI1FFa0Gzwe-rxW2FBXJRG8pqJ0YINDlapx4LAyRUGMbr8VdhLN1tsAszMuLec5zcEa5JdXHaFmaiiLCCI24vbsj-HE6MjRiD1nBvhsLc_EMGpo1oyqbUzS8G4D3Pn5lRv9pExx3oGgZG7NsUbCp_JWLw4n-0-v6MmwAYbrjqCE9_8AKMvnS"/>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<span class="text-[10px] font-bold text-primary uppercase">Defense &amp; Security Tech</span>
+<span class="text-[10px] text-slate-400">18. Mai 2026</span>
+</div>
+<h4 class="text-lg font-bold leading-snug mb-2 line-clamp-2">
+                        Cyber-Abwehr: Armee setzt auf KI-gestützte Systeme
+                    </h4>
+<p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-1">
+                        Die Schweizer Armee investiert verstärkt in Technologie zur Früherkennung von Cyber-Angriffen.
+                    </p>
+</div>
+</article>
+</div>
+<button class="w-full mt-8 py-3 border border-slate-300 dark:border-slate-700 rounded-lg text-sm font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+            Weitere Meldungen laden
+        </button>
+</main>
+<!-- Bottom Navigation Bar (Mobile) -->
+<div class="md:hidden sticky bottom-0 border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm px-4 pb-4 pt-2 flex items-center justify-around z-50">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1">newspaper</span>
+<p class="text-[10px] font-bold">News</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-2xl">track_changes</span>
+<p class="text-[10px] font-medium">Fokus</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-2xl">bookmark</span>
+<p class="text-[10px] font-medium">Merkliste</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined text-2xl">person</span>
+<p class="text-[10px] font-medium">Profil</p>
+</a>
+</div>
+<!-- Footer Desktop -->
+<footer class="bg-background-dark text-slate-400 py-16 px-4 border-t border-slate-800">
+<div class="max-w-4xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+<!-- Column 1: Brand -->
+<div class="space-y-4">
+<h2 class="text-white font-bold text-lg tracking-tight uppercase">SwissTech Briefing</h2>
+<p class="text-sm leading-relaxed max-w-xs">
+                    Kuratiertes Medium fuer KI, Startups und Technologie in der Schweiz. Taegliche Einblicke in die digitale Transformation.
+                </p>
+</div>
+<!-- Column 2: Navigation -->
+<div>
+<h3 class="text-white font-bold mb-6 text-xs uppercase tracking-widest">Navigation</h3>
+<ul class="space-y-3 text-sm">
+<li><a class="hover:text-primary transition-colors" href="#">Home</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">KI</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Startups</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Regulierung</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Defense &amp; Security Tech</a></li>
+<li><a class="hover:text-primary transition-colors font-medium text-white" href="#">Newsletter</a></li>
+</ul>
+</div>
+<!-- Column 3: Rechtliches -->
+<div>
+<h3 class="text-white font-bold mb-6 text-xs uppercase tracking-widest">Rechtliches</h3>
+<ul class="space-y-3 text-sm">
+<li><a class="hover:text-primary transition-colors" href="#">Impressum</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Datenschutz</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Kontakt</a></li>
+</ul>
+</div>
+</div>
+<!-- Bottom Line -->
+<div class="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-[11px] tracking-wide">
+                © 2026 SwissTech Briefing. Alle Rechte vorbehalten.
+            </p>
+<div class="flex gap-6 text-[11px] font-medium uppercase tracking-widest">
+<span class="text-slate-600">Zurich, Schweiz</span>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

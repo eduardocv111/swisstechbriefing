@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+
+<html lang="de-CH"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SwissTech Briefing - Keine Ergebnisse</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1754cf",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header -->
+<header class="bg-slate-900 dark:bg-black text-white px-6 md:px-12 py-4 flex items-center justify-between border-b border-slate-800">
+<div class="flex items-center gap-3">
+<div class="bg-primary p-1.5 rounded-sm">
+<svg class="w-6 h-6 text-white" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h1 class="text-xl font-bold tracking-tight">SwissTech Briefing</h1>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8 text-sm font-medium text-slate-300">
+<a class="hover:text-white transition-colors" href="#">Dossiers</a>
+<a class="hover:text-white transition-colors" href="#">Analysen</a>
+<a class="hover:text-white transition-colors" href="#">Events</a>
+</nav>
+<button class="p-2 hover:bg-slate-800 rounded-full transition-colors">
+<span class="material-symbols-outlined text-2xl">search</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow flex flex-col items-center px-6 py-12 md:py-24">
+<div class="max-w-4xl w-full">
+<!-- Search Query Display -->
+<div class="mb-16 border-b border-slate-200 dark:border-slate-800 pb-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<p class="text-sm uppercase tracking-widest text-slate-500 dark:text-slate-400 font-bold mb-2">Suchergebnisse fuer</p>
+<h2 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white leading-tight">
+                            "Quanten-Computing in Graubuenden"
+                        </h2>
+</div>
+<div class="text-slate-500 dark:text-slate-400 font-medium text-lg pb-1">
+                        0 Treffer
+                    </div>
+</div>
+</div>
+<!-- No Results State -->
+<div class="flex flex-col items-center text-center py-12">
+<div class="mb-8 p-6 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500">
+<span class="material-symbols-outlined text-6xl">find_in_page</span>
+</div>
+<h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+                    Keine passenden Artikel gefunden.
+                </h3>
+<p class="text-slate-600 dark:text-slate-400 max-w-lg leading-relaxed mb-8">
+                    Ihre Suche ergab leider keine Treffer. Bitte ueberpruefen Sie die Schreibweise oder versuchen Sie es mit allgemeineren Suchbegriffen. In unserem Archiv befinden sich ueber 10'000 Fachartikel zu Technologie-Themen in der Schweiz.
+                </p>
+<!-- Search Suggestions -->
+<div class="w-full max-w-2xl mb-12">
+<form action="#" class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-slate-400 group-focus-within:text-primary transition-colors">search</span>
+</div>
+<input class="block w-full pl-12 pr-4 py-4 bg-white dark:bg-background-dark border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-slate-900 dark:text-white placeholder-slate-400 shadow-sm transition-all text-lg" placeholder="Suchen Sie nach anderen Themen..." type="text"/>
+<button class="absolute inset-y-2 right-2 px-6 bg-slate-900 dark:bg-slate-700 text-white font-bold rounded-md hover:bg-primary transition-colors hidden sm:block" type="submit">
+            Suchen
+        </button>
+</form>
+</div><div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-2xl mb-12 text-left">
+<div class="p-5 border border-slate-200 dark:border-slate-800 rounded-lg bg-white dark:bg-background-dark shadow-sm">
+<div class="flex gap-3 items-start">
+<span class="material-symbols-outlined text-primary mt-0.5">spellcheck</span>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-1">Rechtschreibung</h4>
+<p class="text-sm text-slate-500 dark:text-slate-400">Stellen Sie sicher, dass alle Begriffe korrekt geschrieben sind.</p>
+</div>
+</div>
+</div>
+<div class="p-5 border border-slate-200 dark:border-slate-800 rounded-lg bg-white dark:bg-background-dark shadow-sm">
+<div class="flex gap-3 items-start">
+<span class="material-symbols-outlined text-primary mt-0.5">category</span>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white mb-1">Allgemeine Begriffe</h4>
+<p class="text-sm text-slate-500 dark:text-slate-400">Versuchen Sie es mit uebergeordneten Kategorien (z.B. "Quantentechnik").</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Call to Action -->
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-primary hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition-all flex items-center justify-center gap-2">
+<span>Alle Artikel anzeigen</span>
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+<button class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-bold py-3 px-8 rounded-lg transition-all">
+                        Zur Startseite
+                    </button>
+</div>
+</div>
+<!-- Featured Categories (Minimalist Editorial Element) -->
+<div class="mt-24 pt-12 border-t border-slate-200 dark:border-slate-800">
+<h4 class="text-xs uppercase tracking-[0.2em] font-black text-slate-400 dark:text-slate-500 mb-8 text-center">
+                    Beliebte Dossiers
+                </h4>
+<div class="flex flex-wrap justify-center gap-3 md:gap-6">
+<a class="px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-full text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-primary/10 hover:text-primary transition-colors" href="#">KI in der Industrie</a>
+<a class="px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-full text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-primary/10 hover:text-primary transition-colors" href="#">Cybersecurity 2024</a>
+<a class="px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-full text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-primary/10 hover:text-primary transition-colors" href="#">FinTech News</a>
+<a class="px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-full text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-primary/10 hover:text-primary transition-colors" href="#">ETH Forschung</a>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-slate-100 dark:bg-slate-900/50 py-12 px-6 md:px-12 border-t border-slate-200 dark:border-slate-800">
+<div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-slate-500 dark:text-slate-400 text-sm">
+<div class="flex items-center gap-2">
+<div class="size-4 grayscale opacity-50">
+<svg fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<span>© 2024 SwissTech Briefing AG. Alle Rechte vorbehalten.</span>
+</div>
+<div class="flex gap-8">
+<a class="hover:text-primary transition-colors" href="#">Impressum</a>
+<a class="hover:text-primary transition-colors" href="#">Datenschutz</a>
+<a class="hover:text-primary transition-colors" href="#">Abonnement</a>
+</div>
+</div>
+</footer>
+</body></html>

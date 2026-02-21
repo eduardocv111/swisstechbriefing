@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html lang="de-CH"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1754cf",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>SwissTech Briefing - ETH Supercomputer</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<!-- Header -->
+<header class="sticky top-0 z-50 bg-slate-900 text-white px-4 py-3 shadow-md">
+<div class="max-w-3xl mx-auto flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">menu</span>
+<span class="text-lg font-bold tracking-tight uppercase">SwissTech <span class="text-primary">Briefing</span></span>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center p-1 rounded-full hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+</div>
+<!-- Reading Progress Bar -->
+<div class="absolute bottom-0 left-0 h-1 bg-primary w-1/3"></div>
+</header>
+<main class="max-w-3xl mx-auto bg-white dark:bg-slate-900 min-h-screen shadow-sm">
+<!-- Hero Category & Title -->
+<article class="px-6 pt-8 pb-12">
+<div class="mb-4">
+<span class="inline-block bg-primary/10 text-primary text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">KI</span>
+</div>
+<h1 class="text-3xl md:text-4xl font-extrabold leading-tight mb-4 text-slate-900 dark:text-white">
+                ETH Zürich stellt neuen Supercomputer für KI-Forschung vor
+            </h1>
+<div class="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400 mb-8 pb-6 border-b border-slate-100 dark:border-slate-800">
+<span class="material-symbols-outlined text-base">calendar_today</span>
+<span>20. Mai 2026</span>
+<span class="mx-1">•</span>
+<span>Redaktion SwissTech Briefing</span>
+</div>
+<!-- Box Section: In 30 Sekunden erklärt -->
+<section class="bg-background-light dark:bg-slate-800 p-6 rounded-xl border-l-4 border-primary mb-10">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">bolt</span>
+<h2 class="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tight">In 30 Sekunden erklärt</h2>
+</div>
+<ul class="space-y-3 text-slate-700 dark:text-slate-300">
+<li class="flex gap-3">
+<span class="text-primary font-bold">•</span>
+<p>Der neue Supercomputer "Alps" gehört zu den leistungsstärksten der Welt.</p>
+</li>
+<li class="flex gap-3">
+<span class="text-primary font-bold">•</span>
+<p>Er steht am Nationalen Hochleistungsrechenzentrum (CSCS) in Lugano.</p>
+</li>
+<li class="flex gap-3">
+<span class="text-primary font-bold">•</span>
+<p>Fokus liegt auf der Entwicklung grosser Sprachmodelle "Made in Switzerland".</p>
+</li>
+</ul>
+</section>
+<!-- Body Text -->
+<div class="prose prose-slate dark:prose-invert max-w-none text-slate-800 dark:text-slate-200 leading-relaxed space-y-6">
+<p>
+                    Die Schweiz festigt ihre Position als globaler Vorreiter in der künstlichen Intelligenz. Mit der offiziellen Einweihung des neuen Supercomputers "Alps" an der ETH Zürich und dem CSCS in Lugano beginnt eine neue Ära der Forschung. Das System basiert auf modernster Architektur und wurde speziell für die Anforderungen komplexer KI-Berechnungen optimiert.
+                </p>
+<p>
+                    Technisch setzt "Alps" auf die neuesten Grace-Hopper-Superchips, die eine massive Parallelisierung von Rechenvorgängen ermöglichen. Dies ist entscheidend für das Training von grossen Sprachmodellen (LLMs), die Milliarden von Parametern verarbeiten müssen. Im Vergleich zum Vorgängersystem bietet die neue Infrastruktur eine mehr als zehnfache Leistungssteigerung bei gleichzeitig verbesserter Energieeffizienz.
+                </p>
+<div class="my-10 overflow-hidden rounded-xl bg-slate-100">
+<img class="w-full h-64 object-cover" data-alt="Modern high-tech server room with glowing blue lights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9HBt274vccqO55DiGYfYD_VlIyPJCoTVNsts53oT7q9vvrstsn14yVIBHm556m9nLG0CgDHM_ilr9U4GX9_KFG9GF8OUKk9wXDGSOFfdQK4XGScMDVt4ZE564VlIfAQj9GZy0DzMqYL-P033EEdCw6796gxrzDYGn-6mSJjuX4xS1b0h6SU31gz4-yzNw6AHjie7hc9iFddgqXTj9Lv_nPrQCD265mlR7eZckvcwn6QoR5jrRvNd14R-tSOhHAceHzFyo-tR0cagd"/>
+<p class="text-xs text-slate-500 p-3 italic">Das Rechenzentrum in Lugano beherbergt die neue Infrastruktur. (Symbolbild)</p>
+</div>
+<p>
+                    Für die Wissenschaftler der ETH bedeutet dieser Zugang eine Unabhängigkeit von kommerziellen Cloud-Anbietern aus dem Ausland. "Wir wollen Technologie nicht nur konsumieren, sondern aktiv mitgestalten", betont die Projektleitung. Dies sichere nicht nur die Qualität der Forschung, sondern auch den Schutz sensibler Daten gemäss Schweizer Standards.
+                </p>
+<!-- Section: Was bedeutet das für die Schweiz? -->
+<div class="mt-12 mb-8 p-1 bg-primary/5 rounded-xl">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-lg">
+<h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">insights</span>
+                            Was bedeutet das für die Schweiz?
+                        </h3>
+<div class="grid gap-6">
+<div class="flex gap-4">
+<div class="bg-primary/10 text-primary p-2 rounded-lg h-fit">
+<span class="material-symbols-outlined">security</span>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white">Erhalt der technologischen Souveränität</h4>
+<p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Die Kontrolle über eigene Rechenkapazitäten reduziert die Abhängigkeit von globalen Tech-Giganten.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="bg-primary/10 text-primary p-2 rounded-lg h-fit">
+<span class="material-symbols-outlined">school</span>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white">Attraktivität des Forschungsstandorts</h4>
+<p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Weltklasse-Infrastruktur zieht internationale Talente und Spitzenforscher nach Zürich und Lugano.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="bg-primary/10 text-primary p-2 rounded-lg h-fit">
+<span class="material-symbols-outlined">rocket_launch</span>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white">Unterstützung für lokale Startups</h4>
+<p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Schweizer Jungunternehmen erhalten durch gezielte Programme Zugriff auf Hochleistungstechnologie.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Section: Quellen -->
+<div class="mt-12 pt-8 border-t border-slate-100 dark:border-slate-800">
+<h3 class="text-sm font-bold uppercase tracking-widest text-slate-400 mb-4">Quellen</h3>
+<ul class="text-sm text-slate-500 space-y-2">
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-xs">link</span>
+<span class="hover:text-primary cursor-pointer underline decoration-slate-200 underline-offset-4">ETH Zürich Pressemitteilung</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-xs">link</span>
+<span class="hover:text-primary cursor-pointer underline decoration-slate-200 underline-offset-4">CSCS Website (Lugano)</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-xs">link</span>
+<span class="hover:text-primary cursor-pointer underline decoration-slate-200 underline-offset-4">Bundesamt für Kommunikation (BAKOM)</span>
+</li>
+</ul>
+</div>
+</div>
+</article>
+<!-- Related Articles Section -->
+<section class="bg-background-light dark:bg-slate-950 px-6 py-12">
+<h2 class="text-2xl font-bold mb-8 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">grid_view</span>
+                Verwandte Artikel
+            </h2>
+<div class="grid md:grid-cols-3 gap-6">
+<!-- Card 1 -->
+<div class="group cursor-pointer">
+<div class="aspect-video mb-4 overflow-hidden rounded-lg bg-slate-200">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Modern office building facade in Zurich" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOLMFxEdRr3Bfe-3tVoChSpJoUZco9XQRPMgswGjv19vHdOdN6E_Ef8o8ib91PbUi-dvOgucmGQPaYpVwpZKlumKoDfnu-ElAdWDjVnGCDr9oViElHtIznNQEpw9kXoDiZyfrYLYmDCXVdu85etxxk3EG-aJ9zKSsn_fcBxmvrYqyz1RZlkgWBJpRA3quOaLtf1VGWK__p-TT3UjhnMvfOiUxdOxufjFMYw5nhTa8vUq2w3QFReeC_QAW8qSlm46NjSoYXnqgBjBRx"/>
+</div>
+<h3 class="font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors leading-snug">
+                        Zürich als KI-Zentrum: Ein Rundgang durch den neuen Innovationspark
+                    </h3>
+</div>
+<!-- Card 2 -->
+<div class="group cursor-pointer">
+<div class="aspect-video mb-4 overflow-hidden rounded-lg bg-slate-200">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Abstract digital data privacy concept" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPnApVjgHqPvyPkpk5mMnA46a12zySSTSUZoy0S1jld7dfgnRSt1wGD7wlnvpBNWXEsDzR6klwy54aO5o9Yy9omkIbEGHRceM36ES7xgfBirV655aRKXJzZzmy_qsIlT-J85iuVdaF4QfczSXejEmZRaZVATmBDWMgKrO9eIcjR2MV6g1lRgexQfBbplNNKACK-w6OqhfNx13bFLzP_ucEb4vjxhjKkhuHOQev6qrLgshkB8dNS6UO0-wRPyY-afZt1-ZS_CaUsb4X"/>
+</div>
+<h3 class="font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors leading-snug">
+                        Datenschutz bei KI: Was Unternehmen jetzt beachten müssen
+                    </h3>
+</div>
+<!-- Card 3 -->
+<div class="group cursor-pointer">
+<div class="aspect-video mb-4 overflow-hidden rounded-lg bg-slate-200">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Luxury Swiss watch close up details" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHaFqThoxsmnIVZhZD_LIM_VcJ3yLxRJ0x1Z7RkG4akXAs3QNO1WW4-h9eZnr-j4jUXjDAR23ATv8RlUhjkS_82Hn85cDVRYfeuQ3anFgyDyRgDp28qEwtHrZDaFf1sL_Trw5jYuIvD8TCkTnGXs55dxqfxl0Q0gLnbslOm71GgCnVfglWzB4LzkVADxN51PECHrDlRKnYigXgKTcMcK1rVsU2msBc2WuCPbupdwSiIwnmFkxJjkoZzmT-Mbh07UsPF1U7WZbrvgPg"/>
+</div>
+<h3 class="font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors leading-snug">
+                        Interview: Wie KI die Schweizer Uhrenindustrie verändert
+                    </h3>
+</div>
+</div>
+</section>
+<!-- Bottom Navigation Bar -->
+<nav class="sticky bottom-0 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 px-6 py-4 flex items-center justify-between">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">newspaper</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">News</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">lightbulb</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Fokus</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">bookmark</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Gespeichert</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Profil</span>
+</a>
+</nav>
+</main>
+<!-- Footer for large screens -->
+<footer class="max-w-3xl mx-auto py-12 px-6 text-center text-slate-400 text-sm">
+<p>© 2026 SwissTech Briefing. Alle Rechte vorbehalten. Produziert in der Schweiz.</p>
+</footer>
+</body></html>
