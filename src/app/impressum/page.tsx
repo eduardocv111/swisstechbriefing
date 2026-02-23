@@ -17,23 +17,23 @@ export default function ImpressumPage() {
                     <h1>Impressum</h1>
 
                     <h2>Angaben gemäss Schweizer Recht</h2>
-                    {/* TODO: Ergänzen Sie hier die vollständigen Angaben des Betreibers */}
                     <p>
-                        <strong>[Firmenname / Name des Betreibers]</strong><br />
-                        [Strasse und Hausnummer]<br />
-                        [PLZ Ort]<br />
+                        <strong>Jesus Eduardo Cordero</strong><br />
+                        Winkelstrasse 6<br />
+                        2502 Biel/Bienne<br />
                         Schweiz
                     </p>
 
                     <h2>Kontakt</h2>
                     <p>
-                        E-Mail: <a href="mailto:redaktion@swisstechbriefing.ch">redaktion@swisstechbriefing.ch</a>
+                        E-Mail: <a href="mailto:Eduar2cv20@gmail.com">Eduar2cv20@gmail.com</a><br />
+                        Telefon: <a href="tel:+41797413303">+41 79 741 33 03</a><br />
+                        Redaktion: <a href="mailto:redaktion@swisstechbriefing.ch">redaktion@swisstechbriefing.ch</a>
                     </p>
 
                     <h2>Verantwortlich für den Inhalt</h2>
                     <p>
-                        {/* TODO: Name der verantwortlichen Person */}
-                        <strong>[Name der verantwortlichen Person]</strong><br />
+                        <strong>Jesus Eduardo Cordero</strong><br />
                         SwissTech Briefing Redaktion
                     </p>
 

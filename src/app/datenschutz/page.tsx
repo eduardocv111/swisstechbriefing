@@ -19,14 +19,22 @@ export default function DatenschutzPage() {
 
                     <h2>1. Verantwortliche Stelle</h2>
                     <p>
-                        {/* TODO: Ergänzen Sie hier den vollständigen Firmennamen und die Adresse */}
-                        <strong>[Firmenname / Betreiber]</strong><br />
-                        [Strasse und Hausnummer]<br />
-                        [PLZ Ort], Schweiz<br />
-                        E-Mail: <a href="mailto:redaktion@swisstechbriefing.ch">redaktion@swisstechbriefing.ch</a>
+                        <strong>Jesus Eduardo Cordero</strong><br />
+                        Winkelstrasse 6<br />
+                        2502 Biel/Bienne, Schweiz<br />
+                        E-Mail: <a href="mailto:Eduar2cv20@gmail.com">Eduar2cv20@gmail.com</a><br />
+                        Telefon: <a href="tel:+41797413303">+41 79 741 33 03</a>
                     </p>
 
-                    <h2>2. Erhebung und Verarbeitung personenbezogener Daten</h2>
+                    <h2>2. Hosting</h2>
+                    <p>
+                        Unsere Website wird auf einem Virtual Private Server (VPS) betrieben.
+                        Die Server befinden sich in einem Rechenzentrum des jeweiligen Hosting-Anbieters.
+                        Beim Zugriff auf die Website werden automatisch technische Daten (Server-Logfiles)
+                        durch den Webserver erfasst.
+                    </p>
+
+                    <h2>3. Erhebung und Verarbeitung personenbezogener Daten</h2>
                     <p>
                         Beim Besuch unserer Website werden automatisch bestimmte technische Daten erhoben, die Ihr
                         Browser an unseren Server übermittelt (sog. Server-Logfiles). Dazu gehören unter anderem:
@@ -40,9 +48,11 @@ export default function DatenschutzPage() {
                     <p>
                         Diese Daten sind nicht bestimmten Personen zuordenbar und werden nur zur Sicherstellung
                         eines reibungslosen Betriebs und zur Verbesserung unseres Angebots ausgewertet.
+                        Die Rechtsgrundlage ist unser berechtigtes Interesse gemäss Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;f DSGVO
+                        bzw. Art.&nbsp;31 DSG.
                     </p>
 
-                    <h2>3. Cookies und Einwilligungsverwaltung</h2>
+                    <h2>4. Cookies und Einwilligungsverwaltung</h2>
                     <p>
                         Wir verwenden Cookies auf unserer Website. Details zu den eingesetzten Cookies, deren Zweck
                         und Ihren Wahlmöglichkeiten finden Sie in unserer{' '}
@@ -50,8 +60,16 @@ export default function DatenschutzPage() {
                     </p>
                     <p>
                         Beim ersten Besuch unserer Website wird Ihnen ein Cookie-Banner angezeigt, über das Sie
-                        Ihre Einwilligung zu nicht notwendigen Cookies erteilen oder verweigern können. Sie können
-                        Ihre Entscheidung jederzeit über den Link &laquo;Cookie-Einstellungen&raquo; im Footer ändern.
+                        Ihre Einwilligung zu nicht notwendigen Cookies erteilen oder verweigern können.
+                        Wir unterscheiden drei Kategorien:
+                    </p>
+                    <ul>
+                        <li><strong>Notwendige Cookies</strong> — immer aktiv, für den Betrieb der Website erforderlich</li>
+                        <li><strong>Analyse-Cookies</strong> — nur mit Ihrer ausdrücklichen Einwilligung</li>
+                        <li><strong>Marketing-Cookies</strong> — nur mit Ihrer ausdrücklichen Einwilligung</li>
+                    </ul>
+                    <p>
+                        Sie können Ihre Entscheidung jederzeit über den Link &laquo;Cookie-Einstellungen&raquo; im Footer ändern.
                     </p>
                     <p>
                         <strong>Notwendige Cookies</strong> werden auf Grundlage unseres berechtigten Interesses
@@ -60,10 +78,11 @@ export default function DatenschutzPage() {
                         Einwilligung aktiviert (Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;a DSGVO / Art.&nbsp;30 Abs.&nbsp;2 DSG).
                     </p>
 
-                    <h2>4. Webanalyse</h2>
+                    <h2>5. Webanalyse</h2>
                     <p>
-                        Sofern Sie Ihre Einwilligung erteilen, verwenden wir Google Analytics 4, einen Webanalysedienst
-                        der Google LLC. Google Analytics verwendet Cookies, um die Nutzung der Website zu analysieren.
+                        Sofern Sie Ihre Einwilligung erteilen und die Funktion auf unserer Website aktiviert ist,
+                        verwenden wir Google Analytics 4, einen Webanalysedienst der Google LLC.
+                        Google Analytics verwendet Cookies, um die Nutzung der Website zu analysieren.
                         Die dabei erzeugten Informationen werden an einen Server von Google übertragen und dort gespeichert.
                     </p>
                     <p>
@@ -71,18 +90,25 @@ export default function DatenschutzPage() {
                         Mitgliedstaaten der EU bzw. des EWR vor der Übermittlung gekürzt wird.
                     </p>
                     <p>
+                        Google Analytics wird <strong>nur geladen, wenn Sie aktiv der Kategorie «Analyse»
+                            zugestimmt haben</strong> und eine entsprechende Konfiguration auf unserer Seite vorliegt.
+                        Ohne diese beiden Voraussetzungen werden keine Analyse-Cookies gesetzt und keine Daten
+                        an Google übermittelt.
+                    </p>
+                    <p>
                         Sie können die Erfassung durch Google Analytics verhindern, indem Sie keine Einwilligung
                         für Analyse-Cookies erteilen oder Ihre Einwilligung jederzeit widerrufen.
                     </p>
 
-                    <h2>5. Newsletter</h2>
+                    <h2>6. Newsletter</h2>
                     <p>
-                        {/* TODO: Falls ein Newsletter-Dienst genutzt wird, Details hier ergänzen */}
                         Wenn Sie sich für unseren Newsletter anmelden, verwenden wir Ihre E-Mail-Adresse
-                        ausschliesslich für den Versand des Newsletters. Sie können sich jederzeit abmelden.
+                        ausschliesslich für den Versand des Newsletters. Sie können sich jederzeit über den
+                        Abmeldelink im Newsletter abmelden. Die Rechtsgrundlage ist Ihre Einwilligung gemäss
+                        Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;a DSGVO.
                     </p>
 
-                    <h2>6. Ihre Rechte</h2>
+                    <h2>7. Ihre Rechte</h2>
                     <p>
                         Nach DSGVO und dem Schweizer Datenschutzgesetz (DSG) haben Sie folgende Rechte bezüglich
                         Ihrer personenbezogenen Daten:
@@ -102,23 +128,27 @@ export default function DatenschutzPage() {
                         </a>.
                     </p>
 
-                    <h2>7. Datensicherheit</h2>
+                    <h2>8. Datensicherheit</h2>
                     <p>
                         Wir setzen technische und organisatorische Sicherheitsmassnahmen ein, um Ihre Daten
                         gegen Manipulation, Verlust, Zerstörung oder unbefugten Zugriff zu schützen.
                         Unsere Website verwendet TLS-Verschlüsselung (HTTPS).
                     </p>
 
-                    <h2>8. Änderungen dieser Datenschutzerklärung</h2>
+                    <h2>9. Änderungen dieser Datenschutzerklärung</h2>
                     <p>
                         Wir behalten uns vor, diese Datenschutzerklärung bei Bedarf anzupassen, um sie an geänderte
                         Rechtslagen oder Änderungen unseres Angebots anzupassen. Es gilt die jeweils aktuelle Fassung.
                     </p>
 
-                    <h2>9. Kontakt</h2>
+                    <h2>10. Kontakt</h2>
                     <p>
-                        Bei Fragen zum Datenschutz wenden Sie sich bitte an:{' '}
-                        <a href="mailto:redaktion@swisstechbriefing.ch">redaktion@swisstechbriefing.ch</a>
+                        Bei Fragen zum Datenschutz wenden Sie sich bitte an:
+                    </p>
+                    <p>
+                        Jesus Eduardo Cordero<br />
+                        E-Mail: <a href="mailto:Eduar2cv20@gmail.com">Eduar2cv20@gmail.com</a><br />
+                        Telefon: <a href="tel:+41797413303">+41 79 741 33 03</a>
                     </p>
                 </article>
             </main>

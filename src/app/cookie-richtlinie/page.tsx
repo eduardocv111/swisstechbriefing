@@ -27,11 +27,12 @@ export default function CookieRichtliniePage() {
                     <h2>Welche Cookies verwenden wir?</h2>
                     <p>SwissTech Briefing verwendet Cookies in drei Kategorien:</p>
 
-                    <h3>1. Notwendige Cookies</h3>
+                    <h3>1. Notwendige Cookies (immer aktiv)</h3>
                     <p>
                         Diese Cookies sind für den grundlegenden Betrieb der Website unerlässlich. Sie ermöglichen
                         Kernfunktionen wie Seitennavigation, Sicherheit und die Speicherung Ihrer Cookie-Einstellungen.
-                        Diese Cookies können nicht deaktiviert werden.
+                        Diese Cookies können <strong>nicht deaktiviert</strong> werden, da sie für den Betrieb
+                        zwingend erforderlich sind.
                     </p>
                     <table>
                         <thead>
@@ -50,22 +51,30 @@ export default function CookieRichtliniePage() {
                         </tbody>
                     </table>
 
-                    <h3>2. Analyse-Cookies</h3>
+                    <h3>2. Analyse-Cookies (optional)</h3>
                     <p>
                         Diese Cookies helfen uns zu verstehen, wie Besucher unsere Website nutzen, welche Seiten am
                         häufigsten besucht werden und wo Verbesserungspotenzial besteht. Die Daten werden anonymisiert
-                        und aggregiert erhoben. Wir verwenden hierfür <strong>Google Analytics 4</strong>.
+                        und aggregiert erhoben.
+                    </p>
+                    <p>
+                        Sofern aktiviert und konfiguriert, verwenden wir hierfür <strong>Google Analytics 4</strong> (Google LLC).
+                        Die Analyse-Funktion wird nur geladen, wenn Sie aktiv der Kategorie «Analyse» zugestimmt haben.
                     </p>
                     <p>
                         Diese Cookies werden <strong>nur mit Ihrer ausdrücklichen Einwilligung</strong> gesetzt.
                     </p>
 
-                    <h3>3. Marketing-Cookies</h3>
+                    <h3>3. Marketing-Cookies (optional)</h3>
                     <p>
-                        Marketing-Cookies werden verwendet, um Ihnen relevante Werbeanzeigen auf Grundlage Ihrer
-                        Interessen anzuzeigen und deren Wirksamkeit zu messen. In der aktuellen Phase setzt SwissTech
-                        Briefing noch keine Marketing-Cookies ein. Die Kategorie ist vorbereitet für eine zukünftige
-                        Integration mit Werbepartnern.
+                        Marketing-Cookies können verwendet werden, um Ihnen relevante Werbeanzeigen auf Grundlage Ihrer
+                        Interessen anzuzeigen und deren Wirksamkeit zu messen.
+                    </p>
+                    <p>
+                        <strong>Hinweis:</strong> In der aktuellen Phase setzt SwissTech Briefing noch keine
+                        Marketing-Cookies aktiv ein. Die Kategorie ist in unserem Einwilligungssystem vorbereitet
+                        für eine zukünftige Integration mit Werbepartnern. Sobald Marketing-Cookies aktiviert werden,
+                        wird diese Richtlinie entsprechend aktualisiert.
                     </p>
                     <p>
                         Auch diese Cookies werden <strong>nur mit Ihrer Einwilligung</strong> aktiviert.
@@ -75,7 +84,8 @@ export default function CookieRichtliniePage() {
                     <p>
                         Sie können Ihre Cookie-Einstellungen jederzeit über den Link{' '}
                         <strong>&laquo;Cookie-Einstellungen&raquo;</strong> im Footer der Website anpassen.
-                        Dort können Sie einzelne Kategorien aktivieren oder deaktivieren.
+                        Dort können Sie einzelne Kategorien aktivieren oder deaktivieren. Ihre Auswahl
+                        wird sofort wirksam.
                     </p>
                     <p>
                         Darüber hinaus können Sie Cookies jederzeit in den Einstellungen Ihres Browsers löschen
@@ -87,15 +97,15 @@ export default function CookieRichtliniePage() {
                     <p>Folgende Drittanbieter können bei entsprechender Einwilligung Cookies setzen:</p>
                     <ul>
                         <li>
-                            <strong>Google Analytics (Google LLC)</strong> — Webanalyse.{' '}
+                            <strong>Google Analytics (Google LLC)</strong> — Webanalyse (nur bei aktiver Einwilligung
+                            und Konfiguration).{' '}
                             <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
-                                Datenschutzerklärung
+                                Datenschutzerklärung von Google
                             </a>
                         </li>
                     </ul>
                     <p>
-                        {/* TODO: Ergänzen Sie hier weitere Drittanbieter, sobald Marketing-/Werbepartner aktiv werden */}
-                        Weitere Drittanbieter werden bei Aktivierung ergänzt und hier dokumentiert.
+                        Weitere Drittanbieter werden bei Aktivierung hier ergänzt und dokumentiert.
                     </p>
 
                     <h2>Rechtsgrundlage</h2>
@@ -115,8 +125,12 @@ export default function CookieRichtliniePage() {
 
                     <h2>Kontakt</h2>
                     <p>
-                        Bei Fragen zu dieser Cookie-Richtlinie oder Ihrer Privatsphäre können Sie uns unter{' '}
-                        <a href="mailto:redaktion@swisstechbriefing.ch">redaktion@swisstechbriefing.ch</a> erreichen.
+                        Bei Fragen zu dieser Cookie-Richtlinie oder Ihrer Privatsphäre können Sie uns erreichen unter:
+                    </p>
+                    <p>
+                        Jesus Eduardo Cordero<br />
+                        E-Mail: <a href="mailto:Eduar2cv20@gmail.com">Eduar2cv20@gmail.com</a><br />
+                        Redaktion: <a href="mailto:redaktion@swisstechbriefing.ch">redaktion@swisstechbriefing.ch</a>
                     </p>
                 </article>
             </main>

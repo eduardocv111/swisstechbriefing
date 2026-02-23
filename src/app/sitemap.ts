@@ -27,5 +27,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
     },
     ...articleUrls,
+    // ── Static pages ──
+    { url: `${BASE}/ueber-uns`, lastModified: new Date() },
+    { url: `${BASE}/kontakt`, lastModified: new Date() },
+    { url: `${BASE}/newsletter`, lastModified: new Date() },
+    // ── Legal pages ──
+    { url: `${BASE}/impressum`, lastModified: new Date() },
+    { url: `${BASE}/datenschutz`, lastModified: new Date() },
+    { url: `${BASE}/cookie-richtlinie`, lastModified: new Date() },
   ];
 }
