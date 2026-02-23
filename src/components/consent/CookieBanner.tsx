@@ -79,6 +79,9 @@ export default function CookieBanner() {
                                     Cookie-Richtlinie
                                 </a>
                             </p>
+                            <p className="mt-1.5 text-xs text-slate-500">
+                                Sie können Ihre Auswahl jederzeit über «Cookie-Einstellungen» im Footer ändern.
+                            </p>
                         </div>
 
                         {/* Buttons */}
