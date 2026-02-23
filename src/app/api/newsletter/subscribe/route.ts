@@ -20,23 +20,22 @@ export async function POST(req: Request) {
         });
 
         // ── Formspree Integration ──
-        // You can add your Formspree ID here to get email notifications too
-        const FORMSPREE_ID = "xpzeozea"; // Replace with your Formspree ID
+        // Using your endpoint: mwvnwwgl
+        const FORMSPREE_ID = "mwvnwwgl";
         if (FORMSPREE_ID) {
             try {
                 await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify({
                         email,
                         source,
                         leadMagnet,
-                        message: `Neu Newsletter Anmeldung von ${email} via ${source}`
+                        _subject: `SwissTech Briefing Newsletter DB-Sync [${source}]`
                     }),
                 });
             } catch (err) {
                 console.error("Formspree forward error:", err);
-                // We don't fail the request if Formspree fails, as DB already saved it
             }
         }
 
