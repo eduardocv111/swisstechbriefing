@@ -28,8 +28,8 @@ export default function KontaktPage() {
                                 Redaktion
                             </h2>
                             <p className="text-slate-600 dark:text-slate-400 mb-2">Für allgemeine Anfragen und Newsmeldungen:</p>
-                            <a href="mailto:redaktion@swisstech-briefing.ch" className="text-primary font-bold hover:underline">
-                                redaktion@swisstech-briefing.ch
+                            <a href="mailto:redaktion@swisstechbriefing.ch" className="text-primary font-bold hover:underline">
+                                redaktion@swisstechbriefing.ch
                             </a>
                         </section>
 
@@ -39,8 +39,8 @@ export default function KontaktPage() {
                                 Presseanfragen
                             </h2>
                             <p className="text-slate-600 dark:text-slate-400 mb-2">Medienanfragen und Interview-Wünsche:</p>
-                            <a href="mailto:media@swisstech-briefing.ch" className="text-primary font-bold hover:underline">
-                                media@swisstech-briefing.ch
+                            <a href="mailto:media@swisstechbriefing.ch" className="text-primary font-bold hover:underline">
+                                media@swisstechbriefing.ch
                             </a>
                         </section>
 

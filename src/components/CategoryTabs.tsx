@@ -7,7 +7,7 @@ type Props = {
 
 export default function CategoryTabs({ activeCategory }: Props) {
     return (
-        <nav className="bg-background-light dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-16 z-40">
+        <nav className="bg-background-light dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-12 md:top-14 z-40">
             <div className="flex overflow-x-auto px-4 gap-6 py-3 items-center no-scrollbar">
 
                 {/* 🔹 Alle (Home) */}

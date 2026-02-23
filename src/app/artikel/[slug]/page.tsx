@@ -12,6 +12,8 @@ import {
   getAllArticleSlugs,
 } from "@/lib/articles.repo";
 import NewsletterInlineCard from "@/components/NewsletterInlineCard";
+import ScrollProgress from "@/components/ScrollProgress";
+import ShareButtons from "@/components/ShareButtons";
 
 export const runtime = "nodejs";
 export const revalidate = 3600; // 1h ISR
@@ -204,6 +206,7 @@ export default async function ArticlePage({ params }: Props) {
       />
 
       <Header />
+      <ScrollProgress />
 
       <main className="mx-auto min-h-screen max-w-3xl shadow-sm bg-transparent">
         <article className="px-6 pt-10 pb-16">
@@ -244,6 +247,11 @@ export default async function ArticlePage({ params }: Props) {
                 </>
               )}
             </div>
+          </div>
+
+          {/* Share buttons */}
+          <div className="mb-8">
+            <ShareButtons url={articleUrl} title={article.title} />
           </div>
 
           <div className="relative mb-8 h-64 overflow-hidden rounded-xl md:h-96">
