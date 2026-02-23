@@ -17,32 +17,14 @@ import { getConsent } from '@/lib/consent';
  */
 export default function GoogleConsentMode() {
     useEffect(() => {
-        // Initialize dataLayer + gtag shim as early as possible
-        window.dataLayer = window.dataLayer || [];
-        function gtag(...args: unknown[]) {
-            window.dataLayer.push(args);
-        }
-
-        // ── 1. Set DEFAULTS to denied (before any Google script loads) ──
-        gtag('consent', 'default', {
-            analytics_storage: 'denied',
-            ad_storage: 'denied',
-            ad_user_data: 'denied',
-            ad_personalization: 'denied',
-            wait_for_update: 500,
-        });
-
-        // Region-specific: be extra explicit for EEA + CH
-        gtag('set', 'ads_data_redaction', true);
-        gtag('set', 'url_passthrough', true);
-
-        // ── 2. Check for existing consent and update immediately ──
+        // ── 1. Initial Check on Mount ──
+        // If user already made a choice, update Google immediately
         const existing = getConsent();
         if (existing) {
             updateGoogleConsent(existing.categories.analytics, existing.categories.marketing);
         }
 
-        // ── 3. Listen for future consent changes ──
+        // ── 2. Listen for User Life-cycle Changes ──
         function handleConsentChange() {
             const consent = getConsent();
             if (consent) {
@@ -57,16 +39,17 @@ export default function GoogleConsentMode() {
     return null;
 }
 
+/**
+ * Updates Google Consent Mode v2 based on CMP selection
+ */
 function updateGoogleConsent(analytics: boolean, marketing: boolean) {
-    window.dataLayer = window.dataLayer || [];
-    function gtag(...args: unknown[]) {
-        window.dataLayer.push(args);
-    }
+    if (typeof window === 'undefined' || !(window as any).dataLayer) return;
 
-    gtag('consent', 'update', {
+    (window as any).gtag('consent', 'update', {
         analytics_storage: analytics ? 'granted' : 'denied',
         ad_storage: marketing ? 'granted' : 'denied',
         ad_user_data: marketing ? 'granted' : 'denied',
         ad_personalization: marketing ? 'granted' : 'denied',
     });
 }
+

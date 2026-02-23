@@ -33,27 +33,48 @@ export default function RootLayout({
           rel="stylesheet"
         />
         <meta name="google-adsense-account" content="ca-pub-1495161909176032" />
-        {/* GA4 Script — Requirement 2 */}
+
+        {/* ── 1. Google Consent Mode v2 Bootstrap (Requirement 1, 2, 3) ── */}
+        <Script id="google-consent-mode-v2" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            
+            // Set defaults to denied
+            gtag('consent', 'default', {
+              'ad_storage': 'denied',
+              'ad_user_data': 'denied',
+              'ad_personalization': 'denied',
+              'analytics_storage': 'denied',
+              'wait_for_update': 500
+            });
+            
+            // Security & Privacy overrides
+            gtag('set', 'ads_data_redaction', true);
+            gtag('set', 'url_passthrough', true);
+          `}
+        </Script>
+
+        {/* ── 2. GA4 Global Site Tag (Requirement 4, 5) ── */}
         {GA_ID && (
           <>
             <Script
               src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
               strategy="afterInteractive"
             />
-            <Script id="ga-init" strategy="afterInteractive">
+            <Script id="ga-config" strategy="afterInteractive">
               {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
                 gtag('config', '${GA_ID}', {
                   anonymize_ip: true,
                   cookie_flags: 'SameSite=Lax;Secure',
-                  send_page_view: false // Handled by AnalyticsLoader/GaPageViewTracker
+                  send_page_view: false
                 });
               `}
             </Script>
           </>
         )}
+
       </head>
       <body
         className={`${publicSans.variable} font-sans antialiased min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100`}
