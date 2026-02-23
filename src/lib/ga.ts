@@ -2,7 +2,7 @@
  * Utility for GA4 tracking - SwissTech Briefing
  */
 
-export const GA_ID = process.env.NEXT_PUBLIC_GA_ID || process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+export const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 interface TrackEventProps {
     action: string;
