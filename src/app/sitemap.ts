@@ -1,33 +1,31 @@
-import { MetadataRoute } from 'next';
-import { ARTICLES, CATEGORIES } from '@/lib/data/mock';
-import { SITE_CONFIG } from '@/lib/seo/site';
+import { MetadataRoute } from "next";
+import { prisma } from "@/lib/db";
+import { SITE_CONFIG } from "@/lib/seo/site";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = SITE_CONFIG.url;
+export const revalidate = 3600; // 1h ISR
 
-    // Home page
-    const home = {
-        url: baseUrl,
-        lastModified: new Date(),
-        changeFrequency: 'daily' as const,
-        priority: 1,
-    };
+const BASE =
+  process.env.NEXT_PUBLIC_SITE_URL || SITE_CONFIG.url;
 
-    // Category pages
-    const categories = CATEGORIES.map((cat) => ({
-        url: `${baseUrl}${cat.href}`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.8,
-    }));
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const articles = await prisma.article.findMany({
+    select: {
+      slug: true,
+      updatedAt: true,
+    },
+    orderBy: { createdAt: "desc" },
+  });
 
-    // Article pages
-    const articles = ARTICLES.map((art) => ({
-        url: `${baseUrl}/artikel/${art.slug}`,
-        lastModified: new Date(art.datePublished),
-        changeFrequency: 'monthly' as const,
-        priority: 0.6,
-    }));
+  const articleUrls = articles.map((a) => ({
+    url: `${BASE}/artikel/${a.slug}`,
+    lastModified: a.updatedAt,
+  }));
 
-    return [home, ...categories, ...articles];
+  return [
+    {
+      url: BASE,
+      lastModified: new Date(),
+    },
+    ...articleUrls,
+  ];
 }

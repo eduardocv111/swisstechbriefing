@@ -1,250 +1,352 @@
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import Image from 'next/image';
-import { ARTICLES, FEATURED_ARTICLE, Article } from '@/lib/data/mock';
-import ArticleCard from '@/components/ArticleCard';
-import { SITE_CONFIG } from '@/lib/seo/site';
-import { Metadata } from 'next';
-import Link from 'next/link';
-import { formatSwissDate } from '@/lib/formatDate';
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { SITE_CONFIG } from "@/lib/seo/site";
+import { formatSwissDate } from "@/lib/formatDate";
+import {
+  getArticleBySlug,
+  getRelatedArticles,
+  getAllArticleSlugs,
+} from "@/lib/articles.repo";
+import NewsletterInlineCard from "@/components/NewsletterInlineCard";
+
+export const runtime = "nodejs";
+export const revalidate = 3600; // 1h ISR
 
 type Props = {
-    params: Promise<{ slug: string }>;
+  params: { slug: string };
 };
 
-// Search in both featured and list articles
-function getArticle(slug: string): Article | undefined {
-    const allArticles: Article[] = [FEATURED_ARTICLE, ...ARTICLES];
-    return allArticles.find((a) => a.slug === slug);
+const FALLBACK_OG_IMAGE = "/images/og-default.jpg"; // ✅ ajusta ruta real
+
+function stripHtml(html: string = ""): string {
+  return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function estimateReadingTimeFromHtml(html: string = ""): number {
+  const plainText = stripHtml(html);
+  const wordCount = plainText ? plainText.split(" ").length : 0;
+  return Math.max(1, Math.ceil(wordCount / 200));
+}
+
+function toAbsoluteUrl(pathOrUrl?: string | null): string | undefined {
+  if (!pathOrUrl) return undefined;
+  if (/^https?:\/\//i.test(pathOrUrl)) return pathOrUrl;
+  return `${SITE_CONFIG.url}${pathOrUrl.startsWith("/") ? "" : "/"}${pathOrUrl}`;
+}
+
+function toIsoDate(value?: string | Date | null): string | undefined {
+  if (!value) return undefined;
+  const d = value instanceof Date ? value : new Date(value);
+  return Number.isNaN(d.getTime()) ? undefined : d.toISOString();
+}
+
+function getArticleImageOrFallback(image?: string | null): string {
+  return image && image.trim() ? image : FALLBACK_OG_IMAGE;
+}
+
+// ✅ Pre-render de slugs (ISR seguirá revalidando)
+export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
+  try {
+    const slugs = await getAllArticleSlugs();
+    return slugs
+      .filter((s): s is string => typeof s === "string" && s.length > 0)
+      .map((slug) => ({ slug }));
+  } catch (error) {
+    console.error("generateStaticParams error:", error);
+    // Mejor devolver [] que romper el build
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const { slug } = await params;
-    const article = getArticle(slug);
+  const { slug } = params;
+  const article = await getArticleBySlug(slug);
 
-    if (!article) return { title: 'Artikel nicht gefunden' };
-
-    const title = `${article.title} | ${SITE_CONFIG.name}`;
-    const description = article.excerpt;
-    const url = `${SITE_CONFIG.url}/artikel/${article.slug}`;
-
+  // ✅ notFound metadata
+  if (!article) {
     return {
-        title,
-        description,
-        openGraph: {
-            title,
-            description,
-            url,
-            siteName: SITE_CONFIG.name,
-            images: [{ url: article.image }],
-            type: 'article',
-        },
-        twitter: {
-            card: 'summary_large_image',
-            title,
-            description,
-            images: [article.image],
-        },
-        alternates: {
-            canonical: url,
-        },
+      title: "Artikel nicht gefunden",
+      description: "Der angeforderte Artikel konnte nicht gefunden werden.",
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
+  }
+
+  const title = `${article.title} | ${SITE_CONFIG.name}`;
+  const description = article.excerpt ?? "";
+  const url = `${SITE_CONFIG.url}/artikel/${article.slug}`;
+
+  // ✅ og:image fallback automático
+  const imageUrl = toAbsoluteUrl(getArticleImageOrFallback(article.image));
+  // ✅ SEO/Discover: usar fecha real de publicación
+  const publishedTime = toIsoDate(article.publishedAt);
+  const modifiedTime = toIsoDate(article.dateModified);
+  const authorName = article.author?.name ?? SITE_CONFIG.name;
+
+  return {
+    metadataBase: new URL(SITE_CONFIG.url),
+    title,
+    description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: SITE_CONFIG.name,
+      type: "article",
+      ...(imageUrl ? { images: [{ url: imageUrl }] } : {}),
+      ...(publishedTime ? { publishedTime } : {}),
+      ...(modifiedTime ? { modifiedTime } : {}),
+      authors: [authorName],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      ...(imageUrl ? { images: [imageUrl] } : {}),
+    },
+  };
 }
 
 export default async function ArticlePage({ params }: Props) {
-    const { slug } = await params;
-    const article = getArticle(slug);
+  const { slug } = params;
+  const article = await getArticleBySlug(slug);
 
-    if (!article) {
-        return (
-            <>
-                <Header />
-                <main className="max-w-3xl mx-auto py-20 text-center">
-                    <h1 className="text-2xl font-bold">Artikel nicht gefunden</h1>
-                    <p className="text-slate-500 mt-2">Der angeforderte Beitrag existiert leider nicht.</p>
-                </main>
-                <Footer />
-            </>
-        );
-    }
+  if (!article) {
+    notFound();
+  }
 
-    // JSON-LD Structured Data
-    const jsonLd = {
-        '@context': 'https://schema.org',
-        '@type': 'NewsArticle',
-        headline: article.title,
-        description: article.excerpt,
-        image: [article.image],
-        datePublished:
-            article.date === 'Aktuell' ? '2026-05-20T08:00:00+02:00' : '2026-05-20T08:00:00+02:00', // Mock dates
-        dateModified:
-            article.date === 'Aktuell' ? '2026-05-20T08:00:00+02:00' : '2026-05-20T08:00:00+02:00',
-        author: [
-            {
-                '@type': 'Person',
-                name: article.author.name,
-                url: `${SITE_CONFIG.url}/ueber-uns`,
-            },
-        ],
-        publisher: {
-            '@type': 'Organization',
-            name: 'SwissTech Briefing',
-            logo: {
-                '@type': 'ImageObject',
-                url: `${SITE_CONFIG.url}/logo.png`,
-            },
-        },
-        mainEntityOfPage: {
-            '@type': 'WebPage',
-            '@id': `${SITE_CONFIG.url}/artikel/${article.slug}`,
-        },
-    };
+  const relatedArticles = await getRelatedArticles(article.category, article.slug, 3);
 
-    return (
-        <>
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-            <Header />
-            {/* Reading Progress Bar (Simulated) */}
-            <div className="sticky top-16 z-50 h-1 bg-slate-200 dark:bg-slate-800">
-                <div className="h-full bg-primary w-1/3"></div>
+  const articleUrl = `${SITE_CONFIG.url}/artikel/${article.slug}`;
+  const imageUrl = toAbsoluteUrl(getArticleImageOrFallback(article.image));
+  // ✅ SEO/Discover: usar fecha real de publicación
+  const publishedTime = toIsoDate(article.publishedAt);
+  const modifiedTime = toIsoDate(article.dateModified);
+  const readingTime = estimateReadingTimeFromHtml(article.contentHtml);
+
+  // ✅ NewsArticle JSON-LD
+  const newsArticleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": articleUrl,
+    },
+    headline: article.title,
+    description: article.excerpt,
+    ...(imageUrl ? { image: [imageUrl] } : {}),
+    articleSection: article.category,
+    inLanguage: "de-CH",
+    isAccessibleForFree: true,
+    ...(publishedTime ? { datePublished: publishedTime } : {}),
+    ...(modifiedTime ? { dateModified: modifiedTime } : {}),
+    author: [
+      {
+        "@type": "Person",
+        name: article.author?.name ?? SITE_CONFIG.name,
+        url: `${SITE_CONFIG.url}/ueber-uns`,
+      },
+    ],
+    publisher: {
+      "@type": "Organization",
+      name: SITE_CONFIG.name,
+      url: SITE_CONFIG.url,
+    },
+  };
+
+  // ✅ Breadcrumb JSON-LD
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Startseite",
+        item: SITE_CONFIG.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Artikel",
+        item: `${SITE_CONFIG.url}/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: article.title,
+        item: articleUrl,
+      },
+    ],
+  };
+
+  const heroImage = getArticleImageOrFallback(article.image);
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(newsArticleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+
+      <Header />
+
+      <main className="mx-auto min-h-screen max-w-3xl bg-white shadow-sm dark:bg-slate-900">
+        <article className="px-6 pt-10 pb-16">
+          <div className="mb-4">
+            <span className="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">
+              {article.category}
+            </span>
+          </div>
+
+          <h1 className="mb-6 text-3xl font-extrabold leading-tight text-slate-900 dark:text-white md:text-4xl">
+            {article.title}
+          </h1>
+
+          <div className="mb-8 flex flex-wrap items-center gap-3 border-b border-slate-100 pb-6 text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
+            <div className="flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-base">calendar_today</span>
+              <span>{formatSwissDate(article.datePublished)}</span>
             </div>
 
-            <main className="max-w-3xl mx-auto bg-white dark:bg-slate-900 min-h-screen shadow-sm">
-                <article className="px-6 pt-8 pb-12">
-                    <div className="mb-4">
-                        <span className="inline-block bg-primary/10 text-primary text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                            {article.category}
-                        </span>
-                    </div>
-                    <h1 className="text-3xl md:text-4xl font-extrabold leading-tight mb-4 text-slate-900 dark:text-white">
-                        {article.title}
-                    </h1>
-                    <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400 mb-8 pb-6 border-b border-slate-100 dark:border-slate-800">
-                        <span className="material-symbols-outlined text-base">calendar_today</span>
-                        <span>{formatSwissDate(article.datePublished)}</span>
-                        <span className="mx-1 font-light opacity-30">|</span>
-                        <span className="uppercase text-[10px] font-bold tracking-widest text-slate-400">
-                            Von {article.author.name}
-                        </span>
-                    </div>
+            <span className="opacity-30">|</span>
 
-                    {/* Box Section: In 30 Sekunden erklärt */}
-                    {article.summaryPoints && (
-                        <section className="bg-background-light dark:bg-slate-800 p-6 rounded-xl border-l-4 border-primary mb-10">
-                            <div className="flex items-center gap-2 mb-4">
-                                <span className="material-symbols-outlined text-primary">bolt</span>
-                                <h2 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tight">
-                                    In 30 Sekunden erklärt
-                                </h2>
-                            </div>
-                            <ul className="space-y-3 text-slate-700 dark:text-slate-300">
-                                {article.summaryPoints.map((point, idx) => (
-                                    <li key={idx} className="flex gap-3">
-                                        <span className="text-primary font-bold">•</span>
-                                        <p>{point}</p>
-                                    </li>
-                                ))}
-                            </ul>
-                        </section>
-                    )}
-
-                    {/* Body Text */}
-                    <div className="prose prose-slate dark:prose-invert max-w-none text-slate-800 dark:text-slate-200 leading-relaxed space-y-6">
-                        <p>{article.excerpt}</p>
-
-                        <div className="my-10 overflow-hidden rounded-xl bg-slate-100 relative h-64 md:h-96">
-                            <Image
-                                className="object-cover"
-                                src={article.image}
-                                alt={article.title}
-                                fill
-                                priority
-                                sizes="(max-width: 768px) 100vw, 800px"
-                            />
-                        </div>
-                        <p className="text-xs text-slate-500 p-3 italic">Quelle: SwissTech Briefing (Symbolbild)</p>
-
-                        <p>
-                            Die Schweiz festigt ihre Position als globaler Vorreiter in der künstlichen Intelligenz. Mit der offiziellen
-                            Einweihung neuer Infrastruktur beginnt eine neue Ära der Forschung. Dies sichert nicht nur die Qualität,
-                            sondern auch den Schutz sensibler Daten gemäss Schweizer Standards.
-                        </p>
-
-                        {/* Impact Box */}
-                        {article.impactItems && (
-                            <div className="mt-12 mb-8 p-1 bg-primary/5 rounded-xl">
-                                <div className="bg-white dark:bg-slate-900 p-6 rounded-lg">
-                                    <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
-                                        <span className="material-symbols-outlined text-primary">insights</span>
-                                        Was bedeutet das für die Schweiz?
-                                    </h3>
-                                    <div className="grid gap-6">
-                                        {article.impactItems.map((item, idx) => (
-                                            <ImpactItem key={idx} icon={item.icon} title={item.title} desc={item.desc} />
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Share Buttons */}
-                        <div className="mt-12 pt-8 border-t border-slate-100 dark:border-slate-800">
-                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-xs font-bold uppercase text-slate-400">Teilen:</span>
-                                    <div className="flex gap-2">
-                                        <button className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
-                                            <span className="material-symbols-outlined text-xl">share</span>
-                                        </button>
-                                        <button className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center hover:bg-[#0077b5] hover:text-white transition-colors text-xs font-bold">
-                                            in
-                                        </button>
-                                    </div>
-                                </div>
-                                <Link href={`/kategorie/${article.categorySlug}`} className="text-xs font-bold text-primary uppercase hover:underline">
-                                    Mehr aus {article.category} &rarr;
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-
-                {/* Related Articles Section */}
-                <section className="bg-slate-50 dark:bg-slate-900/50 px-6 py-12 border-t border-slate-100 dark:border-slate-800">
-                    <h3 className="text-xl font-bold mb-8">Das könnte Sie auch interessieren</h3>
-                    <div className="grid gap-6">
-                        {ARTICLES.filter((a) => a.categorySlug === article.categorySlug && a.id !== article.id)
-                            .slice(0, 3)
-                            .map((related) => (
-                                <ArticleCard
-                                    key={related.id}
-                                    title={related.title}
-                                    excerpt={related.excerpt}
-                                    category={related.category}
-                                    datePublished={related.datePublished}
-                                    image={related.image}
-                                    slug={related.slug}
-                                />
-                            ))}
-                    </div>
-                </section>
-            </main>
-
-            <Footer />
-        </>
-    );
-}
-
-function ImpactItem({ icon, title, desc }: { icon: string; title: string; desc: string }) {
-    return (
-        <div className="flex gap-4">
-            <div className="bg-primary/10 text-primary p-2 rounded-lg h-fit">
-                <span className="material-symbols-outlined">{icon}</span>
+            <div className="flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-base">schedule</span>
+              <span>{readingTime} min Lesezeit</span>
             </div>
-            <div>
-                <h4 className="font-bold text-slate-900 dark:text-white">{title}</h4>
-                <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">{desc}</p>
+
+            <span className="opacity-30">|</span>
+
+            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest">
+              <span className="text-slate-400">Von</span>
+              <span className="text-slate-900 dark:text-white">
+                {article.author?.name ?? SITE_CONFIG.name}
+              </span>
+              {article.author?.role && (
+                <>
+                  <span className="h-1 w-1 rounded-full bg-slate-300 dark:bg-slate-700" />
+                  <span className="text-primary">{article.author.role}</span>
+                </>
+              )}
             </div>
-        </div>
-    );
+          </div>
+
+          <div className="relative mb-8 h-64 overflow-hidden rounded-xl md:h-96">
+            <Image
+              src={heroImage}
+              alt={article.title}
+              fill
+              priority
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 800px"
+            />
+          </div>
+
+          <div className="prose prose-slate max-w-none leading-relaxed dark:prose-invert">
+            <p>{article.excerpt}</p>
+
+            <div
+              dangerouslySetInnerHTML={{
+                __html: article.contentHtml,
+              }}
+            />
+          </div>
+
+          <div className="mt-12 rounded-2xl border border-primary/10 bg-primary/5 p-2">
+            <NewsletterInlineCard />
+          </div>
+
+          {article.sources && article.sources.length > 0 && (
+            <div className="mt-12 rounded-2xl border border-slate-100 bg-slate-50 p-6 dark:border-slate-800 dark:bg-slate-800/50">
+              <h3 className="mb-4 flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
+                <span className="material-symbols-outlined text-sm">link</span>
+                Quellen & Referenzen
+              </h3>
+
+              <ul className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                {article.sources.map((source, index) => (
+                  <li key={`${source.url}-${index}`}>
+                    <a
+                      href={source.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group flex items-center gap-2 text-sm font-medium text-slate-600 transition-colors hover:text-primary dark:text-slate-300 dark:hover:text-primary"
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-slate-300 transition-colors group-hover:bg-primary dark:bg-slate-600" />
+                      {source.name}
+                      <span className="material-symbols-outlined text-[10px] opacity-0 transition-opacity group-hover:opacity-100">
+                        open_in_new
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {relatedArticles.length > 0 && (
+            <div className="mt-16 border-t border-slate-100 pt-12 dark:border-slate-800">
+              <h3 className="mb-8 text-xs font-black uppercase tracking-[0.2em] text-primary">
+                Das könnte Sie auch interessieren
+              </h3>
+
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                {relatedArticles.map((rel) => (
+                  <Link
+                    key={rel.id}
+                    href={`/artikel/${rel.slug}`}
+                    className="group flex flex-col"
+                  >
+                    <div className="relative mb-4 aspect-[16/9] overflow-hidden rounded-lg">
+                      <Image
+                        src={getArticleImageOrFallback(rel.image)}
+                        alt={rel.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, 300px"
+                      />
+                    </div>
+
+                    <div className="mb-2 text-[10px] font-bold uppercase text-slate-400 dark:text-slate-500">
+                      {formatSwissDate(rel.datePublished)}
+                    </div>
+
+                    <h4 className="line-clamp-2 text-sm font-bold leading-snug transition-colors group-hover:text-primary">
+                      {rel.title}
+                    </h4>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="mt-16 border-t border-slate-100 pt-8 text-center dark:border-slate-800 md:text-left">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-xs font-bold uppercase text-primary transition-transform hover:translate-x-[-4px]"
+            >
+              <span className="material-symbols-outlined text-sm">arrow_back</span>
+              Zurück zur Startseite
+            </Link>
+          </div>
+        </article>
+      </main>
+
+      <Footer />
+    </>
+  );
 }

@@ -1,0 +1,44 @@
+{
+  "id": "ki-1771683152656",
+  "slug": "eth-zurich-presenta-avances-en-computacion-para-ia",
+  "title": "ETH Zürich presenta avances en computación para IA",
+  "excerpt": "Un nuevo proyecto impulsa la infraestructura de cómputo y acelera investigación aplicada.",
+  "category": "KI",
+  "categorySlug": "ki",
+  "author": {
+    "name": "Marc Lehmann",
+    "slug": "marc-lehmann",
+    "role": "Chefredaktor",
+    "bio": "Redaktor bei SwissTech Briefing mit Fokus auf Technologie, Innovation und digitale Politik."
+  },
+  "date": "21. Februar 2026",
+  "datePublished": "2026-02-21T14:12:32.656Z",
+  "image": "/assets/news/eth-zurich-presenta-avances-en-computacion-para-ia.jpg",
+  "readingTimeMinutes": 2,
+  "summaryPoints": [
+    "Resumen clave 1 (auto).",
+    "Resumen clave 2 (auto).",
+    "Resumen clave 3 (auto)."
+  ],
+  "impactItems": [
+    {
+      "icon": "insights",
+      "title": "Impacto",
+      "desc": "Qué cambia para Suiza."
+    },
+    {
+      "icon": "security",
+      "title": "Riesgos",
+      "desc": "Qué vigilar."
+    },
+    {
+      "icon": "rocket_launch",
+      "title": "Oportunidad",
+      "desc": "Qué se abre a futuro."
+    }
+  ],
+  "imageMeta": {
+    "kind": "ai",
+    "prompt": "POSITIVE: Editorial cover image, modern Swiss tech aesthetic, clean composition, soft studio lighting, high detail, realistic materials, premium newsroom style, no text, no logos, no watermark, centered subject, shallow depth of field, 16:9. Topic: AI research, data center, abstract neural network lights, Swiss innovation mood. Inspired by: ETH Zürich presenta avances en computación para IA\nNEGATIVE: text, logo, watermark, brand names, faces, people, flags, distorted, blurry, lowres, artifacts, oversaturated"
+  }
+}

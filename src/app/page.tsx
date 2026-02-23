@@ -1,109 +1,146 @@
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import CategoryTabs from '@/components/CategoryTabs';
-import ArticleCard from '@/components/ArticleCard';
-import NewsletterInlineCard from '@/components/NewsletterInlineCard';
-import { FEATURED_ARTICLE, ARTICLES } from '@/lib/data/mock';
-import Link from 'next/link';
-import { formatSwissDate } from '@/lib/formatDate';
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import CategoryTabs from "@/components/CategoryTabs";
+import ArticleCard from "@/components/ArticleCard";
+import NewsletterInlineCard from "@/components/NewsletterInlineCard";
+import Link from "next/link";
+import Image from "next/image";
+import { formatSwissDate } from "@/lib/formatDate";
+import { getLatestArticles } from "@/lib/articles.repo";
 
-import Image from 'next/image';
+export const runtime = "nodejs";
 
-export default function Home() {
+/**
+ * Revalida cada 60 segundos.
+ * Reduce carga en VPS pero mantiene artículos casi en tiempo real.
+ */
+export const revalidate = 60;
+
+export default async function Home() {
+  const articles = await getLatestArticles(30);
+
+  const featured = articles.length > 0 ? articles[0] : null;
+  const rest = articles.length > 1 ? articles.slice(1) : [];
+
   return (
-    <div className="flex flex-col min-h-screen bg-white dark:bg-slate-950">
+    <div className="flex min-h-screen flex-col bg-white dark:bg-slate-950">
       <Header />
       <CategoryTabs />
 
-      <main className="flex-1 max-w-5xl mx-auto w-full px-4 py-8 md:py-12">
-        {/* Featured Article (Editorial Hero) */}
-        <section className="mb-12 md:mb-20">
-          <Link href={`/artikel/${FEATURED_ARTICLE.slug}`}>
-            <article className="relative group cursor-pointer overflow-hidden rounded-2xl bg-white dark:bg-slate-900 shadow-lg border border-slate-200 dark:border-slate-800 flex flex-col lg:flex-row items-stretch">
-              <div className="lg:w-3/5 overflow-hidden relative min-h-[300px] md:min-h-[400px]">
-                <Image
-                  className="object-cover group-hover:scale-105 transition-transform duration-700"
-                  src={FEATURED_ARTICLE.image}
-                  alt={FEATURED_ARTICLE.title}
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 60vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent lg:hidden" />
-              </div>
-              <div className="lg:w-2/5 p-8 md:p-10 flex flex-col justify-center">
-                <div className="flex items-center gap-3 mb-6">
-                  <span className="bg-primary/10 text-primary text-[11px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-sm">
-                    {FEATURED_ARTICLE.category}
-                  </span>
-                  <span className="text-slate-400 dark:text-slate-500 text-xs font-medium">
-                    {formatSwissDate(FEATURED_ARTICLE.datePublished)}
-                  </span>
+      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 md:py-12">
+        {/* ================= FEATURED ================= */}
+        {featured ? (
+          <section className="mb-12 md:mb-20">
+            <Link href={`/artikel/${featured.slug}`} className="block">
+              <article className="group relative flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg dark:border-slate-800 dark:bg-slate-900 lg:flex-row">
+                {/* Imagen */}
+                <div className="relative min-h-[300px] overflow-hidden md:min-h-[400px] lg:w-3/5">
+                  <Image
+                    src={featured.image}
+                    alt={featured.title}
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 60vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent lg:hidden" />
                 </div>
-                <h2 className="text-3xl md:text-4xl font-bold leading-[1.15] mb-6 group-hover:text-primary transition-colors decoration-primary/30 decoration-2 underline-offset-4 group-hover:underline">
-                  {FEATURED_ARTICLE.title}
-                </h2>
-                <p className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed line-clamp-3 mb-8">
-                  {FEATURED_ARTICLE.excerpt}
-                </p>
-                <div className="mt-auto flex items-center text-primary font-bold text-sm uppercase tracking-widest group-hover:gap-2 transition-all">
-                  Bericht lesen <span className="material-symbols-outlined ml-1.5 text-lg">arrow_forward</span>
+
+                {/* Texto */}
+                <div className="flex flex-col justify-center p-8 md:p-10 lg:w-2/5">
+                  <div className="mb-6 flex items-center gap-3">
+                    <span className="rounded-sm bg-primary/10 px-2.5 py-1 text-[11px] font-bold uppercase tracking-widest text-primary">
+                      {featured.category}
+                    </span>
+                    <span className="text-xs font-medium text-slate-400 dark:text-slate-500">
+                      {formatSwissDate(featured.datePublished)}
+                    </span>
+                  </div>
+
+                  <h2 className="mb-6 text-3xl font-bold leading-[1.15] transition-colors decoration-primary/30 decoration-2 underline-offset-4 group-hover:text-primary group-hover:underline md:text-4xl">
+                    {featured.title}
+                  </h2>
+
+                  <p className="mb-8 line-clamp-3 text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                    {featured.excerpt}
+                  </p>
+
+                  <div className="mt-auto flex items-center text-sm font-bold uppercase tracking-widest text-primary transition-all group-hover:gap-2">
+                    Bericht lesen
+                    <span className="material-symbols-outlined ml-1.5 text-lg">
+                      arrow_forward
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </article>
-          </Link>
-        </section>
-
-        {/* Section Divider & Title */}
-        <div className="space-y-10">
-          <section>
-            <div className="flex items-center gap-4 mb-8">
-              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-primary whitespace-nowrap">
-                Analysen & Meldungen
-              </h3>
-              <div className="h-px w-full bg-slate-200 dark:bg-slate-800" />
-            </div>
-
-            {/* Article List */}
-            <div className="grid grid-cols-1 gap-8">
-              {ARTICLES.slice(0, 2).map((article) => (
-                <ArticleCard
-                  key={article.id}
-                  title={article.title}
-                  excerpt={article.excerpt}
-                  category={article.category}
-                  datePublished={article.datePublished}
-                  image={article.image}
-                  slug={article.slug}
-                  priority
-                />
-              ))}
-
-              <div className="my-4">
-                <NewsletterInlineCard />
-              </div>
-
-              {ARTICLES.slice(2).map((article) => (
-                <ArticleCard
-                  key={article.id}
-                  title={article.title}
-                  excerpt={article.excerpt}
-                  category={article.category}
-                  datePublished={article.datePublished}
-                  image={article.image}
-                  slug={article.slug}
-                />
-              ))}
-            </div>
+              </article>
+            </Link>
           </section>
+        ) : (
+          <section className="mb-12 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900 md:mb-20">
+            <h2 className="mb-2 text-xl font-bold">Noch keine Artikel</h2>
+            <p className="text-slate-600 dark:text-slate-400">
+              Publiziere deinen ersten Artikel über{" "}
+              <code className="rounded bg-slate-100 px-2 py-1 text-sm dark:bg-slate-800">
+                /api/admin/publish
+              </code>
+              , dann erscheint er hier automatisch.
+            </p>
+          </section>
+        )}
 
-          {/* Load More Section */}
-          <div className="pt-12 pb-8 flex justify-center">
-            <button className="px-12 py-4 border border-slate-300 dark:border-slate-700 rounded-full text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 transition-all hover:scale-105 active:scale-95 shadow-sm">
-              Archiv durchsuchen
-            </button>
+        {/* ================= LISTA RESTO ================= */}
+        {rest.length > 0 && (
+          <div className="space-y-10">
+            <section>
+              <div className="mb-8 flex items-center gap-4">
+                <h3 className="whitespace-nowrap text-xs font-black uppercase tracking-[0.2em] text-primary">
+                  Analysen & Meldungen
+                </h3>
+                <div className="h-px w-full bg-slate-200 dark:bg-slate-800" />
+              </div>
+
+              <div className="grid grid-cols-1 gap-8">
+                {rest.slice(0, 2).map((article) => (
+                  <ArticleCard
+                    key={article.id}
+                    title={article.title}
+                    excerpt={article.excerpt}
+                    category={article.category}
+                    datePublished={article.datePublished}
+                    image={article.image}
+                    slug={article.slug}
+                    priority
+                  />
+                ))}
+
+                <div className="my-4">
+                  <NewsletterInlineCard />
+                </div>
+
+                {rest.slice(2).map((article) => (
+                  <ArticleCard
+                    key={article.id}
+                    title={article.title}
+                    excerpt={article.excerpt}
+                    category={article.category}
+                    datePublished={article.datePublished}
+                    image={article.image}
+                    slug={article.slug}
+                  />
+                ))}
+              </div>
+            </section>
+
+            <div className="flex justify-center pb-8 pt-12">
+              <Link
+                href="/suche"
+                className="rounded-full border border-slate-300 px-12 py-4 text-xs font-black uppercase tracking-widest text-slate-600 shadow-sm transition-all hover:scale-105 hover:bg-slate-50 active:scale-95 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-900"
+              >
+                Archiv durchsuchen
+              </Link>
+            </div>
           </div>
-        </div>
+        )}
       </main>
 
       <Footer />
