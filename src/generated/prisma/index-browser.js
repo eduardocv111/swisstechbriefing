@@ -133,6 +133,14 @@ exports.Prisma.ArticleScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.NewsletterSubscriptionScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  source: 'source',
+  leadMagnet: 'leadMagnet',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -145,7 +153,8 @@ exports.Prisma.NullsOrder = {
 
 
 exports.Prisma.ModelName = {
-  Article: 'Article'
+  Article: 'Article',
+  NewsletterSubscription: 'NewsletterSubscription'
 };
 
 /**

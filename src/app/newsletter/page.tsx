@@ -7,7 +7,7 @@ import Footer from '@/components/Footer';
 
 export default function NewsletterPage() {
     const [email, setEmail] = useState('');
-    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+    const [status, setStatus] = useState<string>('idle');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -52,7 +52,7 @@ export default function NewsletterPage() {
                         {/* Decorative background element */}
                         <div className="absolute -top-24 -right-24 h-48 w-48 bg-primary/5 rounded-full blur-3xl" />
 
-                        {status === 'idle' ? (
+                        {status === 'idle' || status === 'loading' || status === 'error' ? (
                             <>
                                 <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-primary">
                                     <span className="relative flex h-2 w-2">
@@ -91,11 +91,17 @@ export default function NewsletterPage() {
                                     </button>
                                 </form>
 
+                                {status === 'error' && (
+                                    <p className="mt-4 text-sm text-red-500 font-medium">
+                                        Hoops! Da lief etwas schief. Bitte versuchen Sie es erneut.
+                                    </p>
+                                )}
+
                                 <p className="mt-6 text-sm text-slate-500 italic">
                                     Abmeldung jederzeit mit einem Klick möglich. Spamschutz inklusive.
                                 </p>
                             </>
-                        ) : status === 'success' ? (
+                        ) : (
                             <div className="py-12 animate-in fade-in zoom-in duration-500">
                                 <div className="mb-6 inline-flex h-20 w-20 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
                                     <svg className="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -106,24 +112,6 @@ export default function NewsletterPage() {
                                 <p className="text-lg text-slate-600 dark:text-slate-400">
                                     Wir haben Ihnen soeben den Bestätigungslink und Ihren <span className="font-bold">AI Intelligence Report</span> zugeschickt. Bitte prüfen Sie Ihr Postfach.
                                 </p>
-                            </div>
-                        ) : (
-                            <div className="py-12 text-center animate-in fade-in zoom-in duration-500">
-                                <div className="mb-6 inline-flex h-20 w-20 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400">
-                                    <svg className="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </div>
-                                <h2 className="text-2xl font-bold mb-4">Hoops! Da lief etwas schief</h2>
-                                <p className="text-slate-600 dark:text-slate-400 mb-8">
-                                    Wir konnten Ihre Anmeldung zur Zeit nicht verarbeiten. Bitte versuchen Sie es später noch einmal.
-                                </p>
-                                <button
-                                    onClick={() => setStatus('idle')}
-                                    className="text-primary font-bold hover:underline"
-                                >
-                                    Eskat erneut versuchen
-                                </button>
                             </div>
                         )}
                     </div>
