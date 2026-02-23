@@ -340,28 +340,31 @@ export default async function ArticlePage({ params }: Props) {
                 />
               </div>
 
-              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
+              <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 md:grid-cols-3">
                 {relatedArticles.map((rel) => (
                   <Link
                     key={rel.id}
                     href={`/artikel/${rel.slug}`}
                     className="group flex flex-col"
                   >
-                    <div className="relative mb-4 aspect-[16/9] overflow-hidden rounded-lg">
+                    <div className="relative mb-4 aspect-video overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-800">
                       <Image
                         src={getArticleImageOrFallback(rel.image)}
-                        alt={rel.title}
+                        alt=""
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                         sizes="(max-width: 768px) 100vw, 300px"
                       />
+                      {/* Subcapa de protección visual */}
+                      <div className="absolute inset-0 ring-1 ring-inset ring-slate-900/5 group-hover:ring-slate-900/10" />
                     </div>
 
-                    <div className="mb-2 text-[10px] font-bold uppercase text-slate-400 dark:text-slate-500">
+                    <div className="mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                      <span className="h-1 w-1 rounded-full bg-primary" />
                       {formatSwissDate(rel.datePublished)}
                     </div>
 
-                    <h4 className="line-clamp-2 text-sm font-bold leading-snug transition-colors group-hover:text-primary">
+                    <h4 className="line-clamp-2 text-sm font-bold leading-snug text-slate-900 transition-colors group-hover:text-primary dark:text-white">
                       {rel.title}
                     </h4>
                   </Link>
