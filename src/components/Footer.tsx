@@ -1,9 +1,9 @@
 import Link from 'next/link';
-import { CATEGORIES } from '@/lib/data/mock';
+import { CATEGORIES } from '@/lib/categories';
 
 export default function Footer() {
     return (
-        <footer className="bg-background-dark text-slate-400 py-16 px-4 border-t border-slate-800">
+        <footer className="bg-slate-900 border-t border-slate-800 text-slate-400 py-16 px-4">
             <div className="max-w-4xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
                     {/* Column 1: Brand */}
@@ -20,9 +20,9 @@ export default function Footer() {
                             <li><Link href="/" className="hover:text-primary transition-colors">Home</Link></li>
                             <li><Link href="/ueber-uns" className="hover:text-primary transition-colors">Über uns</Link></li>
                             {CATEGORIES.map((cat) => (
-                                <li key={cat.href}>
-                                    <Link href={cat.href} className="hover:text-primary transition-colors">
-                                        {cat.name}
+                                <li key={cat.slug}>
+                                    <Link href={`/kategorie/${cat.slug}`} className="hover:text-primary transition-colors">
+                                        {cat.label}
                                     </Link>
                                 </li>
                             ))}

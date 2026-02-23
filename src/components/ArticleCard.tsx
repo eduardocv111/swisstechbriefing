@@ -23,7 +23,7 @@ export default function ArticleCard({
 }: ArticleCardProps) {
     return (
         <Link href={`/artikel/${slug}`} className="group block">
-            <article className="bg-white dark:bg-slate-900 p-5 rounded-lg border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row gap-5 items-start hover:shadow-md transition-shadow duration-200">
+            <article className="bg-background-light dark:bg-slate-900 p-5 rounded-lg border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row gap-5 items-start hover:shadow-md transition-shadow duration-200">
                 {/* Image */}
                 <div className="w-full md:w-36 h-28 flex-shrink-0 rounded-md bg-slate-100 dark:bg-slate-800 overflow-hidden relative">
                     <Image

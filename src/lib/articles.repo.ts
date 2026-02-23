@@ -83,6 +83,11 @@ function safeJsonParseSources(raw: string | null | undefined): Source[] {
   }
 }
 
+function sanitizeText(text: string): string {
+  if (!text) return "";
+  return text.replace(/\uFFFD/g, "ü"); // Tentatively map diamond to 'ü' as it's the most common failure in 'fhren'
+}
+
 function mapDbToUi(a: DbArticle): UiArticle {
   const sources = safeJsonParseSources(a.sourcesJson);
 
@@ -92,8 +97,8 @@ function mapDbToUi(a: DbArticle): UiArticle {
   return {
     id: a.id,
     slug: a.slug,
-    title: a.title,
-    excerpt: a.excerpt,
+    title: sanitizeText(a.title),
+    excerpt: sanitizeText(a.excerpt),
     category: a.category,
 
     // ✅ UI (editorial)
@@ -111,7 +116,7 @@ function mapDbToUi(a: DbArticle): UiArticle {
       name: a.authorName,
       role: a.authorRole ?? null,
     },
-    contentHtml: a.contentHtml ?? "",
+    contentHtml: sanitizeText(a.contentHtml ?? ""),
   };
 }
 

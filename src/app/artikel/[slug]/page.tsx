@@ -17,18 +17,19 @@ export const runtime = "nodejs";
 export const revalidate = 3600; // 1h ISR
 
 type Props = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
-const FALLBACK_OG_IMAGE = "/images/og-default.jpg"; // ✅ ajusta ruta real
+const FALLBACK_OG_IMAGE = "/assets/images/news/default-news.svg";
 
 function stripHtml(html: string = ""): string {
+  if (!html) return "";
   return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 }
 
 function estimateReadingTimeFromHtml(html: string = ""): number {
   const plainText = stripHtml(html);
-  const wordCount = plainText ? plainText.split(" ").length : 0;
+  const wordCount = plainText ? plainText.split(/\s+/).length : 0;
   return Math.max(1, Math.ceil(wordCount / 200));
 }
 
@@ -48,7 +49,7 @@ function getArticleImageOrFallback(image?: string | null): string {
   return image && image.trim() ? image : FALLBACK_OG_IMAGE;
 }
 
-// ✅ Pre-render de slugs (ISR seguirá revalidando)
+// ✅ Pre-render de slugs
 export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
   try {
     const slugs = await getAllArticleSlugs();
@@ -57,13 +58,13 @@ export async function generateStaticParams(): Promise<Array<{ slug: string }>> {
       .map((slug) => ({ slug }));
   } catch (error) {
     console.error("generateStaticParams error:", error);
-    // Mejor devolver [] que romper el build
     return [];
   }
 }
 
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = params;
+  const { slug } = await params;
   const article = await getArticleBySlug(slug);
 
   // ✅ notFound metadata
@@ -117,7 +118,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ArticlePage({ params }: Props) {
-  const { slug } = params;
+  const { slug } = await params;
   const article = await getArticleBySlug(slug);
 
   if (!article) {
@@ -204,7 +205,7 @@ export default async function ArticlePage({ params }: Props) {
 
       <Header />
 
-      <main className="mx-auto min-h-screen max-w-3xl bg-white shadow-sm dark:bg-slate-900">
+      <main className="mx-auto min-h-screen max-w-3xl bg-slate-50 shadow-sm dark:bg-slate-900/50">
         <article className="px-6 pt-10 pb-16">
           <div className="mb-4">
             <span className="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">
@@ -256,10 +257,11 @@ export default async function ArticlePage({ params }: Props) {
             />
           </div>
 
-          <div className="prose prose-slate max-w-none leading-relaxed dark:prose-invert">
-            <p>{article.excerpt}</p>
+          <div className="prose prose-slate max-w-none leading-relaxed text-slate-800 dark:prose-invert dark:text-slate-200">
+            <p className="text-lg font-medium leading-relaxed">{article.excerpt}</p>
 
             <div
+              className="mt-6"
               dangerouslySetInnerHTML={{
                 __html: article.contentHtml,
               }}

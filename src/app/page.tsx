@@ -16,6 +16,13 @@ export const runtime = "nodejs";
  */
 export const revalidate = 60;
 
+const FALLBACK_IMAGE = "/assets/images/news/default-news.svg";
+
+function getArticleImage(url?: string | null): string {
+  if (!url || url.trim() === "") return FALLBACK_IMAGE;
+  return url;
+}
+
 export default async function Home() {
   const articles = await getLatestArticles(30);
 
@@ -23,7 +30,7 @@ export default async function Home() {
   const rest = articles.length > 1 ? articles.slice(1) : [];
 
   return (
-    <div className="flex min-h-screen flex-col bg-white dark:bg-slate-950">
+    <div className="flex min-h-screen flex-col">
       <Header />
       <CategoryTabs />
 
@@ -32,11 +39,11 @@ export default async function Home() {
         {featured ? (
           <section className="mb-12 md:mb-20">
             <Link href={`/artikel/${featured.slug}`} className="block">
-              <article className="group relative flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg dark:border-slate-800 dark:bg-slate-900 lg:flex-row">
+              <article className="group relative flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-slate-200 bg-background-light shadow-lg dark:border-slate-800 dark:bg-slate-900 lg:flex-row">
                 {/* Imagen */}
                 <div className="relative min-h-[300px] overflow-hidden md:min-h-[400px] lg:w-3/5">
                   <Image
-                    src={featured.image}
+                    src={getArticleImage(featured.image)}
                     alt={featured.title}
                     fill
                     priority
@@ -57,7 +64,7 @@ export default async function Home() {
                     </span>
                   </div>
 
-                  <h2 className="mb-6 text-3xl font-bold leading-[1.15] transition-colors decoration-primary/30 decoration-2 underline-offset-4 group-hover:text-primary group-hover:underline md:text-4xl">
+                  <h2 className="mb-6 text-3xl font-bold leading-[1.15] text-slate-900 dark:text-white transition-colors decoration-primary/30 decoration-2 underline-offset-4 group-hover:text-primary group-hover:underline md:text-4xl">
                     {featured.title}
                   </h2>
 
@@ -76,7 +83,7 @@ export default async function Home() {
             </Link>
           </section>
         ) : (
-          <section className="mb-12 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900 md:mb-20">
+          <section className="mb-12 rounded-2xl border border-slate-200 bg-background-light p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900 md:mb-20">
             <h2 className="mb-2 text-xl font-bold">Noch keine Artikel</h2>
             <p className="text-slate-600 dark:text-slate-400">
               Publiziere deinen ersten Artikel über{" "}
