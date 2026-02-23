@@ -82,7 +82,7 @@ export default async function Home() {
                     {featured.title}
                   </h2>
 
-                  <p className="mb-5 line-clamp-3 text-base leading-relaxed text-slate-600 dark:text-slate-400">
+                  <p className="mb-5 line-clamp-3 text-base leading-relaxed text-slate-600 dark:text-slate-300">
                     {featured.excerpt}
                   </p>
 
@@ -97,7 +97,7 @@ export default async function Home() {
                     <span>{estimateReadingTime(featured.contentHtml)} min Lesezeit</span>
                   </div>
 
-                  <div className="mt-auto flex items-center text-sm font-bold uppercase tracking-widest text-primary transition-all group-hover:gap-2">
+                  <div className="mt-auto flex items-center text-base sm:text-sm font-extrabold uppercase tracking-widest text-primary transition-all group-hover:gap-2">
                     Bericht lesen
                     <span className="material-symbols-outlined ml-1.5 text-lg notranslate normal-case">
                       arrow_forward
@@ -138,7 +138,7 @@ export default async function Home() {
              * - Overlay gradient for editorial contrast + readability
              * - No CLS: aspect-ratio reserves space before image loads
              */}
-            <div className="grid grid-cols-2 gap-[2px] rounded-xl overflow-hidden bg-slate-900/80">
+            <div className="grid grid-cols-2 gap-[3px] rounded-xl overflow-hidden bg-slate-800">
               {collageArticles.map((article, idx) => (
                 <Link
                   key={article.id}
