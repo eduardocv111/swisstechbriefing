@@ -82,19 +82,42 @@ export default function AdSlot({
         return () => window.removeEventListener('stb-adsense-ready', handleReady);
     }, []);
 
+    // ── Visibility & Impression Tracking (Fase 2.5) ──
     useEffect(() => {
         if (!hasMarketing || !adsenseReady || adPushed.current) return;
         if (!ADSENSE_CLIENT || !ADS_ENABLED) return;
         if (!insRef.current) return;
 
-        try {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
-            adPushed.current = true;
-        } catch {
-            // Silently handle ad blocker errors
-        }
-    }, [hasMarketing, adsenseReady]);
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting && !adPushed.current) {
+                        try {
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+                            adPushed.current = true;
+
+                            // ── Track impression in GA4 ──
+                            if (typeof window.gtag === 'function') {
+                                window.gtag('event', 'ad_impression', {
+                                    ad_slot: slotId,
+                                    page_type: pageType,
+                                    category: category,
+                                });
+                            }
+                        } catch {
+                            // Silently handle ad blocker errors
+                        }
+                        observer.disconnect();
+                    }
+                });
+            },
+            { threshold: 0.5 } // visible al menos el 50%
+        );
+
+        observer.observe(insRef.current);
+        return () => observer.disconnect();
+    }, [hasMarketing, adsenseReady, slotId, pageType, category]);
 
     if (!hasMarketing) {
         if (fallback) {

@@ -2,7 +2,7 @@ export const SITE_CONFIG = {
     name: 'SwissTech Briefing',
     description: 'Kuratiertes Medium für KI, Startups und Technologie in der Schweiz.',
     url: 'https://swisstechbriefing.ch',
-    ogImage: 'https://swisstechbriefing.ch/og-image.jpg',
+    ogImage: '/assets/images/brand/logo-square.png',
     author: 'SwissTech Briefing Redaktion',
 };
 

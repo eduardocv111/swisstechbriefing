@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { CATEGORIES } from '@/lib/categories';
 import CookieSettingsButton from '@/components/consent/CookieSettingsButton';
 
@@ -9,7 +10,14 @@ export default function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
                     {/* Column 1: Brand */}
                     <div className="space-y-4">
-                        <h2 className="text-white font-bold text-lg tracking-tight uppercase">SwissTech Briefing</h2>
+                        <div className="relative h-6 w-38">
+                            <Image
+                                src="/assets/images/brand/logo-horizontal-dark.png"
+                                alt="SwissTech Briefing"
+                                fill
+                                className="object-contain object-left"
+                            />
+                        </div>
                         <p className="text-sm leading-relaxed max-w-xs">
                             Kuratiertes Medium für KI, Startups und Technologie in der Schweiz. Tägliche Einblicke in die digitale Transformation.
                         </p>
