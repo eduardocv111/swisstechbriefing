@@ -8,6 +8,12 @@ import Image from "next/image";
 import { formatSwissDate } from "@/lib/formatDate";
 import { getLatestArticles } from "@/lib/articles.repo";
 
+function estimateReadingTime(html: string = ""): number {
+  const text = html.replace(/<[^>]*>/g, "").trim();
+  const words = text ? text.split(/\s+/).length : 0;
+  return Math.max(1, Math.ceil(words / 200));
+}
+
 export const runtime = "nodejs";
 
 /**
@@ -40,23 +46,25 @@ export default async function Home() {
           <section className="mb-12 md:mb-20">
             <Link href={`/artikel/${featured.slug}`} className="block">
               <article className="group relative flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-slate-200 bg-background-light shadow-lg dark:border-slate-800 dark:bg-slate-900 lg:flex-row">
-                {/* Imagen */}
-                <div className="relative min-h-[300px] overflow-hidden md:min-h-[400px] lg:w-3/5">
-                  <Image
-                    src={getArticleImage(featured.image)}
-                    alt={featured.title}
-                    fill
-                    priority
-                    unoptimized
-                    sizes="(max-width: 1024px) 100vw, 60vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
+                {/* Imagen — capped on mobile for above-the-fold content */}
+                <div className="relative max-h-[45vh] overflow-hidden md:max-h-none lg:w-3/5">
+                  <div className="aspect-video relative w-full">
+                    <Image
+                      src={getArticleImage(featured.image)}
+                      alt={featured.title}
+                      fill
+                      priority
+                      unoptimized
+                      sizes="(max-width: 1024px) 100vw, 60vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent lg:hidden" />
                 </div>
 
                 {/* Texto */}
-                <div className="flex flex-col justify-center p-8 md:p-10 lg:w-2/5">
-                  <div className="mb-6 flex items-center gap-3">
+                <div className="flex flex-col justify-center p-6 md:p-10 lg:w-2/5">
+                  <div className="mb-4 flex items-center gap-3">
                     <span className="rounded-sm bg-primary/10 px-2.5 py-1 text-[11px] font-bold uppercase tracking-widest text-primary">
                       {featured.category}
                     </span>
@@ -65,13 +73,24 @@ export default async function Home() {
                     </span>
                   </div>
 
-                  <h2 className="mb-6 text-3xl font-bold leading-[1.15] text-slate-900 dark:text-white transition-colors decoration-primary/30 decoration-2 underline-offset-4 group-hover:text-primary group-hover:underline md:text-4xl">
+                  <h2 className="mb-3 text-2xl font-bold leading-[1.15] text-slate-900 dark:text-white transition-colors decoration-primary/30 decoration-2 underline-offset-4 group-hover:text-primary group-hover:underline md:text-4xl" style={{ hyphens: 'auto', WebkitHyphens: 'auto' }} lang="de">
                     {featured.title}
                   </h2>
 
-                  <p className="mb-8 line-clamp-3 text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                  <p className="mb-5 line-clamp-3 text-base leading-relaxed text-slate-600 dark:text-slate-400">
                     {featured.excerpt}
                   </p>
+
+                  {/* Authority signals */}
+                  <div className="mb-6 flex items-center gap-3 text-xs text-slate-400 dark:text-slate-500">
+                    {featured.author?.name && (
+                      <span className="font-semibold text-slate-500 dark:text-slate-400">
+                        {featured.author.name}
+                      </span>
+                    )}
+                    <span className="h-0.5 w-0.5 rounded-full bg-slate-400"></span>
+                    <span>{estimateReadingTime(featured.contentHtml)} min Lesezeit</span>
+                  </div>
 
                   <div className="mt-auto flex items-center text-sm font-bold uppercase tracking-widest text-primary transition-all group-hover:gap-2">
                     Bericht lesen

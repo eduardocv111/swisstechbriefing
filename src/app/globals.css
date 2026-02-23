@@ -26,6 +26,21 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-display);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 🔹 Smart hyphenation for German — prevents ugly mobile breaks */
+h1,
+h2,
+h3,
+.prose h2,
+.prose h3 {
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .hide-scrollbar::-webkit-scrollbar {

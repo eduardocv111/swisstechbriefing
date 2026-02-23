@@ -2,10 +2,10 @@ import Link from 'next/link';
 
 export default function Header() {
     return (
-        <header className="sticky top-0 z-50 bg-background-dark text-white px-4 h-16 flex items-center justify-between shadow-sm border-b border-white/5">
+        <header className="sticky top-0 z-50 bg-background-dark text-white px-4 h-12 md:h-14 flex items-center justify-between shadow-sm border-b border-white/5">
             <div className="flex items-center gap-2">
                 <Link href="/" className="hover:opacity-90 transition-opacity">
-                    <h1 className="text-xl font-bold tracking-tight text-white uppercase cursor-pointer">
+                    <h1 className="text-lg md:text-xl font-bold tracking-tight text-white uppercase cursor-pointer">
                         SwissTech <span className="text-primary">Briefing</span>
                     </h1>
                 </Link>
