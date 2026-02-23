@@ -34,7 +34,11 @@ export default async function Home() {
   const articles = await getLatestArticles(30);
 
   const featured = articles.length > 0 ? articles[0] : null;
-  const rest = articles.length > 1 ? articles.slice(1) : [];
+
+  // Collage: next 4 articles for the 2×2 editorial grid
+  const collageArticles = articles.slice(1, 5);
+  // Remaining articles after collage
+  const rest = articles.slice(5);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -42,12 +46,12 @@ export default async function Home() {
       <CategoryTabs />
 
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 md:py-12">
-        {/* ================= FEATURED ================= */}
+        {/* ================= FEATURED HERO ================= */}
         {featured ? (
           <section className="mb-12 md:mb-20">
             <Link href={`/artikel/${featured.slug}`} className="block">
               <article className="group relative flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-slate-200 bg-background-light shadow-lg dark:border-slate-800 dark:bg-slate-900 lg:flex-row">
-                {/* Imagen — capped on mobile for above-the-fold content */}
+                {/* Image — capped on mobile for above-the-fold content */}
                 <div className="relative max-h-[45vh] overflow-hidden md:max-h-none lg:w-3/5">
                   <div className="aspect-video relative w-full">
                     <Image
@@ -63,7 +67,7 @@ export default async function Home() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent lg:hidden" />
                 </div>
 
-                {/* Texto */}
+                {/* Text */}
                 <div className="flex flex-col justify-center p-6 md:p-10 lg:w-2/5">
                   <div className="mb-4 flex items-center gap-3">
                     <span className="rounded-sm bg-primary/10 px-2.5 py-1 text-[11px] font-bold uppercase tracking-widest text-primary">
@@ -116,6 +120,60 @@ export default async function Home() {
           </section>
         )}
 
+        {/* ================= EDITORIAL COLLAGE 2×2 ================= */}
+        {collageArticles.length > 0 && (
+          <section className="mb-12 md:mb-16">
+            <div className="mb-8 flex items-center gap-4">
+              <h3 className="whitespace-nowrap text-xs font-black uppercase tracking-[0.2em] text-primary">
+                Aktuelle Analysen
+              </h3>
+              <div className="h-px w-full bg-slate-200 dark:bg-slate-800" />
+            </div>
+
+            {/*
+             * 2×2 Collage Grid
+             * - Mobile: 2 columns with 2px gap
+             * - Tablet+: 2 columns with 3px gap
+             * - Each tile: fixed aspect-ratio (4/3) with object-cover
+             * - Overlay gradient for editorial contrast + readability
+             * - No CLS: aspect-ratio reserves space before image loads
+             */}
+            <div className="grid grid-cols-2 gap-[2px] sm:gap-[3px] rounded-xl overflow-hidden">
+              {collageArticles.map((article, idx) => (
+                <Link
+                  key={article.id}
+                  href={`/artikel/${article.slug}`}
+                  className="group relative block"
+                >
+                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-200 dark:bg-slate-800">
+                    <Image
+                      src={getArticleImage(article.image)}
+                      alt={article.title}
+                      fill
+                      unoptimized
+                      sizes="(max-width: 640px) 50vw, 25vw"
+                      priority={idx < 2}
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    {/* Editorial overlay gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+                    {/* Tile content */}
+                    <div className="absolute inset-0 flex flex-col justify-end p-3 sm:p-4">
+                      <span className="mb-1 self-start rounded-sm bg-primary/90 px-1.5 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-white">
+                        {article.category}
+                      </span>
+                      <h4 className="text-xs sm:text-sm md:text-base font-bold leading-tight text-white line-clamp-2 sm:line-clamp-3 drop-shadow-sm transition-colors group-hover:text-primary/90" style={{ hyphens: 'auto', WebkitHyphens: 'auto' }} lang="de">
+                        {article.title}
+                      </h4>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* ── Ad slot: after hero ── */}
         <div className="mb-12 md:mb-16">
           <AdSlot
@@ -127,13 +185,13 @@ export default async function Home() {
           />
         </div>
 
-        {/* ================= LISTA RESTO ================= */}
+        {/* ================= REMAINING ARTICLES LIST ================= */}
         {rest.length > 0 && (
           <div className="space-y-10">
             <section>
               <div className="mb-8 flex items-center gap-4">
                 <h3 className="whitespace-nowrap text-xs font-black uppercase tracking-[0.2em] text-primary">
-                  Analysen & Meldungen
+                  Weitere Meldungen
                 </h3>
                 <div className="h-px w-full bg-slate-200 dark:bg-slate-800" />
               </div>
