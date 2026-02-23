@@ -279,13 +279,13 @@ export default async function ArticlePage({ params }: Props) {
           </div>
 
           {/* ── Ad slot: Middle of article / below content ── */}
-          <div className="my-12">
+          <div className="my-10">
             <AdSlot
               slotId="article-mid-content"
               format="auto"
               pageType="article"
               category={article.category}
-              minHeight={100}
+              minHeight={60}
               label="Anzeige"
             />
           </div>
@@ -329,13 +329,13 @@ export default async function ArticlePage({ params }: Props) {
               </h3>
 
               {/* ── Ad slot: Above related articles ── */}
-              <div className="mb-12">
+              <div className="my-8">
                 <AdSlot
                   slotId="article-before-related"
                   format="horizontal"
                   pageType="article"
                   category={article.category}
-                  minHeight={90}
+                  minHeight={60}
                   label="Anzeige"
                 />
               </div>
