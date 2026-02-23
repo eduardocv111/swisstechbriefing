@@ -1,6 +1,14 @@
 'use client';
 
+import { trackEvent } from '@/lib/ga';
+
 export default function NewsletterInlineCard() {
+    const handleSubscribe = () => {
+        trackEvent('newsletter_cta_click', {
+            location: 'inline_card',
+            lead_magnet: 'ai_report_pdf'
+        });
+    };
     return (
         <section className="my-8 p-6 md:p-8 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
             <div className="max-w-2xl mx-auto text-center">
@@ -18,7 +26,13 @@ export default function NewsletterInlineCard() {
                     Abonnieren Sie unseren Newsletter und erhalten Sie zusätzlich den monatlichen
                     <strong> «AI in Switzerland» Report (PDF)</strong> kostenlos direkt in Ihr Postfach.
                 </p>
-                <form className="mb-4 flex flex-col gap-3 sm:flex-row" onSubmit={(e) => e.preventDefault()}>
+                <form
+                    className="mb-4 flex flex-col gap-3 sm:flex-row"
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        handleSubscribe();
+                    }}
+                >
                     <input
                         className="flex-1 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-primary dark:border-slate-700 dark:bg-slate-900"
                         placeholder="Ihre E-Mail-Adresse"

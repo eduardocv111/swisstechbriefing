@@ -17,6 +17,9 @@ export const metadata: Metadata = {
   description: "Kuratiertes Medium für KI, Startups und Technologie in der Schweiz.",
 };
 
+import Script from "next/script";
+import { GA_ID } from "@/lib/ga";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -30,6 +33,27 @@ export default function RootLayout({
           rel="stylesheet"
         />
         <meta name="google-adsense-account" content="ca-pub-1495161909176032" />
+        {/* GA4 Script — Requirement 2 */}
+        {GA_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_ID}', {
+                  anonymize_ip: true,
+                  cookie_flags: 'SameSite=Lax;Secure',
+                  send_page_view: false // Handled by AnalyticsLoader/GaPageViewTracker
+                });
+              `}
+            </Script>
+          </>
+        )}
       </head>
       <body
         className={`${publicSans.variable} font-sans antialiased min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100`}
@@ -39,7 +63,7 @@ export default function RootLayout({
         {children}
         {/* Cookie consent banner */}
         <CookieBanner />
-        {/* Analytics — GA4 (consent-gated) */}
+        {/* Analytics — GA4 (consent-gated trackers) */}
         <AnalyticsLoader />
         {/* AdSense script loader (marketing consent-gated) */}
         <AdSenseLoader />

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef, type ReactNode } from 'react';
 import { hasConsent, getConsent } from '@/lib/consent';
+import { trackEvent } from '@/lib/ga';
 
 
 const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
@@ -97,14 +98,12 @@ export default function AdSlot({
                             ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
                             adPushed.current = true;
 
-                            // ── Track impression in GA4 ──
-                            if (typeof window.gtag === 'function') {
-                                window.gtag('event', 'ad_impression', {
-                                    ad_slot: slotId,
-                                    page_type: pageType,
-                                    category: category,
-                                });
-                            }
+                            // ── Track impression in GA4 (Fase 2.5 Upgrade) ──
+                            trackEvent('ad_slot_impression', {
+                                ad_slot: slotId,
+                                page_type: pageType,
+                                category: category,
+                            });
                         } catch {
                             // Silently handle ad blocker errors
                         }
