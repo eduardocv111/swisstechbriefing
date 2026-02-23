@@ -47,6 +47,7 @@ export default async function Home() {
                     alt={featured.title}
                     fill
                     priority
+                    unoptimized
                     sizes="(max-width: 1024px) 100vw, 60vw"
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
