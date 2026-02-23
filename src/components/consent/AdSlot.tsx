@@ -149,7 +149,7 @@ export default function AdSlot({
             style={{ minHeight }}
         >
             {label && (
-                <p className="mb-1 text-center text-[9px] uppercase tracking-widest text-slate-500/60">
+                <p className="mb-2 text-center text-[10px] font-medium uppercase tracking-[0.2em] text-slate-500/40">
                     {label}
                 </p>
             )}

@@ -9,16 +9,25 @@ export default function Footer() {
             <div className="max-w-4xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
                     {/* Column 1: Brand */}
-                    <div className="space-y-4">
-                        <div className="relative h-6 w-38">
-                            <Image
-                                src="/assets/images/brand/logo-horizontal-dark.png"
-                                alt="SwissTech Briefing"
-                                fill
-                                className="object-contain object-left"
-                            />
-                        </div>
-                        <p className="text-sm leading-relaxed max-w-xs">
+                    <div className="space-y-6">
+                        <Link href="/" className="hover:opacity-90 transition-opacity flex items-center gap-2.5">
+                            <div className="relative w-8 h-8 shrink-0">
+                                <Image
+                                    src="/assets/images/brand/logo-square.png"
+                                    alt=""
+                                    fill
+                                    sizes="32px"
+                                    className="object-contain"
+                                    aria-hidden="true"
+                                />
+                            </div>
+                            <span className="text-lg font-bold tracking-tight text-white leading-none">
+                                <span className="text-white">Swiss</span>
+                                <span className="text-blue-500">Tech</span>
+                                <span className="text-white font-normal ml-1">Briefing</span>
+                            </span>
+                        </Link>
+                        <p className="text-sm leading-relaxed max-w-xs text-slate-400">
                             Kuratiertes Medium für KI, Startups und Technologie in der Schweiz. Tägliche Einblicke in die digitale Transformation.
                         </p>
                     </div>

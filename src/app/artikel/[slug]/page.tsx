@@ -340,7 +340,7 @@ export default async function ArticlePage({ params }: Props) {
                 />
               </div>
 
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
                 {relatedArticles.map((rel) => (
                   <Link
                     key={rel.id}
