@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
 
 export async function POST(req: Request) {
     try {
@@ -10,11 +9,12 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Valid email is required' }, { status: 400 });
         }
 
-        let dbSuccess = false;
-        let formspreeSuccess = false;
+        let dbOk = false;
+        let formspreeOk = false;
 
-        // 1. Save to Local Database
+        // ── 1. Guardar en Base de Datos Local (si funciona, genial; si no, seguimos) ──
         try {
+            const { prisma } = await import('@/lib/db');
             await prisma.newsletterSubscription.create({
                 data: {
                     email,
@@ -22,43 +22,45 @@ export async function POST(req: Request) {
                     leadMagnet: leadMagnet || null,
                 },
             });
-            dbSuccess = true;
-        } catch (dbError) {
-            console.error('Local DB newsletter save error:', dbError);
+            dbOk = true;
+        } catch (dbErr) {
+            console.warn('[Newsletter] DB save failed (non-blocking):', dbErr);
         }
 
-        // 2. Forward to Formspree (External Email Notification)
-        const FORMSPREE_ID = "mwvnwwgl";
-        if (FORMSPREE_ID) {
-            try {
-                const fsResponse = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        email,
-                        source,
-                        leadMagnet,
-                        _subject: `SwissTech Briefing Newsletter [${source}]`,
-                        _replyto: email
-                    }),
-                });
-                formspreeSuccess = fsResponse.ok;
-            } catch (err) {
-                console.error("Formspree forward error:", err);
+        // ── 2. Reenviar a Formspree (Notificación por email) ──
+        try {
+            const res = await fetch('https://formspree.io/f/mwvnwwgl', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    email,
+                    source: source || 'unknown',
+                    leadMagnet: leadMagnet || null,
+                    _subject: `SwissTech Newsletter [${source || 'web'}]`,
+                    _replyto: email,
+                }),
+            });
+            formspreeOk = res.ok;
+            if (!formspreeOk) {
+                console.warn('[Newsletter] Formspree returned non-OK:', res.status);
             }
+        } catch (fsErr) {
+            console.warn('[Newsletter] Formspree call failed:', fsErr);
         }
 
-        // Return success if at least one storage method worked
-        if (dbSuccess || formspreeSuccess) {
+        // ── 3. Devolver éxito si AL MENOS UNO funcionó ──
+        if (dbOk || formspreeOk) {
             return NextResponse.json({ ok: true });
         }
 
-        throw new Error('Both database and Formspree submission failed');
+        // Si ambos fallaron, devolver error
+        return NextResponse.json({ error: 'Subscription failed' }, { status: 502 });
+
     } catch (error) {
-        console.error('Global newsletter subscription error:', error);
+        console.error('[Newsletter] Unexpected error:', error);
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     }
 }
