@@ -34,3 +34,13 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* 🔹 Prevent Material Symbols from being broken by text-transform: uppercase */
+.material-symbols-outlined {
+  text-transform: none !important;
+  font-variant: normal !important;
+  font-style: normal !important;
+  line-height: 1 !important;
+  display: inline-block !important;
+  white-space: nowrap !important;
+}

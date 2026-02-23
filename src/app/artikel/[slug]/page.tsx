@@ -205,7 +205,7 @@ export default async function ArticlePage({ params }: Props) {
 
       <Header />
 
-      <main className="mx-auto min-h-screen max-w-3xl bg-slate-50 shadow-sm dark:bg-slate-900/50">
+      <main className="mx-auto min-h-screen max-w-3xl shadow-sm bg-transparent">
         <article className="px-6 pt-10 pb-16">
           <div className="mb-4">
             <span className="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">
@@ -219,14 +219,14 @@ export default async function ArticlePage({ params }: Props) {
 
           <div className="mb-8 flex flex-wrap items-center gap-3 border-b border-slate-100 pb-6 text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
             <div className="flex items-center gap-1.5">
-              <span className="material-symbols-outlined text-base">calendar_today</span>
+              <span className="material-symbols-outlined text-base notranslate normal-case">calendar_today</span>
               <span>{formatSwissDate(article.datePublished)}</span>
             </div>
 
             <span className="opacity-30">|</span>
 
             <div className="flex items-center gap-1.5">
-              <span className="material-symbols-outlined text-base">schedule</span>
+              <span className="material-symbols-outlined text-base notranslate normal-case">schedule</span>
               <span>{readingTime} min Lesezeit</span>
             </div>
 
@@ -252,6 +252,7 @@ export default async function ArticlePage({ params }: Props) {
               alt={article.title}
               fill
               priority
+              unoptimized
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 800px"
             />

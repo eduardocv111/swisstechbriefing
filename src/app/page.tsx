@@ -74,7 +74,7 @@ export default async function Home() {
 
                   <div className="mt-auto flex items-center text-sm font-bold uppercase tracking-widest text-primary transition-all group-hover:gap-2">
                     Bericht lesen
-                    <span className="material-symbols-outlined ml-1.5 text-lg">
+                    <span className="material-symbols-outlined ml-1.5 text-lg notranslate normal-case">
                       arrow_forward
                     </span>
                   </div>

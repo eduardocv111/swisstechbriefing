@@ -11,7 +11,7 @@ export default function Header() {
                 </Link>
             </div>
             <button className="flex items-center justify-center p-2 hover:bg-white/10 rounded-full transition-colors" aria-label="Suche">
-                <span className="material-symbols-outlined text-2xl">search</span>
+                <span className="material-symbols-outlined text-2xl notranslate normal-case">search</span>
             </button>
         </header>
     );

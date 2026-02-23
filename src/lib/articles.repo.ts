@@ -85,7 +85,15 @@ function safeJsonParseSources(raw: string | null | undefined): Source[] {
 
 function sanitizeText(text: string): string {
   if (!text) return "";
-  return text.replace(/\uFFFD/g, "ü"); // Tentatively map diamond to 'ü' as it's the most common failure in 'fhren'
+  return text
+    .replace(/\uFFFD/g, "ü") // Diamond replacement character
+    .replace(/\u00C3\u00BC/g, "ü") // UTF-8 'ü' mis-read as Latin-1
+    .replace(/\u00C3\u00A4/g, "ä") // UTF-8 'ä'
+    .replace(/\u00C3\u00B6/g, "ö") // UTF-8 'ö'
+    .replace(/\u00C3\u009C/g, "Ü") // UTF-8 'Ü'
+    .replace(/\u00C3\u0084/g, "Ä") // UTF-8 'Ä'
+    .replace(/\u00C3\u0096/g, "Ö") // UTF-8 'Ö'
+    .replace(/\u00C3\u009F/g, "ß"); // UTF-8 'ß'
 }
 
 function mapDbToUi(a: DbArticle): UiArticle {
