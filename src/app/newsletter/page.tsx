@@ -7,10 +7,11 @@ import Footer from '@/components/Footer';
 
 export default function NewsletterPage() {
     const [email, setEmail] = useState('');
-    const [status, setStatus] = useState<'idle' | 'success'>('idle');
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setStatus('loading');
 
         // Track GA4 event
         trackEvent('newsletter_cta_click', {
@@ -18,9 +19,27 @@ export default function NewsletterPage() {
             lead_magnet: 'ai_report_pdf'
         });
 
-        // Simulate success
-        setStatus('success');
-        setEmail('');
+        try {
+            const response = await fetch('/api/newsletter/subscribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email,
+                    source: 'dedicated_page',
+                    leadMagnet: 'ai_report_pdf'
+                }),
+            });
+
+            if (response.ok) {
+                setStatus('success');
+                setEmail('');
+            } else {
+                setStatus('error');
+            }
+        } catch (err) {
+            console.error('Subscription failed:', err);
+            setStatus('error');
+        }
     };
 
     return (
@@ -65,9 +84,10 @@ export default function NewsletterPage() {
                                     </div>
                                     <button
                                         type="submit"
-                                        className="w-full rounded-2xl bg-primary px-8 py-4 text-lg font-bold text-white shadow-lg shadow-primary/20 transition-all hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98]"
+                                        disabled={status === 'loading'}
+                                        className="w-full rounded-2xl bg-primary px-8 py-4 text-lg font-bold text-white shadow-lg shadow-primary/20 transition-all hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
-                                        Jetzt kostenlos abonnieren
+                                        {status === 'loading' ? 'Verarbeitung...' : 'Jetzt kostenlos abonnieren'}
                                     </button>
                                 </form>
 
@@ -75,7 +95,7 @@ export default function NewsletterPage() {
                                     Abmeldung jederzeit mit einem Klick möglich. Spamschutz inklusive.
                                 </p>
                             </>
-                        ) : (
+                        ) : status === 'success' ? (
                             <div className="py-12 animate-in fade-in zoom-in duration-500">
                                 <div className="mb-6 inline-flex h-20 w-20 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
                                     <svg className="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -86,6 +106,24 @@ export default function NewsletterPage() {
                                 <p className="text-lg text-slate-600 dark:text-slate-400">
                                     Wir haben Ihnen soeben den Bestätigungslink und Ihren <span className="font-bold">AI Intelligence Report</span> zugeschickt. Bitte prüfen Sie Ihr Postfach.
                                 </p>
+                            </div>
+                        ) : (
+                            <div className="py-12 text-center animate-in fade-in zoom-in duration-500">
+                                <div className="mb-6 inline-flex h-20 w-20 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400">
+                                    <svg className="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </div>
+                                <h2 className="text-2xl font-bold mb-4">Hoops! Da lief etwas schief</h2>
+                                <p className="text-slate-600 dark:text-slate-400 mb-8">
+                                    Wir konnten Ihre Anmeldung zur Zeit nicht verarbeiten. Bitte versuchen Sie es später noch einmal.
+                                </p>
+                                <button
+                                    onClick={() => setStatus('idle')}
+                                    className="text-primary font-bold hover:underline"
+                                >
+                                    Eskat erneut versuchen
+                                </button>
                             </div>
                         )}
                     </div>
