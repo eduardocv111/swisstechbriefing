@@ -138,14 +138,14 @@ export default async function Home() {
              * - Overlay gradient for editorial contrast + readability
              * - No CLS: aspect-ratio reserves space before image loads
              */}
-            <div className="grid grid-cols-2 gap-[2px] sm:gap-[3px] rounded-xl overflow-hidden">
+            <div className="grid grid-cols-2 gap-[2px] rounded-xl overflow-hidden bg-slate-900/80">
               {collageArticles.map((article, idx) => (
                 <Link
                   key={article.id}
                   href={`/artikel/${article.slug}`}
                   className="group relative block"
                 >
-                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-200 dark:bg-slate-800">
+                  <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-200 dark:bg-slate-800">
                     <Image
                       src={getArticleImage(article.image)}
                       alt={article.title}
