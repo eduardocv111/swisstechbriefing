@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { CATEGORIES } from '@/lib/categories';
+import CookieSettingsButton from '@/components/consent/CookieSettingsButton';
 
 export default function Footer() {
     return (
@@ -35,7 +36,9 @@ export default function Footer() {
                         <ul className="space-y-3 text-sm">
                             <li><Link href="/impressum" className="hover:text-primary transition-colors">Impressum</Link></li>
                             <li><Link href="/datenschutz" className="hover:text-primary transition-colors">Datenschutz</Link></li>
+                            <li><Link href="/cookie-richtlinie" className="hover:text-primary transition-colors">Cookie-Richtlinie</Link></li>
                             <li><Link href="/kontakt" className="hover:text-primary transition-colors">Kontakt</Link></li>
+                            <li><CookieSettingsButton /></li>
                         </ul>
                     </div>
                 </div>
