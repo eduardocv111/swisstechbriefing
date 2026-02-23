@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Public_Sans } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
+import { GA_ID } from "@/lib/ga";
 import GoogleConsentMode from "@/components/consent/GoogleConsentMode";
 import CookieBanner from "@/components/consent/CookieBanner";
 import AnalyticsLoader from "@/components/consent/AnalyticsLoader";
@@ -17,9 +19,6 @@ export const metadata: Metadata = {
   description: "Kuratiertes Medium für KI, Startups und Technologie in der Schweiz.",
 };
 
-import Script from "next/script";
-import { GA_ID } from "@/lib/ga";
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -34,13 +33,16 @@ export default function RootLayout({
         />
         <meta name="google-adsense-account" content="ca-pub-1495161909176032" />
 
-        {/* ── 1. Google Consent Mode v2 Bootstrap (Requirement 1, 2, 3) ── */}
-        <Script id="google-consent-mode-v2" strategy="afterInteractive">
+        {/*
+         * ── 1. Consent Mode v2 Bootstrap ──
+         * MUST load BEFORE any Google tag.
+         * Uses "beforeInteractive" to ensure it's the first thing Google sees.
+         */}
+        <Script id="google-consent-mode-v2" strategy="beforeInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             
-            // Set defaults to denied
             gtag('consent', 'default', {
               'ad_storage': 'denied',
               'ad_user_data': 'denied',
@@ -49,13 +51,17 @@ export default function RootLayout({
               'wait_for_update': 500
             });
             
-            // Security & Privacy overrides
             gtag('set', 'ads_data_redaction', true);
             gtag('set', 'url_passthrough', true);
           `}
         </Script>
 
-        {/* ── 2. GA4 Global Site Tag (Requirement 4, 5) ── */}
+        {/*
+         * ── 2. GA4 Global Site Tag ──
+         * Uses "afterInteractive" for the script load,
+         * but config runs immediately with send_page_view: true
+         * so Google's tag checker can detect it.
+         */}
         {GA_ID && (
           <>
             <Script
@@ -64,11 +70,13 @@ export default function RootLayout({
             />
             <Script id="ga-config" strategy="afterInteractive">
               {`
+                window.dataLayer = window.dataLayer || [];
+                if(!window.gtag){function gtag(){dataLayer.push(arguments);} window.gtag = gtag;}
                 gtag('js', new Date());
                 gtag('config', '${GA_ID}', {
                   anonymize_ip: true,
                   cookie_flags: 'SameSite=Lax;Secure',
-                  send_page_view: false
+                  send_page_view: true
                 });
               `}
             </Script>
@@ -79,7 +87,7 @@ export default function RootLayout({
       <body
         className={`${publicSans.variable} font-sans antialiased min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100`}
       >
-        {/* ── Consent Mode v2 MUST be first (sets defaults before any Google script) ── */}
+        {/* Consent Mode updater (listens for CMP changes) */}
         <GoogleConsentMode />
         {children}
         {/* Cookie consent banner */}
