@@ -67,14 +67,13 @@ export default function CookieRichtliniePage() {
 
                     <h3>3. Marketing-Cookies (optional)</h3>
                     <p>
-                        Marketing-Cookies können verwendet werden, um Ihnen relevante Werbeanzeigen auf Grundlage Ihrer
-                        Interessen anzuzeigen und deren Wirksamkeit zu messen.
+                        Marketing-Cookies werden verwendet, um Ihnen relevante Werbeanzeigen auf Grundlage Ihrer
+                        Interessen anzuzeigen (via <strong>Google AdSense</strong>) und deren Wirksamkeit zu messen.
                     </p>
                     <p>
-                        <strong>Hinweis:</strong> In der aktuellen Phase setzt SwissTech Briefing noch keine
-                        Marketing-Cookies aktiv ein. Die Kategorie ist in unserem Einwilligungssystem vorbereitet
-                        für eine zukünftige Integration mit Werbepartnern. Sobald Marketing-Cookies aktiviert werden,
-                        wird diese Richtlinie entsprechend aktualisiert.
+                        Diese Cookies werden <strong>nur geladen, wenn Sie in der Kategorie «Marketing»
+                            zugestimmt haben</strong>. Ohne Ihre Einwilligung zeigen wir neutrale Platzhalter oder
+                        interne Inhalte an.
                     </p>
                     <p>
                         Auch diese Cookies werden <strong>nur mit Ihrer Einwilligung</strong> aktiviert.

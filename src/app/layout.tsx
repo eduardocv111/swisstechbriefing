@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Public_Sans } from "next/font/google";
 import "./globals.css";
+import GoogleConsentMode from "@/components/consent/GoogleConsentMode";
 import CookieBanner from "@/components/consent/CookieBanner";
 import AnalyticsLoader from "@/components/consent/AnalyticsLoader";
+import AdSenseLoader from "@/components/consent/AdSenseLoader";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -31,11 +33,15 @@ export default function RootLayout({
       <body
         className={`${publicSans.variable} font-sans antialiased min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100`}
       >
+        {/* ── Consent Mode v2 MUST be first (sets defaults before any Google script) ── */}
+        <GoogleConsentMode />
         {children}
-        {/* Cookie consent banner — renders nothing if consent already given */}
+        {/* Cookie consent banner */}
         <CookieBanner />
-        {/* Analytics — loads GA4 only if analytics consent is given + env ID exists */}
+        {/* Analytics — GA4 (consent-gated) */}
         <AnalyticsLoader />
+        {/* AdSense script loader (marketing consent-gated) */}
+        <AdSenseLoader />
       </body>
     </html>
   );

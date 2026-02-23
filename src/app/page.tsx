@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import CategoryTabs from "@/components/CategoryTabs";
 import ArticleCard from "@/components/ArticleCard";
 import NewsletterInlineCard from "@/components/NewsletterInlineCard";
+import AdSlot from "@/components/consent/AdSlot";
 import Link from "next/link";
 import Image from "next/image";
 import { formatSwissDate } from "@/lib/formatDate";
@@ -115,6 +116,17 @@ export default async function Home() {
           </section>
         )}
 
+        {/* ── Ad slot: after hero ── */}
+        <div className="mb-12 md:mb-16">
+          <AdSlot
+            slotId="home-after-hero"
+            format="horizontal"
+            pageType="home"
+            minHeight={90}
+            label="Anzeige"
+          />
+        </div>
+
         {/* ================= LISTA RESTO ================= */}
         {rest.length > 0 && (
           <div className="space-y-10">
@@ -142,6 +154,17 @@ export default async function Home() {
 
                 <div className="my-4">
                   <NewsletterInlineCard />
+                </div>
+
+                {/* ── Ad slot: mid-feed ── */}
+                <div className="my-6">
+                  <AdSlot
+                    slotId="home-mid-feed"
+                    format="auto"
+                    pageType="home"
+                    minHeight={100}
+                    label="Anzeige"
+                  />
                 </div>
 
                 {rest.slice(2).map((article) => (

@@ -80,20 +80,14 @@ export default function DatenschutzPage() {
 
                     <h2>5. Webanalyse</h2>
                     <p>
-                        Sofern Sie Ihre Einwilligung erteilen und die Funktion auf unserer Website aktiviert ist,
-                        verwenden wir Google Analytics 4, einen Webanalysedienst der Google LLC.
-                        Google Analytics verwendet Cookies, um die Nutzung der Website zu analysieren.
-                        Die dabei erzeugten Informationen werden an einen Server von Google übertragen und dort gespeichert.
-                    </p>
-                    <p>
-                        Wir haben die IP-Anonymisierung aktiviert, sodass Ihre IP-Adresse von Google innerhalb von
-                        Mitgliedstaaten der EU bzw. des EWR vor der Übermittlung gekürzt wird.
+                        Sofern Sie Ihre Einwilligung erteilen, verwenden wir Google Analytics 4 mit aktiviertem
+                        <strong> Google Consent Mode v2</strong>. Dies bedeutet, dass Google-Dienste den vom Nutzer
+                        gewählten Einwilligungsstatus respektieren.
                     </p>
                     <p>
                         Google Analytics wird <strong>nur geladen, wenn Sie aktiv der Kategorie «Analyse»
-                            zugestimmt haben</strong> und eine entsprechende Konfiguration auf unserer Seite vorliegt.
-                        Ohne diese beiden Voraussetzungen werden keine Analyse-Cookies gesetzt und keine Daten
-                        an Google übermittelt.
+                            zugestimmt haben</strong>. Ohne Ihre Einwilligung werden keine Analyse-Cookies gesetzt
+                        und keine Tracking-Daten erhoben.
                     </p>
                     <p>
                         Sie können die Erfassung durch Google Analytics verhindern, indem Sie keine Einwilligung

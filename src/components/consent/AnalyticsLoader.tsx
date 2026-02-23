@@ -1,73 +1,104 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { hasConsent, getConsent } from '@/lib/consent';
+
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 /**
- * Conditionally loads Google Analytics 4 when:
- * 1. A measurement ID is configured via env
- * 2. The user has given analytics consent
+ * GA4 loader — Phase 2 (Consent Mode v2 aware).
  *
- * Listens for consent changes and loads/unloads accordingly.
- * Does NOT load anything if GA_ID is missing — safe by default.
+ * Architecture:
+ * - GoogleConsentMode sets consent defaults to "denied" BEFORE this runs.
+ * - This component only injects the gtag.js script when analytics consent is granted.
+ * - With Consent Mode v2, gtag respects the consent state automatically.
+ * - Listens for consent changes via `stb-consent-updated` event.
+ * - Tracks App Router page navigations via title MutationObserver.
  */
 export default function AnalyticsLoader() {
-    const [loaded, setLoaded] = useState(false);
+    const scriptLoaded = useRef(false);
+    const configDone = useRef(false);
 
     const loadGA = useCallback(() => {
-        if (!GA_ID || loaded) return;
+        if (!GA_ID) return;
         if (!hasConsent('analytics')) return;
 
-        // Inject gtag.js script
-        const script = document.createElement('script');
-        script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
-        script.async = true;
-        script.id = 'stb-ga-script';
-        document.head.appendChild(script);
-
-        // Initialize dataLayer
-        window.dataLayer = window.dataLayer || [];
-        function gtag(...args: unknown[]) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (window as any).dataLayer.push(args);
+        // Inject gtag.js script (only once)
+        if (!scriptLoaded.current) {
+            const existing = document.getElementById('stb-ga-script');
+            if (!existing) {
+                const script = document.createElement('script');
+                script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+                script.async = true;
+                script.id = 'stb-ga-script';
+                document.head.appendChild(script);
+            }
+            scriptLoaded.current = true;
         }
-        gtag('js', new Date());
-        gtag('config', GA_ID, {
-            anonymize_ip: true,
-            cookie_flags: 'SameSite=Lax;Secure',
-        });
 
-        setLoaded(true);
-    }, [loaded]);
+        // Configure GA4 (only once)
+        if (!configDone.current) {
+            window.dataLayer = window.dataLayer || [];
+            function gtag(...args: unknown[]) {
+                window.dataLayer.push(args);
+            }
+            gtag('js', new Date());
+            gtag('config', GA_ID, {
+                anonymize_ip: true,
+                cookie_flags: 'SameSite=Lax;Secure',
+                send_page_view: true,
+            });
+            configDone.current = true;
+        }
+    }, []);
 
-    // Check on mount
+    // Load on mount if consent already exists
     useEffect(() => {
         loadGA();
     }, [loadGA]);
 
-    // Listen for consent updates
+    // React to consent changes
     useEffect(() => {
         function handleConsentChange() {
             const consent = getConsent();
             if (consent?.categories.analytics) {
                 loadGA();
             }
-            // Note: Once GA is loaded, we can't fully "unload" it.
-            // A page reload after revoking consent will simply not load it again.
         }
 
         window.addEventListener('stb-consent-updated', handleConsentChange);
         return () => window.removeEventListener('stb-consent-updated', handleConsentChange);
     }, [loadGA]);
 
-    return null; // Renders nothing — pure side-effect component
-}
+    // Track App Router navigations
+    useEffect(() => {
+        if (!GA_ID) return;
 
-// Extend Window type for dataLayer
-declare global {
-    interface Window {
-        dataLayer?: unknown[];
-    }
+        let previousUrl = window.location.href;
+
+        const observer = new MutationObserver(() => {
+            const currentUrl = window.location.href;
+            if (currentUrl !== previousUrl) {
+                previousUrl = currentUrl;
+                if (configDone.current && hasConsent('analytics')) {
+                    window.dataLayer = window.dataLayer || [];
+                    window.dataLayer.push(['event', 'page_view', {
+                        page_location: currentUrl,
+                        page_title: document.title,
+                    }]);
+                }
+            }
+        });
+
+        observer.observe(document.querySelector('head > title') || document.head, {
+            childList: true,
+            subtree: true,
+            characterData: true,
+        });
+
+        return () => observer.disconnect();
+    }, []);
+
+    return null;
 }

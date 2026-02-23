@@ -14,6 +14,7 @@ import {
 import NewsletterInlineCard from "@/components/NewsletterInlineCard";
 import ScrollProgress from "@/components/ScrollProgress";
 import ShareButtons from "@/components/ShareButtons";
+import AdSlot from "@/components/consent/AdSlot";
 
 export const runtime = "nodejs";
 export const revalidate = 3600; // 1h ISR
@@ -277,6 +278,18 @@ export default async function ArticlePage({ params }: Props) {
             />
           </div>
 
+          {/* ── Ad slot: Middle of article / below content ── */}
+          <div className="my-12">
+            <AdSlot
+              slotId="article-mid-content"
+              format="auto"
+              pageType="article"
+              category={article.category}
+              minHeight={100}
+              label="Anzeige"
+            />
+          </div>
+
           <div className="mt-12 rounded-2xl border border-primary/10 bg-primary/5 p-2">
             <NewsletterInlineCard />
           </div>
@@ -314,6 +327,18 @@ export default async function ArticlePage({ params }: Props) {
               <h3 className="mb-8 text-xs font-black uppercase tracking-[0.2em] text-primary">
                 Das könnte Sie auch interessieren
               </h3>
+
+              {/* ── Ad slot: Above related articles ── */}
+              <div className="mb-12">
+                <AdSlot
+                  slotId="article-before-related"
+                  format="horizontal"
+                  pageType="article"
+                  category={article.category}
+                  minHeight={90}
+                  label="Anzeige"
+                />
+              </div>
 
               <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                 {relatedArticles.map((rel) => (
