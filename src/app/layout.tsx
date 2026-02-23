@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Public_Sans } from "next/font/google";
 import "./globals.css";
-import Script from "next/script";
-import { GA_ID } from "@/lib/ga";
 import GoogleConsentMode from "@/components/consent/GoogleConsentMode";
 import CookieBanner from "@/components/consent/CookieBanner";
 import AnalyticsLoader from "@/components/consent/AnalyticsLoader";
@@ -13,6 +11,8 @@ const publicSans = Public_Sans({
   weight: ["400", "500", "600", "700"],
   variable: "--font-public-sans",
 });
+
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "";
 
 export const metadata: Metadata = {
   title: "SwissTech Briefing - News aus der Schweizer Tech-Szene",
@@ -35,54 +35,57 @@ export default function RootLayout({
 
         {/*
          * ── 1. Consent Mode v2 Bootstrap ──
-         * MUST load BEFORE any Google tag.
-         * Uses "beforeInteractive" to ensure it's the first thing Google sees.
+         * RAW <script> tag so it's in the STATIC HTML that Google's crawler sees.
+         * MUST be BEFORE the gtag.js loader.
          */}
-        <Script id="google-consent-mode-v2" strategy="beforeInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            
-            gtag('consent', 'default', {
-              'ad_storage': 'denied',
-              'ad_user_data': 'denied',
-              'ad_personalization': 'denied',
-              'analytics_storage': 'denied',
-              'wait_for_update': 500
-            });
-            
-            gtag('set', 'ads_data_redaction', true);
-            gtag('set', 'url_passthrough', true);
-          `}
-        </Script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              window.gtag = gtag;
+
+              gtag('consent', 'default', {
+                'ad_storage': 'denied',
+                'ad_user_data': 'denied',
+                'ad_personalization': 'denied',
+                'analytics_storage': 'denied',
+                'wait_for_update': 500
+              });
+
+              gtag('set', 'ads_data_redaction', true);
+              gtag('set', 'url_passthrough', true);
+            `,
+          }}
+        />
 
         {/*
          * ── 2. GA4 Global Site Tag ──
-         * Uses "afterInteractive" for the script load,
-         * but config runs immediately with send_page_view: true
-         * so Google's tag checker can detect it.
+         * RAW <script> tags so Google's tag checker sees them in the HTML source.
+         * This is the ONLY way Google can detect the tag during verification.
          */}
         {GA_ID && (
           <>
-            <Script
+            <script
+              async
               src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-              strategy="afterInteractive"
             />
-            <Script id="ga-config" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                if(!window.gtag){function gtag(){dataLayer.push(arguments);} window.gtag = gtag;}
-                gtag('js', new Date());
-                gtag('config', '${GA_ID}', {
-                  anonymize_ip: true,
-                  cookie_flags: 'SameSite=Lax;Secure',
-                  send_page_view: true
-                });
-              `}
-            </Script>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  if(!window.gtag){function gtag(){dataLayer.push(arguments);} window.gtag = gtag;}
+                  gtag('js', new Date());
+                  gtag('config', '${GA_ID}', {
+                    anonymize_ip: true,
+                    cookie_flags: 'SameSite=Lax;Secure',
+                    send_page_view: true
+                  });
+                `,
+              }}
+            />
           </>
         )}
-
       </head>
       <body
         className={`${publicSans.variable} font-sans antialiased min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100`}
@@ -92,7 +95,7 @@ export default function RootLayout({
         {children}
         {/* Cookie consent banner */}
         <CookieBanner />
-        {/* Analytics — GA4 (consent-gated trackers) */}
+        {/* Analytics — GA4 (consent-gated page view tracker) */}
         <AnalyticsLoader />
         {/* AdSense script loader (marketing consent-gated) */}
         <AdSenseLoader />
