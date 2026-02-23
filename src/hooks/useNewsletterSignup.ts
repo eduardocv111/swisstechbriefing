@@ -21,32 +21,39 @@ export function useNewsletterSignup({ source, leadMagnet = 'ai_report_pdf' }: Us
         // Anti-spam check
         if (company) {
             console.warn('Bot detected via honeypot');
-            setStatus('success'); // Pretend success to the bot
+            setStatus('success');
+            return;
+        }
+
+        if (!email || !email.includes('@')) {
+            setStatus('error');
             return;
         }
 
         setStatus('submitting');
 
-        // 1. Initial GA4 Track
         trackEvent('newsletter_cta_click', {
             location: source,
             lead_magnet: leadMagnet
         });
 
-        try {
-            // 2. Submit to Internal API (Database)
-            // We still want to save it locally for high reliability
-            const dbResponse = await fetch('/api/newsletter/subscribe', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    email,
-                    source,
-                    leadMagnet
-                }),
-            });
+        let dbSuccess = false;
+        let formspreeSuccess = false;
 
-            // 3. Submit to Formspree (Email Notification)
+        try {
+            // 1. Intento guardar en DB local (silencioso, si falla no bloquea Formspree)
+            try {
+                const dbResponse = await fetch('/api/newsletter/subscribe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, source, leadMagnet }),
+                });
+                dbSuccess = dbResponse.ok;
+            } catch (dbErr) {
+                console.error('Local DB save failed, proceeding to Formspree:', dbErr);
+            }
+
+            // 2. Intento enviar a Formspree (Prioridad para notificación)
             const formspreeResponse = await fetch('https://formspree.io/f/mwvnwwgl', {
                 method: 'POST',
                 headers: {
@@ -55,41 +62,29 @@ export function useNewsletterSignup({ source, leadMagnet = 'ai_report_pdf' }: Us
                 },
                 body: JSON.stringify({
                     email,
-                    _subject: `SwissTech Briefing Newsletter Signup [${source}]`,
+                    _subject: `Newsletter Signup: ${source}`,
                     source: source,
-                    site: 'swisstechbriefing.ch',
-                    leadMagnet: leadMagnet
+                    site: 'swisstechbriefing.ch'
                 }),
             });
+            formspreeSuccess = formspreeResponse.ok;
 
-            if (formspreeResponse.ok || dbResponse.ok) {
+            if (formspreeSuccess || dbSuccess) {
                 setStatus('success');
                 setEmail('');
-                trackEvent('newsletter_signup_success', {
-                    location: source,
-                    lead_magnet: leadMagnet
-                });
+                trackEvent('newsletter_signup_success', { location: source });
             } else {
-                throw new Error('Formspree/DB submission failed');
+                setStatus('error');
+                trackEvent('newsletter_signup_error', { location: source, type: 'network_failure' });
             }
         } catch (error) {
-            console.error('Newsletter submission error:', error);
+            console.error('Global newsletter error:', error);
             setStatus('error');
-            trackEvent('newsletter_signup_error', {
-                location: source,
-                error: String(error)
-            });
         }
     };
 
     return {
-        email,
-        setEmail,
-        company,
-        setCompany,
-        status,
-        handleSubmit,
-        isIdle: status === 'idle',
+        email, setEmail, company, setCompany, status, handleSubmit,
         isSubmitting: status === 'submitting',
         isSuccess: status === 'success',
         isError: status === 'error'
