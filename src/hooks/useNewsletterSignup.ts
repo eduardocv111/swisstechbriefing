@@ -20,7 +20,6 @@ export function useNewsletterSignup({ source, leadMagnet = 'ai_report_pdf' }: Us
 
         // Anti-spam check
         if (company) {
-            console.warn('Bot detected via honeypot');
             setStatus('success');
             return;
         }
@@ -37,48 +36,28 @@ export function useNewsletterSignup({ source, leadMagnet = 'ai_report_pdf' }: Us
             lead_magnet: leadMagnet
         });
 
-        let dbSuccess = false;
-        let formspreeSuccess = false;
-
         try {
-            // 1. Intento guardar en DB local (silencioso, si falla no bloquea Formspree)
-            try {
-                const dbResponse = await fetch('/api/newsletter/subscribe', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, source, leadMagnet }),
-                });
-                dbSuccess = dbResponse.ok;
-            } catch (dbErr) {
-                console.error('Local DB save failed, proceeding to Formspree:', dbErr);
-            }
-
-            // 2. Intento enviar a Formspree (Prioridad para notificación)
-            const formspreeResponse = await fetch('https://formspree.io/f/mwvnwwgl', {
+            // CENTRALIZADO: Llamamos a nuestra API que hace TODO (DB + Formspree)
+            const response = await fetch('/api/newsletter/subscribe', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     email,
-                    _subject: `Newsletter Signup: ${source}`,
-                    source: source,
-                    site: 'swisstechbriefing.ch'
+                    source,
+                    leadMagnet
                 }),
             });
-            formspreeSuccess = formspreeResponse.ok;
 
-            if (formspreeSuccess || dbSuccess) {
+            if (response.ok) {
                 setStatus('success');
                 setEmail('');
                 trackEvent('newsletter_signup_success', { location: source });
             } else {
                 setStatus('error');
-                trackEvent('newsletter_signup_error', { location: source, type: 'network_failure' });
+                trackEvent('newsletter_signup_error', { location: source });
             }
         } catch (error) {
-            console.error('Global newsletter error:', error);
+            console.error('Newsletter submission error:', error);
             setStatus('error');
         }
     };
