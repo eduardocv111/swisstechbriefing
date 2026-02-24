@@ -100,54 +100,64 @@ export default function MarketTicker({ initial }: MarketTickerProps) {
     };
 
     return (
-        <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen h-10 bg-slate-950 border-y border-white/10 flex items-center select-none overflow-hidden group z-40 shadow-2xl" aria-label={`Market data ${ageStatus.status}. Updated ${ageStatus.timeStr} ago.`}>
+        <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen h-10 bg-slate-950 border-t border-white/5 border-b border-white/10 flex items-center select-none overflow-hidden group z-40 transition-all duration-700" aria-label={`Market data ${ageStatus.status}. Updated ${ageStatus.timeStr} ago.`}>
 
-            {/* Live Indicator Section - Fixed on the left */}
-            <div className="flex shrink-0 items-center px-4 bg-slate-950/80 backdrop-blur-sm z-20 border-r border-white/10 h-full">
+            {/* Live Indicator Section - Fixed with a subtle depth effect */}
+            <div className="flex shrink-0 items-center px-4 bg-slate-950 z-30 border-r border-white/10 h-full shadow-[5px_0_15px_-5px_rgba(0,0,0,0.8)]">
                 <div className="flex items-center gap-2 font-mono">
                     <span className={`w-1.5 h-1.5 rounded-full ${statusColors[ageStatus.status]} ${ageStatus.status === "LIVE" ? "animate-pulse" : ""}`}></span>
                     <div className="flex items-center gap-1.5 text-[10px] font-black tracking-widest text-white uppercase">
                         <span>{ageStatus.status}</span>
-                        <span className="opacity-30">•</span>
-                        <span className="text-slate-400">{ageStatus.timeStr}</span>
+                        <span className="opacity-20">•</span>
+                        <span className="text-slate-500">{ageStatus.timeStr}</span>
                     </div>
                 </div>
             </div>
 
-            {/* Marquee Track */}
+            {/* Marquee Track - Optimized for maximum buttery smoothness */}
             <div className="flex whitespace-nowrap animate-marquee-track group-hover:[animation-play-state:paused] focus-within:[animation-play-state:paused] motion-reduce:animate-none">
                 {displayItems.map((item, idx) => (
-                    <div key={idx} className="flex items-center px-8 gap-3 border-r border-white/5 h-10">
-                        <span className="text-[10px] font-bold text-slate-500 tracking-wider uppercase font-mono">
+                    <div key={idx} className="flex items-center px-9 gap-3 h-10 relative">
+                        {/* Progressive Opacity Separator */}
+                        <div className="absolute right-0 top-1/4 bottom-1/4 w-[1px] bg-gradient-to-b from-transparent via-white/10 to-transparent"></div>
+
+                        <span className="text-[10px] font-bold text-slate-500 tracking-widest uppercase font-mono">
                             {item.label}
                         </span>
                         <span className="text-[11px] font-bold text-slate-100 tabular-nums font-mono">
                             {item.value}
                         </span>
                         {!item.isFx && (
-                            <span className={`inline-flex items-center gap-1 text-[11px] font-bold tabular-nums font-mono ${item.change >= 0 ? "text-emerald-300" : "text-rose-300"}`}>
+                            <span className={`inline-flex items-center gap-1 text-[11px] font-bold tabular-nums font-mono transition-all duration-300 ${item.change >= 0
+                                    ? "text-emerald-300 group-hover:drop-shadow-[0_0_8px_rgba(110,231,183,1)]"
+                                    : "text-rose-300 group-hover:drop-shadow-[0_0_8px_rgba(252,165,165,0.4)]"
+                                }`}>
                                 {item.change >= 0 ? "▲" : "▼"}
                                 <span>{item.percent}</span>
                             </span>
                         )}
                         {item.isFx && (
-                            <span className="text-[10px] font-bold text-slate-600 font-mono italic">FX</span>
+                            <span className="text-[9px] font-black text-slate-700 font-mono tracking-tighter uppercase opacity-50">FX</span>
                         )}
                     </div>
                 ))}
             </div>
 
-            {/* Premium Edge Gradients */}
-            <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-slate-950 via-slate-950/60 to-transparent pointer-events-none z-10" />
-            <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-slate-950 via-slate-950/60 to-transparent pointer-events-none z-10" />
+            {/* Premium Edge Gradients - Expanded for deeper terminal immersion */}
+            <div className="absolute inset-y-0 left-24 w-48 bg-gradient-to-r from-slate-950 via-slate-950/40 to-transparent pointer-events-none z-10" />
+            <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-slate-950 via-slate-950/40 to-transparent pointer-events-none z-10" />
 
             <style jsx>{`
                 @keyframes marquee-track {
                     0% { transform: translateX(0); }
-                    100% { transform: translateX(-33.33%); } /* Since we added 3 sets, we move back 1/3 */
+                    100% { transform: translateX(-33.33333%); }
                 }
                 .animate-marquee-track {
-                    animation: marquee-track 35s linear infinite;
+                    animation: marquee-track 42s linear infinite;
+                    will-change: transform;
+                    /* Ensure sub-pixel rendering for smoothness */
+                    transform: translateZ(0);
+                    backface-visibility: hidden;
                 }
                 @media (prefers-reduced-motion: reduce) {
                     .animate-marquee-track {
