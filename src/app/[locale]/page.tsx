@@ -12,6 +12,7 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import { Locale } from "@/i18n/config";
 
 import MarketSnapshotCard from "@/components/MarketSnapshotCard";
+import MarketTicker from "@/components/MarketTicker";
 import { getLatestMarketSnapshot } from "@/lib/market.repo";
 
 interface PageProps {
@@ -48,6 +49,7 @@ export default async function Home({ params }: PageProps) {
         <div className="flex min-h-screen flex-col">
             <Header locale={locale} />
             <CategoryTabs locale={locale} />
+            <MarketTicker initial={market} />
 
             <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 md:py-12">
                 {/* ================= FEATURED HERO ================= */}
