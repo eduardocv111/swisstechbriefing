@@ -1,136 +1,81 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import Link from 'next/link';
-import {
-    getConsent,
-    saveConsent,
-    ACCEPT_ALL_CATEGORIES,
-    DEFAULT_CATEGORIES,
-} from '@/lib/consent';
-import CookiePreferencesModal from './CookiePreferencesModal';
+import { useState, useEffect } from 'react';
+import { updateGoogleConsent, getStoredConsent, UserConsent } from '@/lib/ga';
 
-interface CookieBannerProps {
+interface CookieConsentBannerProps {
     dict: {
         title: string;
         description: string;
-        save: string;
         accept_all: string;
-        always_active: string;
-        privacy_policy: string;
-        cookie_policy: string;
-        close: string;
-        banner_title: string;
-        banner_desc: string;
-        banner_note: string;
-        settings: string;
         only_necessary: string;
     };
 }
 
-export default function CookieBanner({ dict }: CookieBannerProps) {
-    const [visible, setVisible] = useState(false);
-    const [showModal, setShowModal] = useState(false);
+/**
+ * CookieConsentBanner - Production Ready
+ * Handles user choice and triggers Google Consent Mode updates.
+ */
+export default function CookieConsentBanner({ dict }: CookieConsentBannerProps) {
+    const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
-        const consent = getConsent();
+        // Check if user already has a saved consent decision
+        const consent = getStoredConsent();
         if (!consent) {
-            const timer = setTimeout(() => setVisible(true), 600);
+            // Delay slightly for better UX
+            const timer = setTimeout(() => setIsVisible(true), 1200);
             return () => clearTimeout(timer);
         }
     }, []);
 
-    useEffect(() => {
-        function handleOpenPrefs() {
-            setShowModal(true);
-        }
-        window.addEventListener('stb-open-cookie-prefs', handleOpenPrefs);
-        return () => window.removeEventListener('stb-open-cookie-prefs', handleOpenPrefs);
-    }, []);
+    const handleAcceptAll = () => {
+        const choice: UserConsent = { analytics: 'granted', marketing: 'granted' };
+        updateGoogleConsent(choice);
+        setIsVisible(false);
+    };
 
-    const handleAcceptAll = useCallback(() => {
-        saveConsent(ACCEPT_ALL_CATEGORIES, 'banner');
-        setVisible(false);
-    }, []);
+    const handleNecessaryOnly = () => {
+        const choice: UserConsent = { analytics: 'denied', marketing: 'denied' };
+        updateGoogleConsent(choice);
+        setIsVisible(false);
+    };
 
-    const handleRejectOptional = useCallback(() => {
-        saveConsent(DEFAULT_CATEGORIES, 'banner');
-        setVisible(false);
-    }, []);
-
-    const handleOpenSettings = useCallback(() => {
-        setShowModal(true);
-    }, []);
-
-    const handleModalSave = useCallback(() => {
-        setVisible(false);
-        setShowModal(false);
-    }, []);
-
-    if (!visible && !showModal) return null;
+    if (!isVisible) return null;
 
     return (
-        <>
-            {/* ── Banner ── */}
-            {visible && !showModal && (
-                <div
-                    className="fixed bottom-0 inset-x-0 z-[9999] p-4 md:p-6 animate-in slide-in-from-bottom duration-500"
-                    role="dialog"
-                    aria-label="Cookie-Banner"
-                >
-                    <div className="mx-auto max-w-3xl rounded-2xl border border-slate-700/60 bg-slate-900/95 p-5 shadow-2xl backdrop-blur-md md:p-6">
-                        {/* Text */}
-                        <div className="mb-5">
-                            <h2 className="mb-2 text-base font-bold text-white">
-                                {dict.banner_title}
-                            </h2>
-                            <p className="text-sm leading-relaxed text-slate-300">
-                                {dict.banner_desc}{' '}
-                                <Link
-                                    href="/cookie-richtlinie"
-                                    className="font-medium text-primary underline underline-offset-2 hover:text-blue-300 transition-colors"
-                                >
-                                    {dict.cookie_policy}
-                                </Link>
-                            </p>
-                            <p className="mt-1.5 text-xs text-slate-500">
-                                {dict.banner_note}
-                            </p>
-                        </div>
-
-                        {/* Buttons */}
-                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
-                            <button
-                                onClick={handleOpenSettings}
-                                className="rounded-lg border border-slate-600 px-5 py-2.5 text-sm font-semibold text-slate-300 transition-all hover:border-slate-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-primary/50"
-                            >
-                                {dict.settings}
-                            </button>
-                            <button
-                                onClick={handleRejectOptional}
-                                className="rounded-lg border border-slate-600 px-5 py-2.5 text-sm font-semibold text-slate-300 transition-all hover:border-slate-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-primary/50"
-                            >
-                                {dict.only_necessary}
-                            </button>
-                            <button
-                                onClick={handleAcceptAll}
-                                className="rounded-lg bg-primary px-6 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:bg-primary/90 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
-                            >
-                                {dict.accept_all}
-                            </button>
-                        </div>
+        <div
+            className="fixed bottom-0 inset-x-0 z-[9999] p-4 md:p-6 animate-in slide-in-from-bottom duration-700"
+            role="dialog"
+            aria-labelledby="cookie-title"
+        >
+            <div className="mx-auto max-w-4xl rounded-2xl border border-white/10 bg-slate-900 shadow-2xl backdrop-blur-xl p-6 md:p-8">
+                <div className="flex flex-col md:flex-row gap-6 items-center">
+                    <div className="flex-1">
+                        <h2 id="cookie-title" className="text-white font-black text-lg mb-2 flex items-center gap-2">
+                            <span className="material-symbols-outlined text-primary text-xl">cookie</span>
+                            {dict.title}
+                        </h2>
+                        <p className="text-slate-400 text-sm leading-relaxed">
+                            {dict.description}
+                        </p>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
+                        <button
+                            onClick={handleNecessaryOnly}
+                            className="px-6 py-2.5 text-xs font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors"
+                        >
+                            {dict.only_necessary}
+                        </button>
+                        <button
+                            onClick={handleAcceptAll}
+                            className="bg-primary hover:bg-primary/90 text-white px-8 py-2.5 rounded-lg text-xs font-black uppercase tracking-widest shadow-lg shadow-primary/20 transition-all transform hover:scale-[1.02] active:scale-95"
+                        >
+                            {dict.accept_all}
+                        </button>
                     </div>
                 </div>
-            )}
-
-            {/* ── Preferences Modal ── */}
-            {showModal && (
-                <CookiePreferencesModal
-                    onClose={() => setShowModal(false)}
-                    onSave={handleModalSave}
-                    dict={dict}
-                />
-            )}
-        </>
+            </div>
+        </div>
     );
 }

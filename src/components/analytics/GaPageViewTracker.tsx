@@ -2,11 +2,11 @@
 
 import { useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { trackPageView } from '@/lib/ga';
-import { hasConsent } from '@/lib/consent';
+import { trackPageView, getStoredConsent } from '@/lib/ga';
 
 /**
- * Tracks page views on route changes in Next.js App Router.
+ * NavigationTracker - Senior Implementation
+ * Tracks page views on route changes for Next.js App Router (SPA).
  */
 export default function GaPageViewTracker() {
     const pathname = usePathname();
@@ -15,11 +15,12 @@ export default function GaPageViewTracker() {
     useEffect(() => {
         if (!pathname) return;
 
-        // Only track if consent is granted
-        if (!hasConsent('analytics')) return;
-
-        const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '');
-        trackPageView(url);
+        // Only track if consent has been explicitly granted
+        const consent = getStoredConsent();
+        if (consent && consent.analytics === 'granted') {
+            const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '');
+            trackPageView(url);
+        }
     }, [pathname, searchParams]);
 
     return null;
