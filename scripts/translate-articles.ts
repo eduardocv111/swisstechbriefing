@@ -22,8 +22,8 @@ const adapter = new PrismaBetterSqlite3({
 });
 const prisma = new PrismaClient({ adapter });
 
-// 2. DeepL Translator
-const translator = new deepl.Translator(process.env.DEEPL_API_KEY || '');
+// 2. Global translator variable (will be initialized in main)
+let translator: deepl.Translator;
 
 /**
  * TRANSLATION METRICS TRACKER
@@ -93,8 +93,11 @@ async function main() {
     const args = process.argv.slice(2);
     const takeArg = args.find(a => a.startsWith('--take='))?.split('=')[1];
     const slugArg = args.find(a => a.startsWith('--slug='))?.split('=')[1];
+    const keyArg = args.find(a => a.startsWith('--key='))?.split('=')[1];
     const force = args.includes('--force');
     const take = takeArg ? parseInt(takeArg) : DEFAULT_TAKE;
+
+    const apiKey = keyArg || process.env.DEEPL_API_KEY;
 
     console.log('\n======================================================');
     console.log('      SWISSTECH BRIEFING: EDITORIAL AUTOMATION');
@@ -104,10 +107,12 @@ async function main() {
     if (slugArg) console.log(`> Target Slug: ${slugArg}`);
     console.log('------------------------------------------------------\n');
 
-    if (!process.env.DEEPL_API_KEY) {
-        console.error('❌ Error: DEEPL_API_KEY is missing in .env');
+    if (!apiKey) {
+        console.error('❌ Error: DEEPL_API_KEY is missing in .env and no --key provided');
         process.exit(1);
     }
+
+    translator = new deepl.Translator(apiKey);
 
     try {
         const articles = await prisma.article.findMany({
