@@ -8,10 +8,16 @@ export const metadata: Metadata = {
     description: 'Informationen zu den von SwissTech Briefing verwendeten Cookies, deren Zweck und Ihren Wahlmöglichkeiten.',
 };
 
-export default function CookieRichtliniePage() {
+export default async function CookieRichtliniePage({
+    params
+}: {
+    params: Promise<{ locale: string }>
+}) {
+    const { locale } = await params;
+
     return (
         <div className="flex flex-col min-h-screen">
-            <Header />
+            <Header locale={locale} />
             <main className="flex-1 mx-auto w-full max-w-3xl px-4 py-12 md:py-20">
                 <article className="prose prose-slate max-w-none dark:prose-invert">
                     <h1>Cookie-Richtlinie</h1>
@@ -133,7 +139,7 @@ export default function CookieRichtliniePage() {
                     </p>
                 </article>
             </main>
-            <Footer />
+            <Footer locale={locale} />
         </div>
     );
 }

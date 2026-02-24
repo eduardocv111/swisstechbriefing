@@ -4,6 +4,8 @@ import { SITE_CONFIG } from "@/lib/seo/site";
 export const runtime = "nodejs";
 export const revalidate = 300; // 5 min ISR
 
+const DEFAULT_LOCALE = "de-CH";
+
 export async function GET() {
   const baseUrl = SITE_CONFIG.url;
 
@@ -12,26 +14,37 @@ export async function GET() {
     orderBy: [{ createdAt: "desc" }, { id: "desc" }],
     select: {
       slug: true,
-      title: true,
-      excerpt: true,
       category: true,
       createdAt: true, // publicación real
       updatedAt: true,
+      translations: {
+        where: { locale: DEFAULT_LOCALE },
+        take: 1,
+        select: {
+          title: true,
+          excerpt: true,
+        },
+      },
     },
   });
 
   const rssItems = latestArticles
-    .map(
-      (article) => `
+    .map((article) => {
+      const t = article.translations[0];
+      const title = t?.title ?? article.slug;
+      const excerpt = t?.excerpt ?? "";
+      const path = `${DEFAULT_LOCALE}/artikel/${article.slug}`;
+
+      return `
     <item>
-      <title>${escapeXml(article.title)}</title>
-      <link>${baseUrl}/artikel/${article.slug}</link>
-      <description>${escapeXml(article.excerpt)}</description>
+      <title>${escapeXml(title)}</title>
+      <link>${baseUrl}/${path}</link>
+      <description>${escapeXml(excerpt)}</description>
       <category>${escapeXml(article.category)}</category>
       <pubDate>${article.createdAt.toUTCString()}</pubDate>
-      <guid>${baseUrl}/artikel/${article.slug}</guid>
-    </item>`
-    )
+      <guid>${baseUrl}/${path}</guid>
+    </item>`;
+    })
     .join("");
 
   const lastBuild =

@@ -1,0 +1,83 @@
+
+> swisstech-briefing@0.1.0 build
+> next build
+
+Ôû▓ Next.js 16.1.6 (Turbopack)
+- Environments: .env
+
+ÔÜá The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+Ô£ô Compiled successfully in 1494.1ms
+  Running TypeScript ...
+  Collecting page data using 27 workers ...
+  Generating static pages using 27 workers (0/55) ...
+  Generating static pages using 27 workers (13/55) 
+  Generating static pages using 27 workers (27/55) 
+  Generating static pages using 27 workers (41/55) 
+Ô£ô Generating static pages using 27 workers (55/55) in 660.3ms
+  Finalizing page optimization ...
+
+Route (app)                                                                         Revalidate  Expire
+Ôöî Ôùï /_not-found
+Ôö£ ÔùÅ /[locale]                                                                               1m      1y
+Ôöé Ôö£ /de-CH                                                                                  1m      1y
+Ôöé Ôö£ /fr-CH                                                                                  1m      1y
+Ôöé Ôö£ /it-CH                                                                                  1m      1y
+Ôöé Ôöö /en                                                                                     1m      1y
+Ôö£ ÔùÅ /[locale]/artikel/[slug]                                                                1h      1y
+Ôöé Ôö£ /de-CH/artikel/deutsche-telekom-quanten-teleportation-glasfaser-qunnect-carina          1h      1y
+Ôöé Ôö£ /de-CH/artikel/soft-power-ranking-2026-global-analysis                                  1h      1y
+Ôöé Ôö£ /de-CH/artikel/swiss-ai-test-1                                                          1h      1y
+Ôöé Ôöö [+9 more paths]
+Ôö£ ÔùÅ /[locale]/cookie-richtlinie
+Ôöé Ôö£ /de-CH/cookie-richtlinie
+Ôöé Ôö£ /fr-CH/cookie-richtlinie
+Ôöé Ôö£ /it-CH/cookie-richtlinie
+Ôöé Ôöö /en/cookie-richtlinie
+Ôö£ ÔùÅ /[locale]/datenschutz
+Ôöé Ôö£ /de-CH/datenschutz
+Ôöé Ôö£ /fr-CH/datenschutz
+Ôöé Ôö£ /it-CH/datenschutz
+Ôöé Ôöö /en/datenschutz
+Ôö£ ÔùÅ /[locale]/impressum
+Ôöé Ôö£ /de-CH/impressum
+Ôöé Ôö£ /fr-CH/impressum
+Ôöé Ôö£ /it-CH/impressum
+Ôöé Ôöö /en/impressum
+Ôö£ ãÆ /[locale]/kategorie/[slug]
+Ôö£ ÔùÅ /[locale]/kontakt
+Ôöé Ôö£ /de-CH/kontakt
+Ôöé Ôö£ /fr-CH/kontakt
+Ôöé Ôö£ /it-CH/kontakt
+Ôöé Ôöö /en/kontakt
+Ôö£ ÔùÅ /[locale]/newsletter
+Ôöé Ôö£ /de-CH/newsletter
+Ôöé Ôö£ /fr-CH/newsletter
+Ôöé Ôö£ /it-CH/newsletter
+Ôöé Ôöö /en/newsletter
+Ôö£ ÔùÅ /[locale]/suche
+Ôöé Ôö£ /de-CH/suche
+Ôöé Ôö£ /fr-CH/suche
+Ôöé Ôö£ /it-CH/suche
+Ôöé Ôöö /en/suche
+Ôö£ ÔùÅ /[locale]/ueber-uns
+Ôöé Ôö£ /de-CH/ueber-uns
+Ôöé Ôö£ /fr-CH/ueber-uns
+Ôöé Ôö£ /it-CH/ueber-uns
+Ôöé Ôöö /en/ueber-uns
+Ôö£ ãÆ /api/admin/publish
+Ôö£ ãÆ /api/newsletter/subscribe
+Ôö£ ãÆ /api/test-db
+Ôö£ Ôùï /feed.xml                                                                               1h      1y
+Ôö£ Ôùï /icon.png
+Ôö£ Ôùï /robots.txt
+Ôö£ Ôùï /rss.xml                                                                                5m      1y
+Ôöö Ôùï /sitemap.xml                                                                            1h      1y
+
+
+ãÆ Proxy (Middleware)
+
+Ôùï  (Static)   prerendered as static content
+ÔùÅ  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ãÆ  (Dynamic)  server-rendered on demand
+

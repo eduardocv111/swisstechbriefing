@@ -8,10 +8,16 @@ export const metadata: Metadata = {
     description: 'Impressum und rechtliche Angaben zu SwissTech Briefing.',
 };
 
-export default function ImpressumPage() {
+export default async function ImpressumPage({
+    params
+}: {
+    params: Promise<{ locale: string }>
+}) {
+    const { locale } = await params;
+
     return (
         <div className="flex flex-col min-h-screen">
-            <Header />
+            <Header locale={locale} />
             <main className="flex-1 mx-auto w-full max-w-3xl px-4 py-12 md:py-20">
                 <article className="prose prose-slate max-w-none dark:prose-invert">
                     <h1>Impressum</h1>
@@ -64,7 +70,7 @@ export default function ImpressumPage() {
                     </p>
                 </article>
             </main>
-            <Footer />
+            <Footer locale={locale} />
         </div>
     );
 }

@@ -8,10 +8,16 @@ export const metadata: Metadata = {
     description: 'Kontaktieren Sie die Redaktion von SwissTech Briefing for Presseanfragen oder Feedback.',
 };
 
-export default function KontaktPage() {
+export default async function KontaktPage({
+    params
+}: {
+    params: Promise<{ locale: string }>
+}) {
+    const { locale } = await params;
+
     return (
         <div className="flex flex-col min-h-screen bg-white dark:bg-slate-950">
-            <Header />
+            <Header locale={locale} />
             <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-12 md:py-20">
                 <div className="max-w-2xl mx-auto text-center">
                     <h1 className="text-4xl md:text-5xl font-extrabold mb-6 text-slate-900 dark:text-white">
@@ -56,7 +62,7 @@ export default function KontaktPage() {
                     </div>
                 </div>
             </main>
-            <Footer />
+            <Footer locale={locale} />
         </div>
     );
 }

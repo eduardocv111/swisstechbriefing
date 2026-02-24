@@ -8,10 +8,16 @@ export const metadata: Metadata = {
     description: 'Erfahren Sie mehr über die Mission und die Redaktion von SwissTech Briefing.',
 };
 
-export default function UeberUnsPage() {
+export default async function UeberUnsPage({
+    params
+}: {
+    params: Promise<{ locale: string }>
+}) {
+    const { locale } = await params;
+
     return (
         <div className="flex flex-col min-h-screen bg-white dark:bg-slate-950">
-            <Header />
+            <Header locale={locale} />
             <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-12 md:py-20">
                 <div className="max-w-3xl">
                     <h1 className="text-4xl md:text-5xl font-extrabold mb-8 text-slate-900 dark:text-white leading-tight">
@@ -55,7 +61,7 @@ export default function UeberUnsPage() {
                     </div>
                 </div>
             </main>
-            <Footer />
+            <Footer locale={locale} />
         </div>
     );
 }
