@@ -1,17 +1,14 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { hasConsent, getConsent } from '@/lib/consent';
+import { getStoredConsent } from '@/lib/ga';
 
-
-const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
+const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || "ca-pub-1495161909176032";
 const ADS_ENABLED = process.env.NEXT_PUBLIC_ENABLE_ADS !== 'false';
 
 /**
- * AdSense script loader — Phase 2.
- *
- * Only loads when: ADSENSE_CLIENT configured + ads enabled + marketing consent granted.
- * Idempotent, fires 'stb-adsense-ready' when script loads.
+ * AdSense script loader - Integrated with professional Consent Mode v2.
+ * Only loads if marketing consent is granted.
  */
 export default function AdSenseLoader() {
     const loaded = useRef(false);
@@ -21,7 +18,10 @@ export default function AdSenseLoader() {
 
         function tryLoad() {
             if (loaded.current) return;
-            if (!hasConsent('marketing')) return;
+
+            // Check new consent system
+            const consent = getStoredConsent();
+            if (consent?.marketing !== 'granted') return;
 
             if (document.getElementById('stb-adsense-script')) {
                 loaded.current = true;
@@ -37,21 +37,21 @@ export default function AdSenseLoader() {
             loaded.current = true;
 
             script.onload = () => {
+                // Trigger event for any ad slots waiting
                 window.dispatchEvent(new CustomEvent('stb-adsense-ready'));
             };
         }
 
+        // Initial check
         tryLoad();
 
-        function handleConsentChange() {
-            const consent = getConsent();
-            if (consent?.categories.marketing) {
-                tryLoad();
-            }
-        }
+        // Listen for internal consent updates (triggered by CookieBanner)
+        const handleConsentUpdate = () => {
+            tryLoad();
+        };
 
-        window.addEventListener('stb-consent-updated', handleConsentChange);
-        return () => window.removeEventListener('stb-consent-updated', handleConsentChange);
+        window.addEventListener('stb-consent-updated', handleConsentUpdate);
+        return () => window.removeEventListener('stb-consent-updated', handleConsentUpdate);
     }, []);
 
     return null;

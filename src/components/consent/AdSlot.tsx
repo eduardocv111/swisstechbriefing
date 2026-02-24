@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef, type ReactNode } from 'react';
-import { hasConsent, getConsent } from '@/lib/consent';
-import { trackEvent } from '@/lib/ga';
+import { getStoredConsent, trackEvent } from '@/lib/ga';
 
 
 const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
@@ -50,22 +49,21 @@ export default function AdSlot({
     pageType,
     category,
 }: AdSlotProps) {
-    const [hasMarketing, setHasMarketing] = useState(() =>
-        typeof window !== 'undefined' ? hasConsent('marketing') : false
-    );
+    const [hasMarketing, setHasMarketing] = useState(() => {
+        if (typeof window === 'undefined') return false;
+        const consent = getStoredConsent();
+        return consent?.marketing === 'granted';
+    });
     const [adsenseReady, setAdsenseReady] = useState(() =>
-        typeof window !== 'undefined' && typeof window.adsbygoogle !== 'undefined'
+        typeof window !== 'undefined' && typeof (window as any).adsbygoogle !== 'undefined'
     );
     const adPushed = useRef(false);
     const insRef = useRef<HTMLModElement>(null);
 
     useEffect(() => {
-        // hasMarketing is already initialized via state initializer, 
-        // but we keep the listener for runtime changes
-
         function handleConsentChange() {
-            const consent = getConsent();
-            setHasMarketing(consent?.categories.marketing ?? false);
+            const consent = getStoredConsent();
+            setHasMarketing(consent?.marketing === 'granted');
         }
 
         window.addEventListener('stb-consent-updated', handleConsentChange);

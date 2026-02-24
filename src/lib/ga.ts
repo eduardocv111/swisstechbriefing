@@ -63,6 +63,9 @@ export const updateGoogleConsent = (consent: UserConsent) => {
     if (consent.analytics === "granted") {
         trackPageView(window.location.pathname + window.location.search);
     }
+
+    // Notify other components (like AdSense)
+    window.dispatchEvent(new CustomEvent('stb-consent-updated'));
 };
 
 /**
