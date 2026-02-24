@@ -67,20 +67,39 @@ function sanitizeText(text: string): string {
     .replace(/\u00C3\u009F/g, "ß");
 }
 
+interface DbArticle {
+  id: string;
+  slug: string;
+  category: string;
+  date: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  imageUrl?: string | null;
+  sourcesJson?: string | null;
+  authorName: string;
+  authorRole?: string | null;
+  translations?: Array<{
+    locale: string;
+    title: string;
+    excerpt: string | null;
+    contentHtml: string;
+  }>;
+}
+
 /**
  * Maps DB Article with its translations to UiArticle for a specific locale
  */
-function mapDbToUi(article: any, locale: string): UiArticle {
+function mapDbToUi(article: DbArticle, locale: string): UiArticle {
   const normLocale = normalizeLocale(locale);
   const translations = article.translations || [];
-  const availableLocales = translations.map((t: any) => t.locale);
+  const availableLocales = translations.map((t) => t.locale);
 
   // Find translation for targetLocale, or fall back to defaultLocale, or first available
-  let trans = translations.find((t: any) => t.locale === normLocale);
+  let trans = translations.find((t) => t.locale === normLocale);
   let isFallback = false;
 
   if (!trans && normLocale !== defaultLocale) {
-    trans = translations.find((t: any) => t.locale === defaultLocale);
+    trans = translations.find((t) => t.locale === defaultLocale);
     isFallback = true;
   }
 

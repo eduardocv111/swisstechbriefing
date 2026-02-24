@@ -50,13 +50,18 @@ export default function AdSlot({
     pageType,
     category,
 }: AdSlotProps) {
-    const [hasMarketing, setHasMarketing] = useState(false);
-    const [adsenseReady, setAdsenseReady] = useState(false);
+    const [hasMarketing, setHasMarketing] = useState(() =>
+        typeof window !== 'undefined' ? hasConsent('marketing') : false
+    );
+    const [adsenseReady, setAdsenseReady] = useState(() =>
+        typeof window !== 'undefined' && typeof window.adsbygoogle !== 'undefined'
+    );
     const adPushed = useRef(false);
     const insRef = useRef<HTMLModElement>(null);
 
     useEffect(() => {
-        setHasMarketing(hasConsent('marketing'));
+        // hasMarketing is already initialized via state initializer, 
+        // but we keep the listener for runtime changes
 
         function handleConsentChange() {
             const consent = getConsent();
@@ -69,11 +74,7 @@ export default function AdSlot({
 
     useEffect(() => {
         if (!ADSENSE_CLIENT || !ADS_ENABLED) return;
-
-        if (typeof window.adsbygoogle !== 'undefined') {
-            setAdsenseReady(true);
-            return;
-        }
+        if (adsenseReady) return;
 
         function handleReady() {
             setAdsenseReady(true);

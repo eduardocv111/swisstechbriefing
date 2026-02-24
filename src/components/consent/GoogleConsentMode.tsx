@@ -43,9 +43,11 @@ export default function GoogleConsentMode() {
  * Updates Google Consent Mode v2 based on CMP selection
  */
 function updateGoogleConsent(analytics: boolean, marketing: boolean) {
-    if (typeof window === 'undefined' || !(window as any).dataLayer) return;
+    // Add type safety for gtag
+    const win = window as Window & { gtag?: (type: string, action: string, config: Record<string, string>) => void; dataLayer?: unknown[] };
+    if (typeof window === 'undefined' || !win.dataLayer) return;
 
-    (window as any).gtag('consent', 'update', {
+    win.gtag?.('consent', 'update', {
         analytics_storage: analytics ? 'granted' : 'denied',
         ad_storage: marketing ? 'granted' : 'denied',
         ad_user_data: marketing ? 'granted' : 'denied',

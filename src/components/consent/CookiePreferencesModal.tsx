@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
+import Link from 'next/link';
 import {
     getConsent,
     saveConsent,
@@ -164,19 +165,19 @@ export default function CookiePreferencesModal({ onClose, onSave, dict }: Props)
 
                 {/* Links */}
                 <div className="mt-4 text-center">
-                    <a
+                    <Link
                         href="/cookie-richtlinie"
                         className="text-xs text-slate-500 underline underline-offset-2 transition-colors hover:text-primary"
                     >
                         {dict.cookie_policy}
-                    </a>
+                    </Link>
                     <span className="mx-2 text-slate-700">•</span>
-                    <a
+                    <Link
                         href="/datenschutz"
                         className="text-xs text-slate-500 underline underline-offset-2 transition-colors hover:text-primary"
                     >
                         {dict.privacy_policy}
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>

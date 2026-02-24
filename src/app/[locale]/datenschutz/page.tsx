@@ -1,5 +1,6 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Link from 'next/link';
 import { SITE_CONFIG } from '@/lib/seo/site';
 import type { Metadata } from 'next';
 
@@ -62,7 +63,7 @@ export default async function DatenschutzPage({
                     <p>
                         Wir verwenden Cookies auf unserer Website. Details zu den eingesetzten Cookies, deren Zweck
                         und Ihren Wahlmöglichkeiten finden Sie in unserer{' '}
-                        <a href="/cookie-richtlinie">Cookie-Richtlinie</a>.
+                        <Link href={`/${locale}/cookie-richtlinie`}>Cookie-Richtlinie</Link>.
                     </p>
                     <p>
                         Beim ersten Besuch unserer Website wird Ihnen ein Cookie-Banner angezeigt, über das Sie

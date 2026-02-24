@@ -59,7 +59,7 @@ export default async function UeberUnsPage({ params }: Props) {
 
                         <h2 className="text-2xl font-bold mt-16 mb-6">{dict.about.transparency_title}</h2>
                         <div className="bg-primary/5 p-8 rounded-2xl border-l-4 border-primary italic text-slate-700 dark:text-slate-300">
-                            "{dict.about.transparency_text}"
+                            &quot;{dict.about.transparency_text}&quot;
                         </div>
 
                         <h2 className="text-2xl font-bold mt-16 mb-6">{dict.about.editorial_title}</h2>

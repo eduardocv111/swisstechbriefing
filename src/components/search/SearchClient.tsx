@@ -62,7 +62,7 @@ export default function SearchClient({ locale, initialQuery, initialResults, dic
                 <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                     <div className="flex flex-col gap-2 mb-6">
                         <h2 className="text-sm font-black text-slate-400 uppercase tracking-[0.2em]">
-                            {initialResults.length} {dict.results_for} "{initialQuery}"
+                            {initialResults.length} {dict.results_for} &quot;{initialQuery}&quot;
                         </h2>
                         {locale !== 'de-CH' && initialResults.every((a: UiArticle) => a.isFallback) && (
                             <div className="flex items-center gap-2 text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-3 py-1.5 rounded-lg border border-blue-100 dark:border-blue-900/30">

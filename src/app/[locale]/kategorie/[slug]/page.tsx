@@ -4,10 +4,10 @@ import CategoryTabs from "@/components/CategoryTabs";
 import ArticleCard from "@/components/ArticleCard";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getCategoryBySlug, CATEGORIES } from "@/lib/categories";
+import { getCategoryBySlug } from "@/lib/categories";
 import { getArticlesByCategory } from "@/lib/articles.repo";
 import { getDictionary } from "@/i18n/get-dictionary";
-import { Locale, defaultLocale, locales } from "@/i18n/config";
+import { Locale, locales } from "@/i18n/config";
 import type { Metadata } from "next";
 import { SITE_CONFIG } from "@/lib/seo/site";
 
@@ -18,7 +18,7 @@ type Props = {
     params: Promise<{ slug: string; locale: string }>;
 };
 
-const getTranslatedCategoryLabel = (label: string, dict: any) => {
+const getTranslatedCategoryLabel = (label: string, dict: Record<string, any>) => { // eslint-disable-line @typescript-eslint/no-explicit-any
     const key = label.toLowerCase();
     if (key.includes('ki') || key.includes('ai')) return dict.categories.ki;
     if (key.includes('startup')) return dict.categories.startups;

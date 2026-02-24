@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import {
     getConsent,
     saveConsent,
@@ -85,12 +86,12 @@ export default function CookieBanner({ dict }: CookieBannerProps) {
                             </h2>
                             <p className="text-sm leading-relaxed text-slate-300">
                                 {dict.banner_desc}{' '}
-                                <a
+                                <Link
                                     href="/cookie-richtlinie"
                                     className="font-medium text-primary underline underline-offset-2 hover:text-blue-300 transition-colors"
                                 >
                                     {dict.cookie_policy}
-                                </a>
+                                </Link>
                             </p>
                             <p className="mt-1.5 text-xs text-slate-500">
                                 {dict.banner_note}
