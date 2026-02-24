@@ -9,7 +9,7 @@ import path from 'path';
  */
 const DEFAULT_TAKE = 20;
 const SOURCE_LOCALE = 'de-CH';
-const TARGET_LOCALES = ['fr-CH', 'it-CH', 'en'];
+const TARGET_LOCALES = ['fr-CH', 'it-CH', 'es-ES', 'en'];
 
 // 1. Robust Database Initialization
 const rawUrl = process.env.DATABASE_URL ?? "file:./data/stb.db";
@@ -45,6 +45,7 @@ async function translateText(
     switch (targetLocale) {
         case 'fr-CH': deepLTarget = 'fr'; break;
         case 'it-CH': deepLTarget = 'it'; break;
+        case 'es-ES': deepLTarget = 'es'; break;
         case 'en': deepLTarget = 'en-US'; break;
         default: deepLTarget = 'en-US';
     }
@@ -156,7 +157,7 @@ async function main() {
                 const tMetaTitle = await translateText(mTitleSource, targetLocale, false);
                 const tMetaDesc = await translateText(mDescSource, targetLocale, false);
 
-                const usedFallback = [tTitle, tExcerpt, tContent, tMetaTitle, tMetaDesc].some(r => (targetLocale === 'fr-CH' || targetLocale === 'it-CH') && !r.usedFormality);
+                const usedFallback = [tTitle, tExcerpt, tContent, tMetaTitle, tMetaDesc].some(r => (targetLocale === 'fr-CH' || targetLocale === 'it-CH' || targetLocale === 'es-ES') && !r.usedFormality);
 
                 await prisma.articleTranslation.upsert({
                     where: { articleId_locale: { articleId: article.id, locale: targetLocale } },
