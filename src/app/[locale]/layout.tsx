@@ -1,3 +1,4 @@
+import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import { Public_Sans } from "next/font/google";
 import Script from "next/script";
@@ -105,7 +106,9 @@ export default async function RootLayout({
 
                 {/* Professional UI and Navigation Tracking */}
                 <CookieBanner dict={dict.cookies} />
-                <GaPageViewTracker />
+                <Suspense fallback={null}>
+                    <GaPageViewTracker />
+                </Suspense>
                 <AdSenseLoader />
             </body>
         </html>
