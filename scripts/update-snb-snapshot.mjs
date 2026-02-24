@@ -29,7 +29,7 @@ function getLastKnownGood() {
         for (const row of rows) {
             const payload = JSON.parse(row.payload_json);
 
-            // New schema check
+            // Current schema check
             if (payload.policy_rate?.value !== undefined && payload.policy_rate?.value !== null) {
                 return {
                     value: payload.policy_rate.value,
@@ -45,7 +45,7 @@ function getLastKnownGood() {
                 };
             }
 
-            // If new schema but value is null, check its stored last_good_value
+            // Stored LKG check
             if (payload.policy_rate?.last_good_value !== undefined && payload.policy_rate?.last_good_value !== null) {
                 return {
                     value: payload.policy_rate.last_good_value,
@@ -60,84 +60,39 @@ function getLastKnownGood() {
 }
 
 /**
- * Layer 1: SNB Data Portal API
+ * Fetch SNB Policy Rate from Official SNB Data Portal API (Cube snboffzisa)
  */
-async function getPolicyRateFromAPI() {
+async function fetchPolicyRate() {
+    const url = "https://data.snb.ch/api/cube/snboffzisa/data/json/de";
     try {
-        const r = await fetch("https://data.snb.ch/api/cube/snbzp/data/json/en?selection=B5", { signal: AbortSignal.timeout(5000) });
-        if (r.ok) {
-            const d = await r.json();
-            if (d.timeseries && d.timeseries[0]?.observations) {
-                const latest = d.timeseries[0].observations.sort((a, b) => b.date.localeCompare(a.date))[0];
-                if (latest.value && latest.value !== ".") {
-                    return { value: parseFloat(latest.value), asof: latest.date, source: "SNB API" };
-                }
-            }
+        const r = await fetch(url);
+        if (!r.ok) return { error: `HTTP ${r.status}` };
+
+        const data = await r.json();
+        const ts = data.timeseries?.[0];
+
+        if (!ts || !ts.values || ts.values.length === 0) {
+            return { error: "No timeseries values found in API response" };
         }
-    } catch (e) { /* silent */ }
-    return null;
-}
 
-/**
- * Layer 2: Scrape SNB Website Home Page
- */
-async function getPolicyRateFromScrape() {
-    try {
-        const r = await fetch("https://www.snb.ch/en", { signal: AbortSignal.timeout(5000) });
-        if (!r.ok) return null;
-        const text = await r.text();
-        const patterns = [
-            /SNB policy rate.*?h-typo-t3">([\d\.]+)%/s,
-            /SNB policy rate.*?<span>([\d\.]+)%/s,
-            /Policy rate.*?([\d\.]+)%/s
-        ];
-        for (const p of patterns) {
-            const match = text.match(p);
-            // We ignore "0.00" only if we suspect it's a placeholder, 
-            // but SNB rate hasn't been 0.00 for a while.
-            if (match && match[1] && match[1] !== "0.00") {
-                return {
-                    value: parseFloat(match[1]),
-                    asof: new Date().toISOString().split('T')[0],
-                    source: "SNB Web"
-                };
-            }
-        }
-    } catch (e) { /* silent */ }
-    return null;
-}
-
-/**
- * Layer 3: FRED API Fallback
- */
-async function getPolicyRateFromFred() {
-    const FRED_API_KEY = process.env.FRED_API_KEY;
-    if (!FRED_API_KEY) return null;
-
-    // We try two common series IDs for Swiss policy/interest rates
-    const seriesIds = ["INTDSRCHM193N", "IRSTCB01CHM156N"];
-
-    for (const sid of seriesIds) {
-        try {
-            const r = await fetch(`https://api.stlouisfed.org/fred/series/observations?series_id=${sid}&api_key=${FRED_API_KEY}&file_type=json&sort_order=desc&limit=1`, { signal: AbortSignal.timeout(5000) });
-            if (r.ok) {
-                const d = await r.json();
-                const obs = d.observations?.[0];
-                if (obs && obs.value !== "." && obs.value !== "") {
-                    return { value: parseFloat(obs.value), asof: obs.date, source: "FRED" };
-                }
-            }
-        } catch (e) { /* next */ }
+        const last = ts.values.at(-1);
+        return {
+            value: last.value,
+            asof: last.date,
+            source: "SNB Data Portal (cube snboffzisa)",
+            status: "ok"
+        };
+    } catch (e) {
+        return { error: e.message };
     }
-    return null;
 }
 
 /**
- * Fetch FX from Frankfurter (USD/CHF, EUR/CHF)
+ * Fetch FX Rates from Frankfurter API (USD/CHF, EUR/CHF)
  */
-async function getFxRates() {
+async function fetchFxRates() {
     try {
-        const r = await fetch("https://api.frankfurter.app/latest?from=CHF&to=USD,EUR", { signal: AbortSignal.timeout(5000) });
+        const r = await fetch("https://api.frankfurter.app/latest?from=CHF&to=USD,EUR");
         if (r.ok) {
             const d = await r.json();
             return {
@@ -152,21 +107,21 @@ async function getFxRates() {
 }
 
 async function run() {
-    console.log("--- SNB Macro Intelligence Layer ---");
+    console.log("--- SNB Official Data Portal Update ---");
 
+    // Get LKG for fallback
     const lkg = getLastKnownGood();
 
-    // Attempt to get current policy rate
-    let policy = await getPolicyRateFromAPI();
-    if (!policy) policy = await getPolicyRateFromScrape();
-    if (!policy) policy = await getPolicyRateFromFred();
+    // 1. Policy Rate Update
+    const policyResult = await fetchPolicyRate();
 
-    const result = {
+    const snapshot = {
         created_at: new Date().toISOString(),
         policy_rate: {
+            label: "SNB-Leitzins",
             value: null,
             asof: null,
-            source: null,
+            source: "SNB Data Portal (cube snboffzisa)",
             status: "unavailable",
             reason: null,
             last_good_value: lkg.value,
@@ -180,36 +135,34 @@ async function run() {
         }
     };
 
-    // Populate Policy Rate
-    if (policy) {
-        result.policy_rate.value = policy.value;
-        result.policy_rate.asof = policy.asof;
-        result.policy_rate.source = policy.source;
-        result.policy_rate.status = "ok";
-        result.policy_rate.last_good_value = policy.value;
-        result.policy_rate.last_good_asof = policy.asof;
-        console.log(`SNB policy rate: OK via ${policy.source} (${policy.value}%)`);
+    if (policyResult.status === "ok") {
+        snapshot.policy_rate.value = policyResult.value;
+        snapshot.policy_rate.asof = policyResult.asof;
+        snapshot.policy_rate.status = "ok";
+        snapshot.policy_rate.last_good_value = policyResult.value;
+        snapshot.policy_rate.last_good_asof = policyResult.asof;
+        console.log(`SNB policy rate: OK (${policyResult.value}%)`);
     } else {
-        result.policy_rate.reason = "All live data sources failed. SNB Portal, Website Scrape, and FRED did not return valid results.";
-        const displayLkg = result.policy_rate.last_good_value !== null ? `${result.policy_rate.last_good_value}%` : "NONE";
-        console.log(`SNB policy rate: UNAVAILABLE (using last known good ${displayLkg})`);
+        snapshot.policy_rate.reason = policyResult.error;
+        const lkgDisplay = lkg.value !== null ? `${lkg.value}%` : "NONE";
+        console.log(`SNB policy rate: UNAVAILABLE (${policyResult.error}) - using LKG: ${lkgDisplay}`);
     }
 
-    // Populate FX
-    const fx = await getFxRates();
+    // 2. FX Update
+    const fx = await fetchFxRates();
     if (fx) {
-        result.fx.usd_chf = fx.usd_chf;
-        result.fx.eur_chf = fx.eur_chf;
-        result.fx.asof = fx.asof;
-        console.log(`FX Rates: Updated via ${fx.source} (USD/CHF: ${fx.usd_chf})`);
+        snapshot.fx.usd_chf = fx.usd_chf;
+        snapshot.fx.eur_chf = fx.eur_chf;
+        snapshot.fx.asof = fx.asof;
+        console.log(`FX: USD/CHF ${fx.usd_chf}, EUR/CHF ${fx.eur_chf}`);
     } else {
-        console.log("FX Rates: Connection failed.");
+        console.log("FX: Data collection failed.");
     }
 
-    // Save to Database
+    // 3. Persistence
     try {
         const stmt = db.prepare("INSERT INTO snb_snapshots (created_at, payload_json) VALUES (?, ?)");
-        stmt.run(result.created_at, JSON.stringify(result));
+        stmt.run(snapshot.created_at, JSON.stringify(snapshot));
         console.log("SNB snapshot saved successfully.");
     } catch (err) {
         console.error("Database error:", err);
