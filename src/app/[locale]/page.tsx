@@ -112,13 +112,6 @@ export default async function Home({ params }: PageProps) {
                     </section>
                 ) : null}
 
-                {/* ================= MARKET SNAPSHOT ================= */}
-                {market && (
-                    <div className="mb-12 md:mb-16">
-                        <MarketSnapshotCard createdAt={market.created_at} payload={market.payload} />
-                    </div>
-                )}
-
                 {/* ================= EDITORIAL COLLAGE 2×2 ================= */}
                 {collageArticles.length > 0 && (
                     <section className="mb-12 md:mb-16">
