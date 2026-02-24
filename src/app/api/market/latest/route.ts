@@ -10,7 +10,7 @@ export async function GET() {
   const db = new Database(DB_PATH);
   const row = db
     .prepare("SELECT created_at, payload_json FROM market_snapshots ORDER BY id DESC LIMIT 1")
-    .get();
+    .get() as { created_at: string; payload_json: string } | undefined;
   db.close();
 
   if (!row) {
