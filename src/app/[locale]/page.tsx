@@ -11,6 +11,9 @@ import { getLatestArticles } from "@/lib/articles.repo";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { Locale } from "@/i18n/config";
 
+import MarketSnapshotCard from "@/components/MarketSnapshotCard";
+import { getLatestMarketSnapshot } from "@/lib/market.repo";
+
 interface PageProps {
     params: Promise<{ locale: string }>;
 }
@@ -35,6 +38,7 @@ export default async function Home({ params }: PageProps) {
     const { locale } = await params;
     const dict = await getDictionary(locale as Locale);
     const articles = await getLatestArticles(locale, 30);
+    const market = getLatestMarketSnapshot();
 
     const featured = articles.length > 0 ? articles[0] : null;
     const collageArticles = articles.slice(1, 5);
@@ -105,6 +109,13 @@ export default async function Home({ params }: PageProps) {
                         </Link>
                     </section>
                 ) : null}
+
+                {/* ================= MARKET SNAPSHOT ================= */}
+                {market && (
+                    <div className="mb-12 md:mb-16">
+                        <MarketSnapshotCard createdAt={market.created_at} payload={market.payload} />
+                    </div>
+                )}
 
                 {/* ================= EDITORIAL COLLAGE 2×2 ================= */}
                 {collageArticles.length > 0 && (
