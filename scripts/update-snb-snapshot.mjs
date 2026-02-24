@@ -25,13 +25,13 @@ const SNB_CUBES = [
     {
         id: "snbzp",
         label: "SNB Policy Rate",
-        url: "https://data.snb.ch/api/cube/snbzp/data/json/en",
+        url: "https://data.snb.ch/api/cube/snbzp/data/json/en?selection=B5",
         series: "B5"
     },
     {
         id: "devkum",
         label: "Exchange Rates",
-        url: "https://data.snb.ch/api/cube/devkum/data/json/en",
+        url: "https://data.snb.ch/api/cube/devkum/data/json/en?selection=D0,D1",
         series: ["D0", "D1"] // D0=USD, D1=EUR
     }
 ];
@@ -39,18 +39,23 @@ const SNB_CUBES = [
 async function fetchSNBCube(cube) {
     try {
         const response = await fetch(cube.url);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response.ok) {
+            console.warn(`SNB API returned ${response.status} for ${cube.id}`);
+            return null;
+        }
         const data = await response.json();
 
-        // SNB JSON structure is complex. We need the latest observations.
-        // data.observations contains values. 
-        // This is a simplified extraction logic for the SNB API structure.
+        if (!data || !data.observations) {
+            console.warn(`No observations found for ${cube.id}`);
+            return null;
+        }
+
         const results = {};
 
         if (Array.isArray(cube.series)) {
             cube.series.forEach(sId => {
                 const obs = data.observations
-                    .filter(o => o.dimensions.some(d => d === sId))
+                    .filter(o => o.dimensions && o.dimensions.includes(sId))
                     .sort((a, b) => b.date.localeCompare(a.date))[0];
 
                 if (obs) {
@@ -59,7 +64,7 @@ async function fetchSNBCube(cube) {
             });
         } else {
             const obs = data.observations
-                .filter(o => o.dimensions.some(d => d === cube.series))
+                .filter(o => o.dimensions && o.dimensions.includes(cube.series))
                 .sort((a, b) => b.date.localeCompare(a.date))[0];
 
             if (obs) {
