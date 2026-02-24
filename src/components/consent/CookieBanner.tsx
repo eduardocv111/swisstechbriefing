@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { updateGoogleConsent, getStoredConsent, UserConsent } from '@/lib/ga';
+import { updateGoogleConsent, getStoredConsent, UserConsent, trackPageView } from '@/lib/ga';
 
 interface CookieConsentBannerProps {
     dict: {
@@ -30,12 +30,23 @@ export default function CookieConsentBanner({ dict }: CookieConsentBannerProps) 
     }, []);
 
     const handleAcceptAll = () => {
+        console.log('STB_CONSENT: User clicked "Alle akzeptieren"');
         const choice: UserConsent = { analytics: 'granted', marketing: 'granted' };
+
+        // 1. Update consent
+        console.log('STB_CONSENT: Updating Google Consent Mode to granted...');
         updateGoogleConsent(choice);
+
+        // 2. Trigger manual page_view immediately (redundant but safe if ga.ts logic is delayed)
+        console.log('STB_CONSENT: Triggering manual page_view for GA4...');
+        trackPageView(window.location.pathname + window.location.search);
+
         setIsVisible(false);
+        console.log('STB_CONSENT: Choice persisted and banner closed.');
     };
 
     const handleNecessaryOnly = () => {
+        console.log('STB_CONSENT: User clicked "Nur notwendige"');
         const choice: UserConsent = { analytics: 'denied', marketing: 'denied' };
         updateGoogleConsent(choice);
         setIsVisible(false);
