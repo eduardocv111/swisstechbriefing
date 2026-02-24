@@ -6,6 +6,7 @@ const dictionaries = {
     'de-CH': () => import('./dictionaries/de-CH.json').then((module) => module.default),
     'fr-CH': () => import('./dictionaries/fr-CH.json').then((module) => module.default),
     'it-CH': () => import('./dictionaries/it-CH.json').then((module) => module.default),
+    'es-ES': () => import('./dictionaries/es-ES.json').then((module) => module.default),
     'en': () => import('./dictionaries/en.json').then((module) => module.default),
 };
 
