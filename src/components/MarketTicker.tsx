@@ -70,7 +70,7 @@ export default function MarketTicker({ initial }: MarketTickerProps) {
                             {item.value}
                         </span>
                         {!item.isFx && (
-                            <span className={`inline-flex items-center gap-0.5 text-[10px] font-black font-mono ${item.change >= 0 ? "text-emerald-500" : "text-rose-500"}`}>
+                            <span className={`inline-flex items-center gap-0.5 text-[10px] font-black font-mono ${item.change >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
                                 {item.change >= 0 ? "▲" : "▼"} {item.percent}
                             </span>
                         )}
