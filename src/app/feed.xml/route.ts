@@ -5,10 +5,10 @@ export const runtime = "nodejs";
 export const revalidate = 3600; // Cache 1h
 
 export async function GET() {
-    const articles = await getLatestArticles(20);
+  const articles = await getLatestArticles('de-CH', 20);
 
-    const itemsXml = articles
-        .map((article: UiArticle) => `
+  const itemsXml = articles
+    .map((article: UiArticle) => `
     <item>
       <title><![CDATA[${article.title}]]></title>
       <link>${SITE_CONFIG.url}/artikel/${article.slug}</link>
@@ -17,9 +17,9 @@ export async function GET() {
       <description><![CDATA[${article.excerpt}]]></description>
       <category><![CDATA[${article.category}]]></category>
     </item>`)
-        .join("");
+    .join("");
 
-    const rssXml = `<?xml version="1.0" encoding="UTF-8" ?>
+  const rssXml = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>${SITE_CONFIG.name}</title>
@@ -32,10 +32,10 @@ export async function GET() {
   </channel>
 </rss>`;
 
-    return new Response(rssXml, {
-        headers: {
-            "Content-Type": "application/xml",
-            "Cache-Control": "s-maxage=3600, stale-while-revalidate",
-        },
-    });
+  return new Response(rssXml, {
+    headers: {
+      "Content-Type": "application/xml",
+      "Cache-Control": "s-maxage=3600, stale-while-revalidate",
+    },
+  });
 }
