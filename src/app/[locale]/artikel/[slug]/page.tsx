@@ -109,7 +109,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             languages,
         },
         // SEO Strategy: if it's a fallback, don't index this specific URL
-        ...(article.isFallback ? { robots: { index: false, follow: true } } : {}),
+        ...(article.isFallback ? { robots: "noindex, follow" } : {}),
         openGraph: {
             title,
             description,

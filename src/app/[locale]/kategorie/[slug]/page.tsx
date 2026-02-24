@@ -18,7 +18,7 @@ type Props = {
     params: Promise<{ slug: string; locale: string }>;
 };
 
-const getTranslatedCategoryLabel = (label: string, dict: Record<string, any>) => { // eslint-disable-line @typescript-eslint/no-explicit-any
+const getTranslatedCategoryLabel = (label: string, dict: Record<string, any>) => {
     const key = label.toLowerCase();
     if (key.includes('ki') || key.includes('ai')) return dict.categories.ki;
     if (key.includes('startup')) return dict.categories.startups;
