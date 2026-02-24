@@ -19,6 +19,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type Article = $Result.DefaultSelection<Prisma.$ArticlePayload>
 /**
+ * Model ArticleTranslation
+ * 
+ */
+export type ArticleTranslation = $Result.DefaultSelection<Prisma.$ArticleTranslationPayload>
+/**
  * Model NewsletterSubscription
  * 
  */
@@ -150,6 +155,16 @@ export class PrismaClient<
     * ```
     */
   get article(): Prisma.ArticleDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.articleTranslation`: Exposes CRUD operations for the **ArticleTranslation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ArticleTranslations
+    * const articleTranslations = await prisma.articleTranslation.findMany()
+    * ```
+    */
+  get articleTranslation(): Prisma.ArticleTranslationDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.newsletterSubscription`: Exposes CRUD operations for the **NewsletterSubscription** model.
@@ -595,6 +610,7 @@ export namespace Prisma {
 
   export const ModelName: {
     Article: 'Article',
+    ArticleTranslation: 'ArticleTranslation',
     NewsletterSubscription: 'NewsletterSubscription'
   };
 
@@ -611,7 +627,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "article" | "newsletterSubscription"
+      modelProps: "article" | "articleTranslation" | "newsletterSubscription"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -686,6 +702,80 @@ export namespace Prisma {
           count: {
             args: Prisma.ArticleCountArgs<ExtArgs>
             result: $Utils.Optional<ArticleCountAggregateOutputType> | number
+          }
+        }
+      }
+      ArticleTranslation: {
+        payload: Prisma.$ArticleTranslationPayload<ExtArgs>
+        fields: Prisma.ArticleTranslationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ArticleTranslationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticleTranslationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ArticleTranslationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticleTranslationPayload>
+          }
+          findFirst: {
+            args: Prisma.ArticleTranslationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticleTranslationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ArticleTranslationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticleTranslationPayload>
+          }
+          findMany: {
+            args: Prisma.ArticleTranslationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticleTranslationPayload>[]
+          }
+          create: {
+            args: Prisma.ArticleTranslationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticleTranslationPayload>
+          }
+          createMany: {
+            args: Prisma.ArticleTranslationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ArticleTranslationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticleTranslationPayload>[]
+          }
+          delete: {
+            args: Prisma.ArticleTranslationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticleTranslationPayload>
+          }
+          update: {
+            args: Prisma.ArticleTranslationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticleTranslationPayload>
+          }
+          deleteMany: {
+            args: Prisma.ArticleTranslationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ArticleTranslationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ArticleTranslationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticleTranslationPayload>[]
+          }
+          upsert: {
+            args: Prisma.ArticleTranslationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ArticleTranslationPayload>
+          }
+          aggregate: {
+            args: Prisma.ArticleTranslationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateArticleTranslation>
+          }
+          groupBy: {
+            args: Prisma.ArticleTranslationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ArticleTranslationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ArticleTranslationCountArgs<ExtArgs>
+            result: $Utils.Optional<ArticleTranslationCountAggregateOutputType> | number
           }
         }
       }
@@ -872,6 +962,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     article?: ArticleOmit
+    articleTranslation?: ArticleTranslationOmit
     newsletterSubscription?: NewsletterSubscriptionOmit
   }
 
@@ -948,6 +1039,36 @@ export namespace Prisma {
    */
 
 
+  /**
+   * Count Type ArticleCountOutputType
+   */
+
+  export type ArticleCountOutputType = {
+    translations: number
+  }
+
+  export type ArticleCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    translations?: boolean | ArticleCountOutputTypeCountTranslationsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ArticleCountOutputType without action
+   */
+  export type ArticleCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleCountOutputType
+     */
+    select?: ArticleCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ArticleCountOutputType without action
+   */
+  export type ArticleCountOutputTypeCountTranslationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ArticleTranslationWhereInput
+  }
+
 
   /**
    * Models
@@ -966,9 +1087,6 @@ export namespace Prisma {
   export type ArticleMinAggregateOutputType = {
     id: string | null
     slug: string | null
-    title: string | null
-    excerpt: string | null
-    contentHtml: string | null
     category: string | null
     date: Date | null
     authorName: string | null
@@ -982,9 +1100,6 @@ export namespace Prisma {
   export type ArticleMaxAggregateOutputType = {
     id: string | null
     slug: string | null
-    title: string | null
-    excerpt: string | null
-    contentHtml: string | null
     category: string | null
     date: Date | null
     authorName: string | null
@@ -998,9 +1113,6 @@ export namespace Prisma {
   export type ArticleCountAggregateOutputType = {
     id: number
     slug: number
-    title: number
-    excerpt: number
-    contentHtml: number
     category: number
     date: number
     authorName: number
@@ -1016,9 +1128,6 @@ export namespace Prisma {
   export type ArticleMinAggregateInputType = {
     id?: true
     slug?: true
-    title?: true
-    excerpt?: true
-    contentHtml?: true
     category?: true
     date?: true
     authorName?: true
@@ -1032,9 +1141,6 @@ export namespace Prisma {
   export type ArticleMaxAggregateInputType = {
     id?: true
     slug?: true
-    title?: true
-    excerpt?: true
-    contentHtml?: true
     category?: true
     date?: true
     authorName?: true
@@ -1048,9 +1154,6 @@ export namespace Prisma {
   export type ArticleCountAggregateInputType = {
     id?: true
     slug?: true
-    title?: true
-    excerpt?: true
-    contentHtml?: true
     category?: true
     date?: true
     authorName?: true
@@ -1137,9 +1240,6 @@ export namespace Prisma {
   export type ArticleGroupByOutputType = {
     id: string
     slug: string
-    title: string
-    excerpt: string
-    contentHtml: string
     category: string
     date: Date
     authorName: string
@@ -1170,9 +1270,6 @@ export namespace Prisma {
   export type ArticleSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     slug?: boolean
-    title?: boolean
-    excerpt?: boolean
-    contentHtml?: boolean
     category?: boolean
     date?: boolean
     authorName?: boolean
@@ -1181,14 +1278,13 @@ export namespace Prisma {
     imageUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    translations?: boolean | Article$translationsArgs<ExtArgs>
+    _count?: boolean | ArticleCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["article"]>
 
   export type ArticleSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     slug?: boolean
-    title?: boolean
-    excerpt?: boolean
-    contentHtml?: boolean
     category?: boolean
     date?: boolean
     authorName?: boolean
@@ -1202,9 +1298,6 @@ export namespace Prisma {
   export type ArticleSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     slug?: boolean
-    title?: boolean
-    excerpt?: boolean
-    contentHtml?: boolean
     category?: boolean
     date?: boolean
     authorName?: boolean
@@ -1218,9 +1311,6 @@ export namespace Prisma {
   export type ArticleSelectScalar = {
     id?: boolean
     slug?: boolean
-    title?: boolean
-    excerpt?: boolean
-    contentHtml?: boolean
     category?: boolean
     date?: boolean
     authorName?: boolean
@@ -1231,17 +1321,22 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ArticleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "title" | "excerpt" | "contentHtml" | "category" | "date" | "authorName" | "authorRole" | "sourcesJson" | "imageUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["article"]>
+  export type ArticleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "category" | "date" | "authorName" | "authorRole" | "sourcesJson" | "imageUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["article"]>
+  export type ArticleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    translations?: boolean | Article$translationsArgs<ExtArgs>
+    _count?: boolean | ArticleCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ArticleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ArticleIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $ArticlePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Article"
-    objects: {}
+    objects: {
+      translations: Prisma.$ArticleTranslationPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       slug: string
-      title: string
-      excerpt: string
-      contentHtml: string
       category: string
       date: Date
       authorName: string
@@ -1644,6 +1739,7 @@ export namespace Prisma {
    */
   export interface Prisma__ArticleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    translations<T extends Article$translationsArgs<ExtArgs> = {}>(args?: Subset<T, Article$translationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArticleTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1675,9 +1771,6 @@ export namespace Prisma {
   interface ArticleFieldRefs {
     readonly id: FieldRef<"Article", 'String'>
     readonly slug: FieldRef<"Article", 'String'>
-    readonly title: FieldRef<"Article", 'String'>
-    readonly excerpt: FieldRef<"Article", 'String'>
-    readonly contentHtml: FieldRef<"Article", 'String'>
     readonly category: FieldRef<"Article", 'String'>
     readonly date: FieldRef<"Article", 'DateTime'>
     readonly authorName: FieldRef<"Article", 'String'>
@@ -1703,6 +1796,10 @@ export namespace Prisma {
      */
     omit?: ArticleOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleInclude<ExtArgs> | null
+    /**
      * Filter, which Article to fetch.
      */
     where: ArticleWhereUniqueInput
@@ -1721,6 +1818,10 @@ export namespace Prisma {
      */
     omit?: ArticleOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleInclude<ExtArgs> | null
+    /**
      * Filter, which Article to fetch.
      */
     where: ArticleWhereUniqueInput
@@ -1738,6 +1839,10 @@ export namespace Prisma {
      * Omit specific fields from the Article
      */
     omit?: ArticleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleInclude<ExtArgs> | null
     /**
      * Filter, which Article to fetch.
      */
@@ -1787,6 +1892,10 @@ export namespace Prisma {
      */
     omit?: ArticleOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleInclude<ExtArgs> | null
+    /**
      * Filter, which Article to fetch.
      */
     where?: ArticleWhereInput
@@ -1835,6 +1944,10 @@ export namespace Prisma {
      */
     omit?: ArticleOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleInclude<ExtArgs> | null
+    /**
      * Filter, which Articles to fetch.
      */
     where?: ArticleWhereInput
@@ -1877,6 +1990,10 @@ export namespace Prisma {
      * Omit specific fields from the Article
      */
     omit?: ArticleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleInclude<ExtArgs> | null
     /**
      * The data needed to create a Article.
      */
@@ -1923,6 +2040,10 @@ export namespace Prisma {
      * Omit specific fields from the Article
      */
     omit?: ArticleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleInclude<ExtArgs> | null
     /**
      * The data needed to update a Article.
      */
@@ -1990,6 +2111,10 @@ export namespace Prisma {
      */
     omit?: ArticleOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleInclude<ExtArgs> | null
+    /**
      * The filter to search for the Article to update in case it exists.
      */
     where: ArticleWhereUniqueInput
@@ -2016,6 +2141,10 @@ export namespace Prisma {
      */
     omit?: ArticleOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleInclude<ExtArgs> | null
+    /**
      * Filter which Article to delete.
      */
     where: ArticleWhereUniqueInput
@@ -2036,6 +2165,30 @@ export namespace Prisma {
   }
 
   /**
+   * Article.translations
+   */
+  export type Article$translationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleTranslation
+     */
+    select?: ArticleTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ArticleTranslation
+     */
+    omit?: ArticleTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleTranslationInclude<ExtArgs> | null
+    where?: ArticleTranslationWhereInput
+    orderBy?: ArticleTranslationOrderByWithRelationInput | ArticleTranslationOrderByWithRelationInput[]
+    cursor?: ArticleTranslationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ArticleTranslationScalarFieldEnum | ArticleTranslationScalarFieldEnum[]
+  }
+
+  /**
    * Article without action
    */
   export type ArticleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2047,6 +2200,1118 @@ export namespace Prisma {
      * Omit specific fields from the Article
      */
     omit?: ArticleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ArticleTranslation
+   */
+
+  export type AggregateArticleTranslation = {
+    _count: ArticleTranslationCountAggregateOutputType | null
+    _min: ArticleTranslationMinAggregateOutputType | null
+    _max: ArticleTranslationMaxAggregateOutputType | null
+  }
+
+  export type ArticleTranslationMinAggregateOutputType = {
+    id: string | null
+    articleId: string | null
+    locale: string | null
+    title: string | null
+    excerpt: string | null
+    contentHtml: string | null
+    metaTitle: string | null
+    metaDescription: string | null
+    updatedAt: Date | null
+  }
+
+  export type ArticleTranslationMaxAggregateOutputType = {
+    id: string | null
+    articleId: string | null
+    locale: string | null
+    title: string | null
+    excerpt: string | null
+    contentHtml: string | null
+    metaTitle: string | null
+    metaDescription: string | null
+    updatedAt: Date | null
+  }
+
+  export type ArticleTranslationCountAggregateOutputType = {
+    id: number
+    articleId: number
+    locale: number
+    title: number
+    excerpt: number
+    contentHtml: number
+    metaTitle: number
+    metaDescription: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ArticleTranslationMinAggregateInputType = {
+    id?: true
+    articleId?: true
+    locale?: true
+    title?: true
+    excerpt?: true
+    contentHtml?: true
+    metaTitle?: true
+    metaDescription?: true
+    updatedAt?: true
+  }
+
+  export type ArticleTranslationMaxAggregateInputType = {
+    id?: true
+    articleId?: true
+    locale?: true
+    title?: true
+    excerpt?: true
+    contentHtml?: true
+    metaTitle?: true
+    metaDescription?: true
+    updatedAt?: true
+  }
+
+  export type ArticleTranslationCountAggregateInputType = {
+    id?: true
+    articleId?: true
+    locale?: true
+    title?: true
+    excerpt?: true
+    contentHtml?: true
+    metaTitle?: true
+    metaDescription?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ArticleTranslationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ArticleTranslation to aggregate.
+     */
+    where?: ArticleTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ArticleTranslations to fetch.
+     */
+    orderBy?: ArticleTranslationOrderByWithRelationInput | ArticleTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ArticleTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ArticleTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ArticleTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ArticleTranslations
+    **/
+    _count?: true | ArticleTranslationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ArticleTranslationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ArticleTranslationMaxAggregateInputType
+  }
+
+  export type GetArticleTranslationAggregateType<T extends ArticleTranslationAggregateArgs> = {
+        [P in keyof T & keyof AggregateArticleTranslation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateArticleTranslation[P]>
+      : GetScalarType<T[P], AggregateArticleTranslation[P]>
+  }
+
+
+
+
+  export type ArticleTranslationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ArticleTranslationWhereInput
+    orderBy?: ArticleTranslationOrderByWithAggregationInput | ArticleTranslationOrderByWithAggregationInput[]
+    by: ArticleTranslationScalarFieldEnum[] | ArticleTranslationScalarFieldEnum
+    having?: ArticleTranslationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ArticleTranslationCountAggregateInputType | true
+    _min?: ArticleTranslationMinAggregateInputType
+    _max?: ArticleTranslationMaxAggregateInputType
+  }
+
+  export type ArticleTranslationGroupByOutputType = {
+    id: string
+    articleId: string
+    locale: string
+    title: string
+    excerpt: string
+    contentHtml: string
+    metaTitle: string | null
+    metaDescription: string | null
+    updatedAt: Date
+    _count: ArticleTranslationCountAggregateOutputType | null
+    _min: ArticleTranslationMinAggregateOutputType | null
+    _max: ArticleTranslationMaxAggregateOutputType | null
+  }
+
+  type GetArticleTranslationGroupByPayload<T extends ArticleTranslationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ArticleTranslationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ArticleTranslationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ArticleTranslationGroupByOutputType[P]>
+            : GetScalarType<T[P], ArticleTranslationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ArticleTranslationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    articleId?: boolean
+    locale?: boolean
+    title?: boolean
+    excerpt?: boolean
+    contentHtml?: boolean
+    metaTitle?: boolean
+    metaDescription?: boolean
+    updatedAt?: boolean
+    article?: boolean | ArticleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["articleTranslation"]>
+
+  export type ArticleTranslationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    articleId?: boolean
+    locale?: boolean
+    title?: boolean
+    excerpt?: boolean
+    contentHtml?: boolean
+    metaTitle?: boolean
+    metaDescription?: boolean
+    updatedAt?: boolean
+    article?: boolean | ArticleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["articleTranslation"]>
+
+  export type ArticleTranslationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    articleId?: boolean
+    locale?: boolean
+    title?: boolean
+    excerpt?: boolean
+    contentHtml?: boolean
+    metaTitle?: boolean
+    metaDescription?: boolean
+    updatedAt?: boolean
+    article?: boolean | ArticleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["articleTranslation"]>
+
+  export type ArticleTranslationSelectScalar = {
+    id?: boolean
+    articleId?: boolean
+    locale?: boolean
+    title?: boolean
+    excerpt?: boolean
+    contentHtml?: boolean
+    metaTitle?: boolean
+    metaDescription?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ArticleTranslationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "articleId" | "locale" | "title" | "excerpt" | "contentHtml" | "metaTitle" | "metaDescription" | "updatedAt", ExtArgs["result"]["articleTranslation"]>
+  export type ArticleTranslationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    article?: boolean | ArticleDefaultArgs<ExtArgs>
+  }
+  export type ArticleTranslationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    article?: boolean | ArticleDefaultArgs<ExtArgs>
+  }
+  export type ArticleTranslationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    article?: boolean | ArticleDefaultArgs<ExtArgs>
+  }
+
+  export type $ArticleTranslationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ArticleTranslation"
+    objects: {
+      article: Prisma.$ArticlePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      articleId: string
+      locale: string
+      title: string
+      excerpt: string
+      contentHtml: string
+      metaTitle: string | null
+      metaDescription: string | null
+      updatedAt: Date
+    }, ExtArgs["result"]["articleTranslation"]>
+    composites: {}
+  }
+
+  type ArticleTranslationGetPayload<S extends boolean | null | undefined | ArticleTranslationDefaultArgs> = $Result.GetResult<Prisma.$ArticleTranslationPayload, S>
+
+  type ArticleTranslationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ArticleTranslationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ArticleTranslationCountAggregateInputType | true
+    }
+
+  export interface ArticleTranslationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ArticleTranslation'], meta: { name: 'ArticleTranslation' } }
+    /**
+     * Find zero or one ArticleTranslation that matches the filter.
+     * @param {ArticleTranslationFindUniqueArgs} args - Arguments to find a ArticleTranslation
+     * @example
+     * // Get one ArticleTranslation
+     * const articleTranslation = await prisma.articleTranslation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ArticleTranslationFindUniqueArgs>(args: SelectSubset<T, ArticleTranslationFindUniqueArgs<ExtArgs>>): Prisma__ArticleTranslationClient<$Result.GetResult<Prisma.$ArticleTranslationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ArticleTranslation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ArticleTranslationFindUniqueOrThrowArgs} args - Arguments to find a ArticleTranslation
+     * @example
+     * // Get one ArticleTranslation
+     * const articleTranslation = await prisma.articleTranslation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ArticleTranslationFindUniqueOrThrowArgs>(args: SelectSubset<T, ArticleTranslationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ArticleTranslationClient<$Result.GetResult<Prisma.$ArticleTranslationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ArticleTranslation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArticleTranslationFindFirstArgs} args - Arguments to find a ArticleTranslation
+     * @example
+     * // Get one ArticleTranslation
+     * const articleTranslation = await prisma.articleTranslation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ArticleTranslationFindFirstArgs>(args?: SelectSubset<T, ArticleTranslationFindFirstArgs<ExtArgs>>): Prisma__ArticleTranslationClient<$Result.GetResult<Prisma.$ArticleTranslationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ArticleTranslation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArticleTranslationFindFirstOrThrowArgs} args - Arguments to find a ArticleTranslation
+     * @example
+     * // Get one ArticleTranslation
+     * const articleTranslation = await prisma.articleTranslation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ArticleTranslationFindFirstOrThrowArgs>(args?: SelectSubset<T, ArticleTranslationFindFirstOrThrowArgs<ExtArgs>>): Prisma__ArticleTranslationClient<$Result.GetResult<Prisma.$ArticleTranslationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ArticleTranslations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArticleTranslationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ArticleTranslations
+     * const articleTranslations = await prisma.articleTranslation.findMany()
+     * 
+     * // Get first 10 ArticleTranslations
+     * const articleTranslations = await prisma.articleTranslation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const articleTranslationWithIdOnly = await prisma.articleTranslation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ArticleTranslationFindManyArgs>(args?: SelectSubset<T, ArticleTranslationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArticleTranslationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ArticleTranslation.
+     * @param {ArticleTranslationCreateArgs} args - Arguments to create a ArticleTranslation.
+     * @example
+     * // Create one ArticleTranslation
+     * const ArticleTranslation = await prisma.articleTranslation.create({
+     *   data: {
+     *     // ... data to create a ArticleTranslation
+     *   }
+     * })
+     * 
+     */
+    create<T extends ArticleTranslationCreateArgs>(args: SelectSubset<T, ArticleTranslationCreateArgs<ExtArgs>>): Prisma__ArticleTranslationClient<$Result.GetResult<Prisma.$ArticleTranslationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ArticleTranslations.
+     * @param {ArticleTranslationCreateManyArgs} args - Arguments to create many ArticleTranslations.
+     * @example
+     * // Create many ArticleTranslations
+     * const articleTranslation = await prisma.articleTranslation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ArticleTranslationCreateManyArgs>(args?: SelectSubset<T, ArticleTranslationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ArticleTranslations and returns the data saved in the database.
+     * @param {ArticleTranslationCreateManyAndReturnArgs} args - Arguments to create many ArticleTranslations.
+     * @example
+     * // Create many ArticleTranslations
+     * const articleTranslation = await prisma.articleTranslation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ArticleTranslations and only return the `id`
+     * const articleTranslationWithIdOnly = await prisma.articleTranslation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ArticleTranslationCreateManyAndReturnArgs>(args?: SelectSubset<T, ArticleTranslationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArticleTranslationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ArticleTranslation.
+     * @param {ArticleTranslationDeleteArgs} args - Arguments to delete one ArticleTranslation.
+     * @example
+     * // Delete one ArticleTranslation
+     * const ArticleTranslation = await prisma.articleTranslation.delete({
+     *   where: {
+     *     // ... filter to delete one ArticleTranslation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ArticleTranslationDeleteArgs>(args: SelectSubset<T, ArticleTranslationDeleteArgs<ExtArgs>>): Prisma__ArticleTranslationClient<$Result.GetResult<Prisma.$ArticleTranslationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ArticleTranslation.
+     * @param {ArticleTranslationUpdateArgs} args - Arguments to update one ArticleTranslation.
+     * @example
+     * // Update one ArticleTranslation
+     * const articleTranslation = await prisma.articleTranslation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ArticleTranslationUpdateArgs>(args: SelectSubset<T, ArticleTranslationUpdateArgs<ExtArgs>>): Prisma__ArticleTranslationClient<$Result.GetResult<Prisma.$ArticleTranslationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ArticleTranslations.
+     * @param {ArticleTranslationDeleteManyArgs} args - Arguments to filter ArticleTranslations to delete.
+     * @example
+     * // Delete a few ArticleTranslations
+     * const { count } = await prisma.articleTranslation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ArticleTranslationDeleteManyArgs>(args?: SelectSubset<T, ArticleTranslationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ArticleTranslations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArticleTranslationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ArticleTranslations
+     * const articleTranslation = await prisma.articleTranslation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ArticleTranslationUpdateManyArgs>(args: SelectSubset<T, ArticleTranslationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ArticleTranslations and returns the data updated in the database.
+     * @param {ArticleTranslationUpdateManyAndReturnArgs} args - Arguments to update many ArticleTranslations.
+     * @example
+     * // Update many ArticleTranslations
+     * const articleTranslation = await prisma.articleTranslation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ArticleTranslations and only return the `id`
+     * const articleTranslationWithIdOnly = await prisma.articleTranslation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ArticleTranslationUpdateManyAndReturnArgs>(args: SelectSubset<T, ArticleTranslationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArticleTranslationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ArticleTranslation.
+     * @param {ArticleTranslationUpsertArgs} args - Arguments to update or create a ArticleTranslation.
+     * @example
+     * // Update or create a ArticleTranslation
+     * const articleTranslation = await prisma.articleTranslation.upsert({
+     *   create: {
+     *     // ... data to create a ArticleTranslation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ArticleTranslation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ArticleTranslationUpsertArgs>(args: SelectSubset<T, ArticleTranslationUpsertArgs<ExtArgs>>): Prisma__ArticleTranslationClient<$Result.GetResult<Prisma.$ArticleTranslationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ArticleTranslations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArticleTranslationCountArgs} args - Arguments to filter ArticleTranslations to count.
+     * @example
+     * // Count the number of ArticleTranslations
+     * const count = await prisma.articleTranslation.count({
+     *   where: {
+     *     // ... the filter for the ArticleTranslations we want to count
+     *   }
+     * })
+    **/
+    count<T extends ArticleTranslationCountArgs>(
+      args?: Subset<T, ArticleTranslationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ArticleTranslationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ArticleTranslation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArticleTranslationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ArticleTranslationAggregateArgs>(args: Subset<T, ArticleTranslationAggregateArgs>): Prisma.PrismaPromise<GetArticleTranslationAggregateType<T>>
+
+    /**
+     * Group by ArticleTranslation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ArticleTranslationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ArticleTranslationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ArticleTranslationGroupByArgs['orderBy'] }
+        : { orderBy?: ArticleTranslationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ArticleTranslationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetArticleTranslationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ArticleTranslation model
+   */
+  readonly fields: ArticleTranslationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ArticleTranslation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ArticleTranslationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    article<T extends ArticleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ArticleDefaultArgs<ExtArgs>>): Prisma__ArticleClient<$Result.GetResult<Prisma.$ArticlePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ArticleTranslation model
+   */
+  interface ArticleTranslationFieldRefs {
+    readonly id: FieldRef<"ArticleTranslation", 'String'>
+    readonly articleId: FieldRef<"ArticleTranslation", 'String'>
+    readonly locale: FieldRef<"ArticleTranslation", 'String'>
+    readonly title: FieldRef<"ArticleTranslation", 'String'>
+    readonly excerpt: FieldRef<"ArticleTranslation", 'String'>
+    readonly contentHtml: FieldRef<"ArticleTranslation", 'String'>
+    readonly metaTitle: FieldRef<"ArticleTranslation", 'String'>
+    readonly metaDescription: FieldRef<"ArticleTranslation", 'String'>
+    readonly updatedAt: FieldRef<"ArticleTranslation", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ArticleTranslation findUnique
+   */
+  export type ArticleTranslationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleTranslation
+     */
+    select?: ArticleTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ArticleTranslation
+     */
+    omit?: ArticleTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which ArticleTranslation to fetch.
+     */
+    where: ArticleTranslationWhereUniqueInput
+  }
+
+  /**
+   * ArticleTranslation findUniqueOrThrow
+   */
+  export type ArticleTranslationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleTranslation
+     */
+    select?: ArticleTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ArticleTranslation
+     */
+    omit?: ArticleTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which ArticleTranslation to fetch.
+     */
+    where: ArticleTranslationWhereUniqueInput
+  }
+
+  /**
+   * ArticleTranslation findFirst
+   */
+  export type ArticleTranslationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleTranslation
+     */
+    select?: ArticleTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ArticleTranslation
+     */
+    omit?: ArticleTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which ArticleTranslation to fetch.
+     */
+    where?: ArticleTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ArticleTranslations to fetch.
+     */
+    orderBy?: ArticleTranslationOrderByWithRelationInput | ArticleTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ArticleTranslations.
+     */
+    cursor?: ArticleTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ArticleTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ArticleTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ArticleTranslations.
+     */
+    distinct?: ArticleTranslationScalarFieldEnum | ArticleTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * ArticleTranslation findFirstOrThrow
+   */
+  export type ArticleTranslationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleTranslation
+     */
+    select?: ArticleTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ArticleTranslation
+     */
+    omit?: ArticleTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which ArticleTranslation to fetch.
+     */
+    where?: ArticleTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ArticleTranslations to fetch.
+     */
+    orderBy?: ArticleTranslationOrderByWithRelationInput | ArticleTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ArticleTranslations.
+     */
+    cursor?: ArticleTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ArticleTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ArticleTranslations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ArticleTranslations.
+     */
+    distinct?: ArticleTranslationScalarFieldEnum | ArticleTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * ArticleTranslation findMany
+   */
+  export type ArticleTranslationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleTranslation
+     */
+    select?: ArticleTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ArticleTranslation
+     */
+    omit?: ArticleTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleTranslationInclude<ExtArgs> | null
+    /**
+     * Filter, which ArticleTranslations to fetch.
+     */
+    where?: ArticleTranslationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ArticleTranslations to fetch.
+     */
+    orderBy?: ArticleTranslationOrderByWithRelationInput | ArticleTranslationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ArticleTranslations.
+     */
+    cursor?: ArticleTranslationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ArticleTranslations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ArticleTranslations.
+     */
+    skip?: number
+    distinct?: ArticleTranslationScalarFieldEnum | ArticleTranslationScalarFieldEnum[]
+  }
+
+  /**
+   * ArticleTranslation create
+   */
+  export type ArticleTranslationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleTranslation
+     */
+    select?: ArticleTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ArticleTranslation
+     */
+    omit?: ArticleTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleTranslationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ArticleTranslation.
+     */
+    data: XOR<ArticleTranslationCreateInput, ArticleTranslationUncheckedCreateInput>
+  }
+
+  /**
+   * ArticleTranslation createMany
+   */
+  export type ArticleTranslationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ArticleTranslations.
+     */
+    data: ArticleTranslationCreateManyInput | ArticleTranslationCreateManyInput[]
+  }
+
+  /**
+   * ArticleTranslation createManyAndReturn
+   */
+  export type ArticleTranslationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleTranslation
+     */
+    select?: ArticleTranslationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ArticleTranslation
+     */
+    omit?: ArticleTranslationOmit<ExtArgs> | null
+    /**
+     * The data used to create many ArticleTranslations.
+     */
+    data: ArticleTranslationCreateManyInput | ArticleTranslationCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleTranslationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ArticleTranslation update
+   */
+  export type ArticleTranslationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleTranslation
+     */
+    select?: ArticleTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ArticleTranslation
+     */
+    omit?: ArticleTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleTranslationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ArticleTranslation.
+     */
+    data: XOR<ArticleTranslationUpdateInput, ArticleTranslationUncheckedUpdateInput>
+    /**
+     * Choose, which ArticleTranslation to update.
+     */
+    where: ArticleTranslationWhereUniqueInput
+  }
+
+  /**
+   * ArticleTranslation updateMany
+   */
+  export type ArticleTranslationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ArticleTranslations.
+     */
+    data: XOR<ArticleTranslationUpdateManyMutationInput, ArticleTranslationUncheckedUpdateManyInput>
+    /**
+     * Filter which ArticleTranslations to update
+     */
+    where?: ArticleTranslationWhereInput
+    /**
+     * Limit how many ArticleTranslations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ArticleTranslation updateManyAndReturn
+   */
+  export type ArticleTranslationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleTranslation
+     */
+    select?: ArticleTranslationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ArticleTranslation
+     */
+    omit?: ArticleTranslationOmit<ExtArgs> | null
+    /**
+     * The data used to update ArticleTranslations.
+     */
+    data: XOR<ArticleTranslationUpdateManyMutationInput, ArticleTranslationUncheckedUpdateManyInput>
+    /**
+     * Filter which ArticleTranslations to update
+     */
+    where?: ArticleTranslationWhereInput
+    /**
+     * Limit how many ArticleTranslations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleTranslationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ArticleTranslation upsert
+   */
+  export type ArticleTranslationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleTranslation
+     */
+    select?: ArticleTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ArticleTranslation
+     */
+    omit?: ArticleTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleTranslationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ArticleTranslation to update in case it exists.
+     */
+    where: ArticleTranslationWhereUniqueInput
+    /**
+     * In case the ArticleTranslation found by the `where` argument doesn't exist, create a new ArticleTranslation with this data.
+     */
+    create: XOR<ArticleTranslationCreateInput, ArticleTranslationUncheckedCreateInput>
+    /**
+     * In case the ArticleTranslation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ArticleTranslationUpdateInput, ArticleTranslationUncheckedUpdateInput>
+  }
+
+  /**
+   * ArticleTranslation delete
+   */
+  export type ArticleTranslationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleTranslation
+     */
+    select?: ArticleTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ArticleTranslation
+     */
+    omit?: ArticleTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleTranslationInclude<ExtArgs> | null
+    /**
+     * Filter which ArticleTranslation to delete.
+     */
+    where: ArticleTranslationWhereUniqueInput
+  }
+
+  /**
+   * ArticleTranslation deleteMany
+   */
+  export type ArticleTranslationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ArticleTranslations to delete
+     */
+    where?: ArticleTranslationWhereInput
+    /**
+     * Limit how many ArticleTranslations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ArticleTranslation without action
+   */
+  export type ArticleTranslationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ArticleTranslation
+     */
+    select?: ArticleTranslationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ArticleTranslation
+     */
+    omit?: ArticleTranslationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ArticleTranslationInclude<ExtArgs> | null
   }
 
 
@@ -3057,9 +4322,6 @@ export namespace Prisma {
   export const ArticleScalarFieldEnum: {
     id: 'id',
     slug: 'slug',
-    title: 'title',
-    excerpt: 'excerpt',
-    contentHtml: 'contentHtml',
     category: 'category',
     date: 'date',
     authorName: 'authorName',
@@ -3071,6 +4333,21 @@ export namespace Prisma {
   };
 
   export type ArticleScalarFieldEnum = (typeof ArticleScalarFieldEnum)[keyof typeof ArticleScalarFieldEnum]
+
+
+  export const ArticleTranslationScalarFieldEnum: {
+    id: 'id',
+    articleId: 'articleId',
+    locale: 'locale',
+    title: 'title',
+    excerpt: 'excerpt',
+    contentHtml: 'contentHtml',
+    metaTitle: 'metaTitle',
+    metaDescription: 'metaDescription',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ArticleTranslationScalarFieldEnum = (typeof ArticleTranslationScalarFieldEnum)[keyof typeof ArticleTranslationScalarFieldEnum]
 
 
   export const NewsletterSubscriptionScalarFieldEnum: {
@@ -3135,9 +4412,6 @@ export namespace Prisma {
     NOT?: ArticleWhereInput | ArticleWhereInput[]
     id?: StringFilter<"Article"> | string
     slug?: StringFilter<"Article"> | string
-    title?: StringFilter<"Article"> | string
-    excerpt?: StringFilter<"Article"> | string
-    contentHtml?: StringFilter<"Article"> | string
     category?: StringFilter<"Article"> | string
     date?: DateTimeFilter<"Article"> | Date | string
     authorName?: StringFilter<"Article"> | string
@@ -3146,14 +4420,12 @@ export namespace Prisma {
     imageUrl?: StringNullableFilter<"Article"> | string | null
     createdAt?: DateTimeFilter<"Article"> | Date | string
     updatedAt?: DateTimeFilter<"Article"> | Date | string
+    translations?: ArticleTranslationListRelationFilter
   }
 
   export type ArticleOrderByWithRelationInput = {
     id?: SortOrder
     slug?: SortOrder
-    title?: SortOrder
-    excerpt?: SortOrder
-    contentHtml?: SortOrder
     category?: SortOrder
     date?: SortOrder
     authorName?: SortOrder
@@ -3162,6 +4434,7 @@ export namespace Prisma {
     imageUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    translations?: ArticleTranslationOrderByRelationAggregateInput
   }
 
   export type ArticleWhereUniqueInput = Prisma.AtLeast<{
@@ -3170,9 +4443,6 @@ export namespace Prisma {
     AND?: ArticleWhereInput | ArticleWhereInput[]
     OR?: ArticleWhereInput[]
     NOT?: ArticleWhereInput | ArticleWhereInput[]
-    title?: StringFilter<"Article"> | string
-    excerpt?: StringFilter<"Article"> | string
-    contentHtml?: StringFilter<"Article"> | string
     category?: StringFilter<"Article"> | string
     date?: DateTimeFilter<"Article"> | Date | string
     authorName?: StringFilter<"Article"> | string
@@ -3181,14 +4451,12 @@ export namespace Prisma {
     imageUrl?: StringNullableFilter<"Article"> | string | null
     createdAt?: DateTimeFilter<"Article"> | Date | string
     updatedAt?: DateTimeFilter<"Article"> | Date | string
+    translations?: ArticleTranslationListRelationFilter
   }, "id" | "slug">
 
   export type ArticleOrderByWithAggregationInput = {
     id?: SortOrder
     slug?: SortOrder
-    title?: SortOrder
-    excerpt?: SortOrder
-    contentHtml?: SortOrder
     category?: SortOrder
     date?: SortOrder
     authorName?: SortOrder
@@ -3208,9 +4476,6 @@ export namespace Prisma {
     NOT?: ArticleScalarWhereWithAggregatesInput | ArticleScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Article"> | string
     slug?: StringWithAggregatesFilter<"Article"> | string
-    title?: StringWithAggregatesFilter<"Article"> | string
-    excerpt?: StringWithAggregatesFilter<"Article"> | string
-    contentHtml?: StringWithAggregatesFilter<"Article"> | string
     category?: StringWithAggregatesFilter<"Article"> | string
     date?: DateTimeWithAggregatesFilter<"Article"> | Date | string
     authorName?: StringWithAggregatesFilter<"Article"> | string
@@ -3219,6 +4484,82 @@ export namespace Prisma {
     imageUrl?: StringNullableWithAggregatesFilter<"Article"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Article"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Article"> | Date | string
+  }
+
+  export type ArticleTranslationWhereInput = {
+    AND?: ArticleTranslationWhereInput | ArticleTranslationWhereInput[]
+    OR?: ArticleTranslationWhereInput[]
+    NOT?: ArticleTranslationWhereInput | ArticleTranslationWhereInput[]
+    id?: StringFilter<"ArticleTranslation"> | string
+    articleId?: StringFilter<"ArticleTranslation"> | string
+    locale?: StringFilter<"ArticleTranslation"> | string
+    title?: StringFilter<"ArticleTranslation"> | string
+    excerpt?: StringFilter<"ArticleTranslation"> | string
+    contentHtml?: StringFilter<"ArticleTranslation"> | string
+    metaTitle?: StringNullableFilter<"ArticleTranslation"> | string | null
+    metaDescription?: StringNullableFilter<"ArticleTranslation"> | string | null
+    updatedAt?: DateTimeFilter<"ArticleTranslation"> | Date | string
+    article?: XOR<ArticleScalarRelationFilter, ArticleWhereInput>
+  }
+
+  export type ArticleTranslationOrderByWithRelationInput = {
+    id?: SortOrder
+    articleId?: SortOrder
+    locale?: SortOrder
+    title?: SortOrder
+    excerpt?: SortOrder
+    contentHtml?: SortOrder
+    metaTitle?: SortOrderInput | SortOrder
+    metaDescription?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    article?: ArticleOrderByWithRelationInput
+  }
+
+  export type ArticleTranslationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    articleId_locale?: ArticleTranslationArticleIdLocaleCompoundUniqueInput
+    AND?: ArticleTranslationWhereInput | ArticleTranslationWhereInput[]
+    OR?: ArticleTranslationWhereInput[]
+    NOT?: ArticleTranslationWhereInput | ArticleTranslationWhereInput[]
+    articleId?: StringFilter<"ArticleTranslation"> | string
+    locale?: StringFilter<"ArticleTranslation"> | string
+    title?: StringFilter<"ArticleTranslation"> | string
+    excerpt?: StringFilter<"ArticleTranslation"> | string
+    contentHtml?: StringFilter<"ArticleTranslation"> | string
+    metaTitle?: StringNullableFilter<"ArticleTranslation"> | string | null
+    metaDescription?: StringNullableFilter<"ArticleTranslation"> | string | null
+    updatedAt?: DateTimeFilter<"ArticleTranslation"> | Date | string
+    article?: XOR<ArticleScalarRelationFilter, ArticleWhereInput>
+  }, "id" | "articleId_locale">
+
+  export type ArticleTranslationOrderByWithAggregationInput = {
+    id?: SortOrder
+    articleId?: SortOrder
+    locale?: SortOrder
+    title?: SortOrder
+    excerpt?: SortOrder
+    contentHtml?: SortOrder
+    metaTitle?: SortOrderInput | SortOrder
+    metaDescription?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    _count?: ArticleTranslationCountOrderByAggregateInput
+    _max?: ArticleTranslationMaxOrderByAggregateInput
+    _min?: ArticleTranslationMinOrderByAggregateInput
+  }
+
+  export type ArticleTranslationScalarWhereWithAggregatesInput = {
+    AND?: ArticleTranslationScalarWhereWithAggregatesInput | ArticleTranslationScalarWhereWithAggregatesInput[]
+    OR?: ArticleTranslationScalarWhereWithAggregatesInput[]
+    NOT?: ArticleTranslationScalarWhereWithAggregatesInput | ArticleTranslationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ArticleTranslation"> | string
+    articleId?: StringWithAggregatesFilter<"ArticleTranslation"> | string
+    locale?: StringWithAggregatesFilter<"ArticleTranslation"> | string
+    title?: StringWithAggregatesFilter<"ArticleTranslation"> | string
+    excerpt?: StringWithAggregatesFilter<"ArticleTranslation"> | string
+    contentHtml?: StringWithAggregatesFilter<"ArticleTranslation"> | string
+    metaTitle?: StringNullableWithAggregatesFilter<"ArticleTranslation"> | string | null
+    metaDescription?: StringNullableWithAggregatesFilter<"ArticleTranslation"> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"ArticleTranslation"> | Date | string
   }
 
   export type NewsletterSubscriptionWhereInput = {
@@ -3276,9 +4617,6 @@ export namespace Prisma {
   export type ArticleCreateInput = {
     id?: string
     slug: string
-    title: string
-    excerpt: string
-    contentHtml: string
     category: string
     date: Date | string
     authorName: string
@@ -3287,14 +4625,12 @@ export namespace Prisma {
     imageUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    translations?: ArticleTranslationCreateNestedManyWithoutArticleInput
   }
 
   export type ArticleUncheckedCreateInput = {
     id?: string
     slug: string
-    title: string
-    excerpt: string
-    contentHtml: string
     category: string
     date: Date | string
     authorName: string
@@ -3303,14 +4639,12 @@ export namespace Prisma {
     imageUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    translations?: ArticleTranslationUncheckedCreateNestedManyWithoutArticleInput
   }
 
   export type ArticleUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    excerpt?: StringFieldUpdateOperationsInput | string
-    contentHtml?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     authorName?: StringFieldUpdateOperationsInput | string
@@ -3319,14 +4653,12 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    translations?: ArticleTranslationUpdateManyWithoutArticleNestedInput
   }
 
   export type ArticleUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    excerpt?: StringFieldUpdateOperationsInput | string
-    contentHtml?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     authorName?: StringFieldUpdateOperationsInput | string
@@ -3335,14 +4667,12 @@ export namespace Prisma {
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    translations?: ArticleTranslationUncheckedUpdateManyWithoutArticleNestedInput
   }
 
   export type ArticleCreateManyInput = {
     id?: string
     slug: string
-    title: string
-    excerpt: string
-    contentHtml: string
     category: string
     date: Date | string
     authorName: string
@@ -3356,9 +4686,6 @@ export namespace Prisma {
   export type ArticleUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    excerpt?: StringFieldUpdateOperationsInput | string
-    contentHtml?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     authorName?: StringFieldUpdateOperationsInput | string
@@ -3372,9 +4699,6 @@ export namespace Prisma {
   export type ArticleUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    excerpt?: StringFieldUpdateOperationsInput | string
-    contentHtml?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     authorName?: StringFieldUpdateOperationsInput | string
@@ -3382,6 +4706,89 @@ export namespace Prisma {
     sourcesJson?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArticleTranslationCreateInput = {
+    id?: string
+    locale: string
+    title: string
+    excerpt: string
+    contentHtml: string
+    metaTitle?: string | null
+    metaDescription?: string | null
+    updatedAt?: Date | string
+    article: ArticleCreateNestedOneWithoutTranslationsInput
+  }
+
+  export type ArticleTranslationUncheckedCreateInput = {
+    id?: string
+    articleId: string
+    locale: string
+    title: string
+    excerpt: string
+    contentHtml: string
+    metaTitle?: string | null
+    metaDescription?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type ArticleTranslationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    locale?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    excerpt?: StringFieldUpdateOperationsInput | string
+    contentHtml?: StringFieldUpdateOperationsInput | string
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    article?: ArticleUpdateOneRequiredWithoutTranslationsNestedInput
+  }
+
+  export type ArticleTranslationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    articleId?: StringFieldUpdateOperationsInput | string
+    locale?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    excerpt?: StringFieldUpdateOperationsInput | string
+    contentHtml?: StringFieldUpdateOperationsInput | string
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArticleTranslationCreateManyInput = {
+    id?: string
+    articleId: string
+    locale: string
+    title: string
+    excerpt: string
+    contentHtml: string
+    metaTitle?: string | null
+    metaDescription?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type ArticleTranslationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    locale?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    excerpt?: StringFieldUpdateOperationsInput | string
+    contentHtml?: StringFieldUpdateOperationsInput | string
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArticleTranslationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    articleId?: StringFieldUpdateOperationsInput | string
+    locale?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    excerpt?: StringFieldUpdateOperationsInput | string
+    contentHtml?: StringFieldUpdateOperationsInput | string
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -3480,17 +4887,24 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type ArticleTranslationListRelationFilter = {
+    every?: ArticleTranslationWhereInput
+    some?: ArticleTranslationWhereInput
+    none?: ArticleTranslationWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
   }
 
+  export type ArticleTranslationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type ArticleCountOrderByAggregateInput = {
     id?: SortOrder
     slug?: SortOrder
-    title?: SortOrder
-    excerpt?: SortOrder
-    contentHtml?: SortOrder
     category?: SortOrder
     date?: SortOrder
     authorName?: SortOrder
@@ -3504,9 +4918,6 @@ export namespace Prisma {
   export type ArticleMaxOrderByAggregateInput = {
     id?: SortOrder
     slug?: SortOrder
-    title?: SortOrder
-    excerpt?: SortOrder
-    contentHtml?: SortOrder
     category?: SortOrder
     date?: SortOrder
     authorName?: SortOrder
@@ -3520,9 +4931,6 @@ export namespace Prisma {
   export type ArticleMinOrderByAggregateInput = {
     id?: SortOrder
     slug?: SortOrder
-    title?: SortOrder
-    excerpt?: SortOrder
-    contentHtml?: SortOrder
     category?: SortOrder
     date?: SortOrder
     authorName?: SortOrder
@@ -3581,6 +4989,52 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
+  export type ArticleScalarRelationFilter = {
+    is?: ArticleWhereInput
+    isNot?: ArticleWhereInput
+  }
+
+  export type ArticleTranslationArticleIdLocaleCompoundUniqueInput = {
+    articleId: string
+    locale: string
+  }
+
+  export type ArticleTranslationCountOrderByAggregateInput = {
+    id?: SortOrder
+    articleId?: SortOrder
+    locale?: SortOrder
+    title?: SortOrder
+    excerpt?: SortOrder
+    contentHtml?: SortOrder
+    metaTitle?: SortOrder
+    metaDescription?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ArticleTranslationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    articleId?: SortOrder
+    locale?: SortOrder
+    title?: SortOrder
+    excerpt?: SortOrder
+    contentHtml?: SortOrder
+    metaTitle?: SortOrder
+    metaDescription?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ArticleTranslationMinOrderByAggregateInput = {
+    id?: SortOrder
+    articleId?: SortOrder
+    locale?: SortOrder
+    title?: SortOrder
+    excerpt?: SortOrder
+    contentHtml?: SortOrder
+    metaTitle?: SortOrder
+    metaDescription?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type NewsletterSubscriptionCountOrderByAggregateInput = {
     id?: SortOrder
     email?: SortOrder
@@ -3605,6 +5059,20 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type ArticleTranslationCreateNestedManyWithoutArticleInput = {
+    create?: XOR<ArticleTranslationCreateWithoutArticleInput, ArticleTranslationUncheckedCreateWithoutArticleInput> | ArticleTranslationCreateWithoutArticleInput[] | ArticleTranslationUncheckedCreateWithoutArticleInput[]
+    connectOrCreate?: ArticleTranslationCreateOrConnectWithoutArticleInput | ArticleTranslationCreateOrConnectWithoutArticleInput[]
+    createMany?: ArticleTranslationCreateManyArticleInputEnvelope
+    connect?: ArticleTranslationWhereUniqueInput | ArticleTranslationWhereUniqueInput[]
+  }
+
+  export type ArticleTranslationUncheckedCreateNestedManyWithoutArticleInput = {
+    create?: XOR<ArticleTranslationCreateWithoutArticleInput, ArticleTranslationUncheckedCreateWithoutArticleInput> | ArticleTranslationCreateWithoutArticleInput[] | ArticleTranslationUncheckedCreateWithoutArticleInput[]
+    connectOrCreate?: ArticleTranslationCreateOrConnectWithoutArticleInput | ArticleTranslationCreateOrConnectWithoutArticleInput[]
+    createMany?: ArticleTranslationCreateManyArticleInputEnvelope
+    connect?: ArticleTranslationWhereUniqueInput | ArticleTranslationWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -3615,6 +5083,48 @@ export namespace Prisma {
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
+  }
+
+  export type ArticleTranslationUpdateManyWithoutArticleNestedInput = {
+    create?: XOR<ArticleTranslationCreateWithoutArticleInput, ArticleTranslationUncheckedCreateWithoutArticleInput> | ArticleTranslationCreateWithoutArticleInput[] | ArticleTranslationUncheckedCreateWithoutArticleInput[]
+    connectOrCreate?: ArticleTranslationCreateOrConnectWithoutArticleInput | ArticleTranslationCreateOrConnectWithoutArticleInput[]
+    upsert?: ArticleTranslationUpsertWithWhereUniqueWithoutArticleInput | ArticleTranslationUpsertWithWhereUniqueWithoutArticleInput[]
+    createMany?: ArticleTranslationCreateManyArticleInputEnvelope
+    set?: ArticleTranslationWhereUniqueInput | ArticleTranslationWhereUniqueInput[]
+    disconnect?: ArticleTranslationWhereUniqueInput | ArticleTranslationWhereUniqueInput[]
+    delete?: ArticleTranslationWhereUniqueInput | ArticleTranslationWhereUniqueInput[]
+    connect?: ArticleTranslationWhereUniqueInput | ArticleTranslationWhereUniqueInput[]
+    update?: ArticleTranslationUpdateWithWhereUniqueWithoutArticleInput | ArticleTranslationUpdateWithWhereUniqueWithoutArticleInput[]
+    updateMany?: ArticleTranslationUpdateManyWithWhereWithoutArticleInput | ArticleTranslationUpdateManyWithWhereWithoutArticleInput[]
+    deleteMany?: ArticleTranslationScalarWhereInput | ArticleTranslationScalarWhereInput[]
+  }
+
+  export type ArticleTranslationUncheckedUpdateManyWithoutArticleNestedInput = {
+    create?: XOR<ArticleTranslationCreateWithoutArticleInput, ArticleTranslationUncheckedCreateWithoutArticleInput> | ArticleTranslationCreateWithoutArticleInput[] | ArticleTranslationUncheckedCreateWithoutArticleInput[]
+    connectOrCreate?: ArticleTranslationCreateOrConnectWithoutArticleInput | ArticleTranslationCreateOrConnectWithoutArticleInput[]
+    upsert?: ArticleTranslationUpsertWithWhereUniqueWithoutArticleInput | ArticleTranslationUpsertWithWhereUniqueWithoutArticleInput[]
+    createMany?: ArticleTranslationCreateManyArticleInputEnvelope
+    set?: ArticleTranslationWhereUniqueInput | ArticleTranslationWhereUniqueInput[]
+    disconnect?: ArticleTranslationWhereUniqueInput | ArticleTranslationWhereUniqueInput[]
+    delete?: ArticleTranslationWhereUniqueInput | ArticleTranslationWhereUniqueInput[]
+    connect?: ArticleTranslationWhereUniqueInput | ArticleTranslationWhereUniqueInput[]
+    update?: ArticleTranslationUpdateWithWhereUniqueWithoutArticleInput | ArticleTranslationUpdateWithWhereUniqueWithoutArticleInput[]
+    updateMany?: ArticleTranslationUpdateManyWithWhereWithoutArticleInput | ArticleTranslationUpdateManyWithWhereWithoutArticleInput[]
+    deleteMany?: ArticleTranslationScalarWhereInput | ArticleTranslationScalarWhereInput[]
+  }
+
+  export type ArticleCreateNestedOneWithoutTranslationsInput = {
+    create?: XOR<ArticleCreateWithoutTranslationsInput, ArticleUncheckedCreateWithoutTranslationsInput>
+    connectOrCreate?: ArticleCreateOrConnectWithoutTranslationsInput
+    connect?: ArticleWhereUniqueInput
+  }
+
+  export type ArticleUpdateOneRequiredWithoutTranslationsNestedInput = {
+    create?: XOR<ArticleCreateWithoutTranslationsInput, ArticleUncheckedCreateWithoutTranslationsInput>
+    connectOrCreate?: ArticleCreateOrConnectWithoutTranslationsInput
+    upsert?: ArticleUpsertWithoutTranslationsInput
+    connect?: ArticleWhereUniqueInput
+    update?: XOR<XOR<ArticleUpdateToOneWithWhereWithoutTranslationsInput, ArticleUpdateWithoutTranslationsInput>, ArticleUncheckedUpdateWithoutTranslationsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -3724,6 +5234,180 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type ArticleTranslationCreateWithoutArticleInput = {
+    id?: string
+    locale: string
+    title: string
+    excerpt: string
+    contentHtml: string
+    metaTitle?: string | null
+    metaDescription?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type ArticleTranslationUncheckedCreateWithoutArticleInput = {
+    id?: string
+    locale: string
+    title: string
+    excerpt: string
+    contentHtml: string
+    metaTitle?: string | null
+    metaDescription?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type ArticleTranslationCreateOrConnectWithoutArticleInput = {
+    where: ArticleTranslationWhereUniqueInput
+    create: XOR<ArticleTranslationCreateWithoutArticleInput, ArticleTranslationUncheckedCreateWithoutArticleInput>
+  }
+
+  export type ArticleTranslationCreateManyArticleInputEnvelope = {
+    data: ArticleTranslationCreateManyArticleInput | ArticleTranslationCreateManyArticleInput[]
+  }
+
+  export type ArticleTranslationUpsertWithWhereUniqueWithoutArticleInput = {
+    where: ArticleTranslationWhereUniqueInput
+    update: XOR<ArticleTranslationUpdateWithoutArticleInput, ArticleTranslationUncheckedUpdateWithoutArticleInput>
+    create: XOR<ArticleTranslationCreateWithoutArticleInput, ArticleTranslationUncheckedCreateWithoutArticleInput>
+  }
+
+  export type ArticleTranslationUpdateWithWhereUniqueWithoutArticleInput = {
+    where: ArticleTranslationWhereUniqueInput
+    data: XOR<ArticleTranslationUpdateWithoutArticleInput, ArticleTranslationUncheckedUpdateWithoutArticleInput>
+  }
+
+  export type ArticleTranslationUpdateManyWithWhereWithoutArticleInput = {
+    where: ArticleTranslationScalarWhereInput
+    data: XOR<ArticleTranslationUpdateManyMutationInput, ArticleTranslationUncheckedUpdateManyWithoutArticleInput>
+  }
+
+  export type ArticleTranslationScalarWhereInput = {
+    AND?: ArticleTranslationScalarWhereInput | ArticleTranslationScalarWhereInput[]
+    OR?: ArticleTranslationScalarWhereInput[]
+    NOT?: ArticleTranslationScalarWhereInput | ArticleTranslationScalarWhereInput[]
+    id?: StringFilter<"ArticleTranslation"> | string
+    articleId?: StringFilter<"ArticleTranslation"> | string
+    locale?: StringFilter<"ArticleTranslation"> | string
+    title?: StringFilter<"ArticleTranslation"> | string
+    excerpt?: StringFilter<"ArticleTranslation"> | string
+    contentHtml?: StringFilter<"ArticleTranslation"> | string
+    metaTitle?: StringNullableFilter<"ArticleTranslation"> | string | null
+    metaDescription?: StringNullableFilter<"ArticleTranslation"> | string | null
+    updatedAt?: DateTimeFilter<"ArticleTranslation"> | Date | string
+  }
+
+  export type ArticleCreateWithoutTranslationsInput = {
+    id?: string
+    slug: string
+    category: string
+    date: Date | string
+    authorName: string
+    authorRole?: string | null
+    sourcesJson: string
+    imageUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ArticleUncheckedCreateWithoutTranslationsInput = {
+    id?: string
+    slug: string
+    category: string
+    date: Date | string
+    authorName: string
+    authorRole?: string | null
+    sourcesJson: string
+    imageUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ArticleCreateOrConnectWithoutTranslationsInput = {
+    where: ArticleWhereUniqueInput
+    create: XOR<ArticleCreateWithoutTranslationsInput, ArticleUncheckedCreateWithoutTranslationsInput>
+  }
+
+  export type ArticleUpsertWithoutTranslationsInput = {
+    update: XOR<ArticleUpdateWithoutTranslationsInput, ArticleUncheckedUpdateWithoutTranslationsInput>
+    create: XOR<ArticleCreateWithoutTranslationsInput, ArticleUncheckedCreateWithoutTranslationsInput>
+    where?: ArticleWhereInput
+  }
+
+  export type ArticleUpdateToOneWithWhereWithoutTranslationsInput = {
+    where?: ArticleWhereInput
+    data: XOR<ArticleUpdateWithoutTranslationsInput, ArticleUncheckedUpdateWithoutTranslationsInput>
+  }
+
+  export type ArticleUpdateWithoutTranslationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    authorName?: StringFieldUpdateOperationsInput | string
+    authorRole?: NullableStringFieldUpdateOperationsInput | string | null
+    sourcesJson?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArticleUncheckedUpdateWithoutTranslationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    authorName?: StringFieldUpdateOperationsInput | string
+    authorRole?: NullableStringFieldUpdateOperationsInput | string | null
+    sourcesJson?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArticleTranslationCreateManyArticleInput = {
+    id?: string
+    locale: string
+    title: string
+    excerpt: string
+    contentHtml: string
+    metaTitle?: string | null
+    metaDescription?: string | null
+    updatedAt?: Date | string
+  }
+
+  export type ArticleTranslationUpdateWithoutArticleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    locale?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    excerpt?: StringFieldUpdateOperationsInput | string
+    contentHtml?: StringFieldUpdateOperationsInput | string
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArticleTranslationUncheckedUpdateWithoutArticleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    locale?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    excerpt?: StringFieldUpdateOperationsInput | string
+    contentHtml?: StringFieldUpdateOperationsInput | string
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ArticleTranslationUncheckedUpdateManyWithoutArticleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    locale?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    excerpt?: StringFieldUpdateOperationsInput | string
+    contentHtml?: StringFieldUpdateOperationsInput | string
+    metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

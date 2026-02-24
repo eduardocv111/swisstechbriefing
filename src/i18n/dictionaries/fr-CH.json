@@ -1,0 +1,24 @@
+{
+    "nav": {
+        "home": "Accueil",
+        "about": "À propos",
+        "newsletter": "Newsletter",
+        "search": "Recherche"
+    },
+    "article": {
+        "readTime": "min de lecture",
+        "by": "Par",
+        "readMore": "Lire l'article",
+        "backToHome": "Retour à l'accueil",
+        "relatedTitle": "Ceci pourrait également vous intéresser",
+        "sourcesTitle": "Sources & Références",
+        "fallbackNotice": "Cet article n'est actuellement disponible qu'en allemand."
+    },
+    "footer": {
+        "description": "Média curaté pour l'IA, les startups et la technologie en Suisse. Un aperçu quotidien de la transformation numérique.",
+        "navigation": "Navigation",
+        "legal": "Mentions légales",
+        "rights": "Tous droits réservés.",
+        "location": "Zurich, Suisse"
+    }
+}

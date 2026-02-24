@@ -1,0 +1,24 @@
+{
+    "nav": {
+        "home": "Home",
+        "about": "Chi siamo",
+        "newsletter": "Newsletter",
+        "search": "Cerca"
+    },
+    "article": {
+        "readTime": "min di lettura",
+        "by": "Di",
+        "readMore": "Leggi l'articolo",
+        "backToHome": "Torna alla home",
+        "relatedTitle": "Potrebbe interessarti anche",
+        "sourcesTitle": "Fonti e Riferimenti",
+        "fallbackNotice": "Questo articolo è attualmente disponibile solo en tedesco."
+    },
+    "footer": {
+        "description": "Media curato per AI, startup e tecnologia en Svizzera. Approfondimenti quotidiani sulla trasformazione digitale.",
+        "navigation": "Navigazione",
+        "legal": "Note legali",
+        "rights": "Tutti i diritti riservati.",
+        "location": "Zurigo, Svizzera"
+    }
+}

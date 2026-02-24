@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { defaultLocale, Locale } from "@/i18n/config";
 
 export type Source = {
   name: string;
@@ -11,16 +12,9 @@ export type UiArticle = {
   title: string;
   excerpt: string;
   category: string;
-
-  // ✅ Fecha editorial (lo que enseñas al usuario)
   datePublished: string;
-
-  // ✅ Publicación real (SEO/Discover)
   publishedAt: string;
-
-  // ✅ Última modificación real (SEO/Discover)
   dateModified: string;
-
   image: string;
   sources: Source[];
   author: {
@@ -28,52 +22,28 @@ export type UiArticle = {
     role?: string | null;
   };
   contentHtml: string;
+  // i18n metadata
+  locale: string;
+  isFallback: boolean;
+  availableLocales: string[];
 };
 
-// ✅ Ruta real según tu carpeta:
-// public/assets/images/news/default-news.svg
 const FALLBACK_IMAGE = "/assets/images/news/default-news.svg";
-
-type DbArticle = {
-  id: string;
-  slug: string;
-  title: string;
-  excerpt: string;
-  category: string;
-
-  // fecha editorial
-  date: Date;
-
-  // fechas técnicas
-  createdAt: Date;
-  updatedAt: Date;
-
-  imageUrl: string | null;
-  sourcesJson: string | null;
-  authorName: string;
-  authorRole: string | null;
-  contentHtml: string | null;
-};
 
 function isValidSource(value: unknown): value is Source {
   if (!value || typeof value !== "object") return false;
-
   const v = value as Record<string, unknown>;
   return (
-    typeof v.name === "string" &&
-    v.name.trim().length > 0 &&
-    typeof v.url === "string" &&
-    v.url.trim().length > 0
+    typeof v.name === "string" && v.name.trim().length > 0 &&
+    typeof v.url === "string" && v.url.trim().length > 0
   );
 }
 
 function safeJsonParseSources(raw: string | null | undefined): Source[] {
   if (!raw) return [];
-
   try {
-    const parsed: unknown = JSON.parse(raw);
+    const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
-
     return parsed.filter(isValidSource).map((s) => ({
       name: s.name.trim(),
       url: s.url.trim(),
@@ -86,74 +56,84 @@ function safeJsonParseSources(raw: string | null | undefined): Source[] {
 function sanitizeText(text: string): string {
   if (!text) return "";
   return text
-    .replace(/\uFFFD/g, "ü") // Diamond replacement character
-    .replace(/\u00C3\u00BC/g, "ü") // UTF-8 'ü' mis-read as Latin-1
-    .replace(/\u00C3\u00A4/g, "ä") // UTF-8 'ä'
-    .replace(/\u00C3\u00B6/g, "ö") // UTF-8 'ö'
-    .replace(/\u00C3\u009C/g, "Ü") // UTF-8 'Ü'
-    .replace(/\u00C3\u0084/g, "Ä") // UTF-8 'Ä'
-    .replace(/\u00C3\u0096/g, "Ö") // UTF-8 'Ö'
-    .replace(/\u00C3\u009F/g, "ß"); // UTF-8 'ß'
+    .replace(/\uFFFD/g, "ü")
+    .replace(/\u00C3\u00BC/g, "ü")
+    .replace(/\u00C3\u00A4/g, "ä")
+    .replace(/\u00C3\u00B6/g, "ö")
+    .replace(/\u00C3\u009C/g, "Ü")
+    .replace(/\u00C3\u0084/g, "Ä")
+    .replace(/\u00C3\u0096/g, "Ö")
+    .replace(/\u00C3\u009F/g, "ß");
 }
 
-function mapDbToUi(a: DbArticle): UiArticle {
-  const sources = safeJsonParseSources(a.sourcesJson);
+/**
+ * Maps DB Article with its translations to UiArticle for a specific locale
+ */
+function mapDbToUi(article: any, targetLocale: string): UiArticle {
+  const translations = article.translations || [];
+  const availableLocales = translations.map((t: any) => t.locale);
 
-  const image =
-    a.imageUrl && a.imageUrl.trim() !== "" ? a.imageUrl : FALLBACK_IMAGE;
+  // Find translation for targetLocale, or fall back to defaultLocale, or first available
+  let trans = translations.find((t: any) => t.locale === targetLocale);
+  let isFallback = false;
+
+  if (!trans && targetLocale !== defaultLocale) {
+    trans = translations.find((t: any) => t.locale === defaultLocale);
+    isFallback = true;
+  }
+
+  // Final emergency fallback if neither target nor default exists
+  if (!trans && translations.length > 0) {
+    trans = translations[0];
+    isFallback = true;
+  }
+
+  const sources = safeJsonParseSources(article.sourcesJson);
+  const image = article.imageUrl && article.imageUrl.trim() !== "" ? article.imageUrl : FALLBACK_IMAGE;
 
   return {
-    id: a.id,
-    slug: a.slug,
-    title: sanitizeText(a.title),
-    excerpt: sanitizeText(a.excerpt),
-    category: a.category,
-
-    // ✅ UI (editorial)
-    datePublished: a.date.toISOString(),
-
-    // ✅ SEO/Discover (publicación real)
-    publishedAt: a.createdAt.toISOString(),
-
-    // ✅ SEO/Discover (modificación real)
-    dateModified: a.updatedAt.toISOString(),
-
+    id: article.id,
+    slug: article.slug,
+    title: sanitizeText(trans?.title || "Untitled"),
+    excerpt: sanitizeText(trans?.excerpt || ""),
+    category: article.category,
+    datePublished: article.date.toISOString(),
+    publishedAt: article.createdAt.toISOString(),
+    dateModified: article.updatedAt.toISOString(),
     image,
     sources,
     author: {
-      name: a.authorName,
-      role: a.authorRole ?? null,
+      name: article.authorName,
+      role: article.authorRole ?? null,
     },
-    contentHtml: sanitizeText(a.contentHtml ?? ""),
+    contentHtml: sanitizeText(trans?.contentHtml || ""),
+    locale: trans?.locale || targetLocale,
+    isFallback,
+    availableLocales,
   };
 }
 
-/**
- * ✅ Para Home / feeds
- * Ordenado por publicación real (createdAt), no por fecha editorial.
- */
-export async function getLatestArticles(limit = 30): Promise<UiArticle[]> {
+export async function getLatestArticles(locale: string, limit = 30): Promise<UiArticle[]> {
   const rows = await prisma.article.findMany({
     take: limit,
     orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+    include: { translations: true },
   });
 
-  return rows.map((r) => mapDbToUi(r as unknown as DbArticle));
+  return rows.map((r) => mapDbToUi(r, locale));
 }
 
-/**
- * ✅ Workaround Prisma 7.4.1 + sqlite adapter
- * findUnique() puede provocar panic interno en algunos casos.
- */
-export async function getArticleBySlug(slug: string): Promise<UiArticle | null> {
+export async function getArticleBySlug(locale: string, slug: string): Promise<UiArticle | null> {
   const row = await prisma.article.findFirst({
     where: { slug },
+    include: { translations: true },
   });
 
-  return row ? mapDbToUi(row as unknown as DbArticle) : null;
+  return row ? mapDbToUi(row, locale) : null;
 }
 
 export async function getRelatedArticles(
+  locale: string,
   category: string,
   currentSlug: string,
   limit = 3
@@ -165,14 +145,27 @@ export async function getRelatedArticles(
     },
     take: limit,
     orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+    include: { translations: true },
   });
 
-  return rows.map((r) => mapDbToUi(r as unknown as DbArticle));
+  return rows.map((r) => mapDbToUi(r, locale));
 }
 
-/**
- * ✅ Necesario para generateStaticParams() en app/artikel/[slug]/page.tsx
- */
+export async function getArticlesByCategory(
+  locale: string,
+  category: string,
+  limit = 50
+): Promise<UiArticle[]> {
+  const rows = await prisma.article.findMany({
+    where: { category },
+    take: limit,
+    orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+    include: { translations: true },
+  });
+
+  return rows.map((r) => mapDbToUi(r, locale));
+}
+
 export async function getAllArticleSlugs(): Promise<string[]> {
   const rows = await prisma.article.findMany({
     select: { slug: true },

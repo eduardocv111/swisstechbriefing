@@ -1,0 +1,24 @@
+{
+    "nav": {
+        "home": "Home",
+        "about": "Über uns",
+        "newsletter": "Newsletter",
+        "search": "Suche"
+    },
+    "article": {
+        "readTime": "min Lesezeit",
+        "by": "Von",
+        "readMore": "Bericht lesen",
+        "backToHome": "Zurück zur Startseite",
+        "relatedTitle": "Das könnte Sie auch interessieren",
+        "sourcesTitle": "Quellen & Referenzen",
+        "fallbackNotice": "Dieser Artikel ist derzeit nur auf Deutsch verfügbar."
+    },
+    "footer": {
+        "description": "Kuratiertes Medium für KI, Startups und Technologie in der Schweiz. Tägliche Einblicke in die digitale Transformation.",
+        "navigation": "Navigation",
+        "legal": "Rechtliches",
+        "rights": "Alle Rechte vorbehalten.",
+        "location": "Zurich, Schweiz"
+    }
+}

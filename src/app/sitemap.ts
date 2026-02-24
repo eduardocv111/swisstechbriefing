@@ -1,39 +1,50 @@
 import { MetadataRoute } from "next";
 import { prisma } from "@/lib/db";
 import { SITE_CONFIG } from "@/lib/seo/site";
+import { locales } from "@/i18n/config";
 
-export const revalidate = 3600; // 1h ISR
+export const revalidate = 3600;
 
-const BASE =
-  process.env.NEXT_PUBLIC_SITE_URL || SITE_CONFIG.url;
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || SITE_CONFIG.url;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const articles = await prisma.article.findMany({
-    select: {
-      slug: true,
-      updatedAt: true,
-    },
+    include: { translations: true },
     orderBy: { createdAt: "desc" },
   });
 
-  const articleUrls = articles.map((a) => ({
-    url: `${BASE}/artikel/${a.slug}`,
-    lastModified: a.updatedAt,
-  }));
+  const routes: MetadataRoute.Sitemap = [];
 
-  return [
-    {
-      url: BASE,
-      lastModified: new Date(),
-    },
-    ...articleUrls,
-    // ── Static pages ──
-    { url: `${BASE}/ueber-uns`, lastModified: new Date() },
-    { url: `${BASE}/kontakt`, lastModified: new Date() },
-    { url: `${BASE}/newsletter`, lastModified: new Date() },
-    // ── Legal pages ──
-    { url: `${BASE}/impressum`, lastModified: new Date() },
-    { url: `${BASE}/datenschutz`, lastModified: new Date() },
-    { url: `${BASE}/cookie-richtlinie`, lastModified: new Date() },
-  ];
+  // Home and static pages for each locale
+  for (const locale of locales) {
+    const staticPages = [
+      '',
+      '/ueber-uns',
+      '/kontakt',
+      '/newsletter',
+      '/impressum',
+      '/datenschutz',
+    ];
+
+    staticPages.forEach(p => {
+      routes.push({
+        url: `${BASE}/${locale}${p}`,
+        lastModified: new Date(),
+      });
+    });
+
+    // Articles for each locale
+    articles.forEach(a => {
+      // Only include if translation exists for this locale
+      const hasTranslation = a.translations.some(t => t.locale === locale);
+      if (hasTranslation) {
+        routes.push({
+          url: `${BASE}/${locale}/artikel/${a.slug}`,
+          lastModified: a.updatedAt,
+        });
+      }
+    });
+  }
+
+  return routes;
 }

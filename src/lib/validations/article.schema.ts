@@ -11,6 +11,7 @@ export const articleSchema = z.object({
     excerpt: z.string().min(10).max(500).trim(),
     contentHtml: z.string().min(20).trim(),
     category: z.string().min(1).trim(),
+    locale: z.enum(['de-CH', 'fr-CH', 'it-CH', 'en']).default('de-CH'),
     date: z.coerce.date(),
 
     author: z.object({

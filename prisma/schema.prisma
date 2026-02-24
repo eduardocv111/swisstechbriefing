@@ -10,9 +10,6 @@ datasource db {
 model Article {
   id          String   @id @default(cuid())
   slug        String   @unique
-  title       String
-  excerpt     String
-  contentHtml String
   category    String
   date        DateTime
   authorName  String
@@ -21,6 +18,26 @@ model Article {
   imageUrl    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  translations ArticleTranslation[]
+
+  @@index([category])
+  @@index([createdAt])
+}
+
+model ArticleTranslation {
+  id              String   @id @default(cuid())
+  articleId       String
+  locale          String
+  title           String
+  excerpt         String
+  contentHtml     String
+  metaTitle       String?
+  metaDescription String?
+  updatedAt       DateTime @updatedAt
+  article         Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@unique([articleId, locale])
+  @@index([locale])
 }
 
 model NewsletterSubscription {
@@ -29,6 +46,5 @@ model NewsletterSubscription {
   source     String
   leadMagnet String?
   createdAt  DateTime @default(now())
-
   @@index([email])
 }

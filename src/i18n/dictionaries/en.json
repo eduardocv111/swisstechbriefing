@@ -1,0 +1,24 @@
+{
+    "nav": {
+        "home": "Home",
+        "about": "About Us",
+        "newsletter": "Newsletter",
+        "search": "Search"
+    },
+    "article": {
+        "readTime": "min read",
+        "by": "By",
+        "readMore": "Read Article",
+        "backToHome": "Back to Home",
+        "relatedTitle": "You might also be interested in",
+        "sourcesTitle": "Sources & References",
+        "fallbackNotice": "This article is currently only available in German."
+    },
+    "footer": {
+        "description": "Curated media for AI, startups, and technology in Switzerland. Daily insights into digital transformation.",
+        "navigation": "Navigation",
+        "legal": "Legal",
+        "rights": "All rights reserved.",
+        "location": "Zurich, Switzerland"
+    }
+}
