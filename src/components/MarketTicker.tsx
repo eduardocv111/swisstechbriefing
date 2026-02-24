@@ -10,6 +10,12 @@ type MarketTickerProps = {
 };
 
 export default function MarketTicker({ initial }: MarketTickerProps) {
+    const [mounted, setMounted] = React.useState(false);
+
+    React.useEffect(() => {
+        setMounted(true);
+    }, []);
+
     const { items, ageStatus } = useMemo(() => {
         if (!initial || !initial.payload) return { items: [], ageStatus: null };
 
@@ -42,8 +48,8 @@ export default function MarketTicker({ initial }: MarketTickerProps) {
             }
         }
 
-        // Calculate Age Status
-        const now = Date.now();
+        // Calculate Age Status - If not mounted, use a stable reference for hydration
+        const now = mounted ? Date.now() : new Date(initial.created_at).getTime();
         const createdDate = new Date(initial.created_at).getTime();
         const diffMs = now - createdDate;
         const diffMin = Math.floor(diffMs / 60000);
@@ -67,14 +73,14 @@ export default function MarketTicker({ initial }: MarketTickerProps) {
             const h = Math.floor(diffMin / 60);
             const m = diffMin % 60;
             if (h > 0) {
-                timeStr = `${h}h${m > 0 ? ` ${m}m` : ""}`;
+                timeStr = h === 0 && m === 0 ? "Just now" : `${h}h${m > 0 ? ` ${m}m` : ""}`;
             } else {
-                timeStr = `${m}m`;
+                timeStr = m <= 0 ? "Just now" : `${m}m`;
             }
         }
 
         return { items: data, ageStatus: { status, timeStr, diffMin } };
-    }, [initial]);
+    }, [initial, mounted]);
 
     if (items.length === 0 || !ageStatus) {
         return (
@@ -129,8 +135,8 @@ export default function MarketTicker({ initial }: MarketTickerProps) {
                         </span>
                         {!item.isFx && (
                             <span className={`inline-flex items-center gap-1 text-[11px] font-bold tabular-nums font-mono transition-all duration-300 ${item.change >= 0
-                                    ? "text-emerald-300 group-hover:drop-shadow-[0_0_8px_rgba(110,231,183,1)]"
-                                    : "text-rose-300 group-hover:drop-shadow-[0_0_8px_rgba(252,165,165,0.4)]"
+                                ? "text-emerald-300 group-hover:drop-shadow-[0_0_8px_rgba(110,231,183,1)]"
+                                : "text-rose-300 group-hover:drop-shadow-[0_0_8px_rgba(252,165,165,0.4)]"
                                 }`}>
                                 {item.change >= 0 ? "▲" : "▼"}
                                 <span>{item.percent}</span>

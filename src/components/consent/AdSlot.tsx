@@ -49,16 +49,20 @@ export default function AdSlot({
     pageType,
     category,
 }: AdSlotProps) {
-    const [hasMarketing, setHasMarketing] = useState(() => {
-        if (typeof window === 'undefined') return false;
-        const consent = getStoredConsent();
-        return consent?.marketing === 'granted';
-    });
-    const [adsenseReady, setAdsenseReady] = useState(() =>
-        typeof window !== 'undefined' && typeof (window as any).adsbygoogle !== 'undefined'
-    );
+    const [hasMarketing, setHasMarketing] = useState(false);
+    const [adsenseReady, setAdsenseReady] = useState(false);
     const adPushed = useRef(false);
     const insRef = useRef<HTMLModElement>(null);
+
+    useEffect(() => {
+        // Only check on client after hydration
+        const consent = getStoredConsent();
+        setHasMarketing(consent?.marketing === 'granted');
+
+        if (typeof (window as any).adsbygoogle !== 'undefined') {
+            setAdsenseReady(true);
+        }
+    }, []);
 
     useEffect(() => {
         function handleConsentChange() {
