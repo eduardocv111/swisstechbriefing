@@ -14,6 +14,7 @@ const FULL_LOCALE_NAMES: Record<Locale, string> = {
     'de-CH': 'Deutsch (CH)',
     'fr-CH': 'Français (CH)',
     'it-CH': 'Italiano (CH)',
+    'es-ES': 'Español',
     'en': 'English',
 };
 
