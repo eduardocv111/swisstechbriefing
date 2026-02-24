@@ -10,24 +10,21 @@ type MarketTickerProps = {
 };
 
 export default function MarketTicker({ initial }: MarketTickerProps) {
-    // Memoize items to avoid unnecessary re-renders
     const items = useMemo(() => {
         if (!initial || !initial.payload) return [];
 
         const { fx, markets } = initial.payload;
         const data = [];
 
-        // FX Rates
         if (fx) {
             if (fx.usd_chf) data.push({ label: "USD/CHF", value: fx.usd_chf.toFixed(4), change: 0, isFx: true });
             if (fx.eur_chf) data.push({ label: "EUR/CHF", value: fx.eur_chf.toFixed(4), change: 0, isFx: true });
         }
 
-        // Market Indices
         if (markets) {
             if (markets.qqq) {
                 data.push({
-                    label: "QQQ (Nasdaq 100)",
+                    label: "QQQ",
                     value: `$${markets.qqq.price.toFixed(2)}`,
                     change: markets.qqq.change,
                     percent: markets.qqq.change_percent,
@@ -35,7 +32,7 @@ export default function MarketTicker({ initial }: MarketTickerProps) {
             }
             if (markets.spy) {
                 data.push({
-                    label: "SPY (S&P 500)",
+                    label: "SPY",
                     value: `$${markets.spy.price.toFixed(2)}`,
                     change: markets.spy.change,
                     percent: markets.spy.change_percent,
@@ -48,31 +45,31 @@ export default function MarketTicker({ initial }: MarketTickerProps) {
 
     if (items.length === 0) {
         return (
-            <div className="w-full bg-slate-900/50 border-y border-white/5 py-1.5 overflow-hidden">
-                <div className="flex justify-center text-[10px] font-bold uppercase tracking-widest text-slate-500 animate-pulse">
+            <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen bg-[#0a0f1a] border-y border-white/5 py-2 overflow-hidden">
+                <div className="flex justify-center text-[10px] font-bold uppercase tracking-widest text-slate-600 animate-pulse">
                     ••• Market Snapshot wird täglich aktualisiert •••
                 </div>
             </div>
         );
     }
 
-    // Double the items for a seamless loop
-    const tickerItems = [...items, ...items, ...items];
+    // Double items for seamless marquee loop
+    const tickerItems = [...items, ...items];
 
     return (
-        <div className="group relative w-full bg-[#0a0f1a] border-y border-white/5 overflow-hidden h-9 flex items-center select-none font-mono">
-            {/* Container for the marquee animation */}
+        <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen bg-[#0a0f1a] border-y border-white/5 h-10 flex items-center select-none overflow-hidden group">
+            {/* Scrollable track */}
             <div className="flex whitespace-nowrap animate-marquee group-hover:[animation-play-state:paused] focus-within:[animation-play-state:paused] motion-reduce:animate-none">
                 {tickerItems.map((item, idx) => (
-                    <div key={idx} className="flex items-center px-6 gap-3 border-r border-white/10 h-full">
-                        <span className="text-[10px] font-bold text-slate-400 tracking-tighter uppercase whitespace-nowrap">
+                    <div key={idx} className="flex items-center px-8 gap-3 border-r border-white/10 h-10 leading-10">
+                        <span className="text-[10px] font-bold text-slate-400 tracking-tighter uppercase font-mono">
                             {item.label}
                         </span>
-                        <span className="text-[11px] font-bold text-white tracking-tight">
+                        <span className="text-[11px] font-bold text-white tracking-tight font-mono">
                             {item.value}
                         </span>
                         {!item.isFx && (
-                            <span className={`inline-flex items-center gap-0.5 text-[10px] font-black ${item.change >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+                            <span className={`inline-flex items-center gap-0.5 text-[10px] font-black font-mono ${item.change >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
                                 {item.change >= 0 ? "▲" : "▼"} {item.percent}
                             </span>
                         )}
@@ -80,27 +77,28 @@ export default function MarketTicker({ initial }: MarketTickerProps) {
                 ))}
             </div>
 
-            {/* CSS for the Marquee - Using style tag for simplicity and portable animation */}
             <style jsx>{`
         @keyframes marquee {
           0% { transform: translateX(0); }
-          100% { transform: translateX(-33.33%); }
+          100% { transform: translateX(-50%); }
         }
         .animate-marquee {
           display: flex;
-          animation: marquee 40s linear infinite;
+          animation: marquee 35s linear infinite;
+          padding-left: 20vw; /* Initial offset so it enters from right in a balanced way */
         }
         @media (prefers-reduced-motion: reduce) {
           .animate-marquee {
             animation: none;
             overflow-x: auto;
+            padding-left: 0;
           }
         }
       `}</style>
 
-            {/* Bloomberg-style Edge Gradient overlays for smoothness */}
-            <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-[#0a0f1a] to-transparent pointer-events-none z-10" />
-            <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-[#0a0f1a] to-transparent pointer-events-none z-10" />
+            {/* Bloomberg Edge Gradients - Hidden in mobile for cleaner look if needed, but keeping for premium feel */}
+            <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#0a0f1a] via-[#0a0f1a]/80 to-transparent pointer-events-none z-10" />
+            <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#0a0f1a] via-[#0a0f1a]/80 to-transparent pointer-events-none z-10" />
         </div>
     );
 }
