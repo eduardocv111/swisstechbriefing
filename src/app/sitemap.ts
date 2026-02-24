@@ -7,6 +7,8 @@ export const revalidate = 3600;
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || SITE_CONFIG.url;
 
+import { CATEGORIES } from "@/lib/categories";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const articles = await prisma.article.findMany({
     include: { translations: true },
@@ -29,6 +31,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     staticPages.forEach(p => {
       routes.push({
         url: `${BASE}/${locale}${p}`,
+        lastModified: new Date(),
+      });
+    });
+
+    // Categories for each locale
+    CATEGORIES.forEach(cat => {
+      routes.push({
+        url: `${BASE}/${locale}/kategorie/${cat.slug}`,
         lastModified: new Date(),
       });
     });

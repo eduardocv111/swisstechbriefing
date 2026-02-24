@@ -12,9 +12,19 @@ import {
 interface Props {
     onClose: () => void;
     onSave: () => void;
+    dict: {
+        title: string;
+        description: string;
+        save: string;
+        accept_all: string;
+        always_active: string;
+        privacy_policy: string;
+        cookie_policy: string;
+        close: string;
+    };
 }
 
-export default function CookiePreferencesModal({ onClose, onSave }: Props) {
+export default function CookiePreferencesModal({ onClose, onSave, dict }: Props) {
     const [categories, setCategories] = useState<ConsentCategories>(() => {
         const existing = getConsent();
         return existing ? existing.categories : { ...DEFAULT_CATEGORIES };
@@ -54,7 +64,7 @@ export default function CookiePreferencesModal({ onClose, onSave }: Props) {
             className="fixed inset-0 z-[10000] flex items-center justify-center p-4"
             role="dialog"
             aria-modal="true"
-            aria-label="Cookie-Einstellungen"
+            aria-label={dict.title}
         >
             {/* Backdrop */}
             <div
@@ -67,15 +77,15 @@ export default function CookiePreferencesModal({ onClose, onSave }: Props) {
                 {/* Header */}
                 <div className="mb-6 flex items-start justify-between">
                     <div>
-                        <h2 className="text-lg font-bold text-white">Cookie-Einstellungen</h2>
+                        <h2 className="text-lg font-bold text-white">{dict.title}</h2>
                         <p className="mt-1 text-sm text-slate-400">
-                            Wählen Sie, welche Cookies Sie zulassen möchten.
+                            {dict.description}
                         </p>
                     </div>
                     <button
                         onClick={onClose}
                         className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-800 hover:text-white"
-                        aria-label="Schliessen"
+                        aria-label={dict.close}
                     >
                         <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path
@@ -114,10 +124,10 @@ export default function CookiePreferencesModal({ onClose, onSave }: Props) {
                                         disabled={isLocked}
                                         onClick={() => toggleCategory(cat.key)}
                                         className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/50 ${isLocked
-                                                ? 'cursor-not-allowed bg-primary/60'
-                                                : isOn
-                                                    ? 'bg-primary'
-                                                    : 'bg-slate-600'
+                                            ? 'cursor-not-allowed bg-primary/60'
+                                            : isOn
+                                                ? 'bg-primary'
+                                                : 'bg-slate-600'
                                             }`}
                                     >
                                         <span
@@ -128,7 +138,7 @@ export default function CookiePreferencesModal({ onClose, onSave }: Props) {
                                 </div>
                                 {isLocked && (
                                     <span className="mt-2 inline-block rounded bg-slate-700/60 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                                        Immer aktiv
+                                        {dict.always_active}
                                     </span>
                                 )}
                             </div>
@@ -142,13 +152,13 @@ export default function CookiePreferencesModal({ onClose, onSave }: Props) {
                         onClick={handleSave}
                         className="rounded-lg border border-slate-600 px-5 py-2.5 text-sm font-semibold text-slate-300 transition-all hover:border-slate-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-primary/50"
                     >
-                        Auswahl speichern
+                        {dict.save}
                     </button>
                     <button
                         onClick={handleAcceptAll}
                         className="rounded-lg bg-primary px-6 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:bg-primary/90 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
                     >
-                        Alle akzeptieren
+                        {dict.accept_all}
                     </button>
                 </div>
 
@@ -158,14 +168,14 @@ export default function CookiePreferencesModal({ onClose, onSave }: Props) {
                         href="/cookie-richtlinie"
                         className="text-xs text-slate-500 underline underline-offset-2 transition-colors hover:text-primary"
                     >
-                        Cookie-Richtlinie lesen
+                        {dict.cookie_policy}
                     </a>
                     <span className="mx-2 text-slate-700">•</span>
                     <a
                         href="/datenschutz"
                         className="text-xs text-slate-500 underline underline-offset-2 transition-colors hover:text-primary"
                     >
-                        Datenschutzerklärung
+                        {dict.privacy_policy}
                     </a>
                 </div>
             </div>

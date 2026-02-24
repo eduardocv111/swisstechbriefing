@@ -9,21 +9,36 @@ import {
 } from '@/lib/consent';
 import CookiePreferencesModal from './CookiePreferencesModal';
 
-export default function CookieBanner() {
+interface CookieBannerProps {
+    dict: {
+        title: string;
+        description: string;
+        save: string;
+        accept_all: string;
+        always_active: string;
+        privacy_policy: string;
+        cookie_policy: string;
+        close: string;
+        banner_title: string;
+        banner_desc: string;
+        banner_note: string;
+        settings: string;
+        only_necessary: string;
+    };
+}
+
+export default function CookieBanner({ dict }: CookieBannerProps) {
     const [visible, setVisible] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
-        // Only show if no valid consent exists
         const consent = getConsent();
         if (!consent) {
-            // Small delay to avoid layout shift on first paint
             const timer = setTimeout(() => setVisible(true), 600);
             return () => clearTimeout(timer);
         }
     }, []);
 
-    // Listen for external "open preferences" requests (from footer button)
     useEffect(() => {
         function handleOpenPrefs() {
             setShowModal(true);
@@ -66,21 +81,19 @@ export default function CookieBanner() {
                         {/* Text */}
                         <div className="mb-5">
                             <h2 className="mb-2 text-base font-bold text-white">
-                                🍪 Wir respektieren Ihre Privatsphäre
+                                {dict.banner_title}
                             </h2>
                             <p className="text-sm leading-relaxed text-slate-300">
-                                Wir verwenden Cookies, um Ihnen die bestmögliche Nutzererfahrung zu bieten.
-                                Notwendige Cookies sind für den Betrieb der Website erforderlich.
-                                Analyse- und Marketing-Cookies setzen wir nur mit Ihrer ausdrücklichen Einwilligung.{' '}
+                                {dict.banner_desc}{' '}
                                 <a
                                     href="/cookie-richtlinie"
                                     className="font-medium text-primary underline underline-offset-2 hover:text-blue-300 transition-colors"
                                 >
-                                    Cookie-Richtlinie
+                                    {dict.cookie_policy}
                                 </a>
                             </p>
                             <p className="mt-1.5 text-xs text-slate-500">
-                                Sie können Ihre Auswahl jederzeit über «Cookie-Einstellungen» im Footer ändern.
+                                {dict.banner_note}
                             </p>
                         </div>
 
@@ -90,19 +103,19 @@ export default function CookieBanner() {
                                 onClick={handleOpenSettings}
                                 className="rounded-lg border border-slate-600 px-5 py-2.5 text-sm font-semibold text-slate-300 transition-all hover:border-slate-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-primary/50"
                             >
-                                Einstellungen
+                                {dict.settings}
                             </button>
                             <button
                                 onClick={handleRejectOptional}
                                 className="rounded-lg border border-slate-600 px-5 py-2.5 text-sm font-semibold text-slate-300 transition-all hover:border-slate-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-primary/50"
                             >
-                                Nur notwendige
+                                {dict.only_necessary}
                             </button>
                             <button
                                 onClick={handleAcceptAll}
                                 className="rounded-lg bg-primary px-6 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:bg-primary/90 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
                             >
-                                Alle akzeptieren
+                                {dict.accept_all}
                             </button>
                         </div>
                     </div>
@@ -114,6 +127,7 @@ export default function CookieBanner() {
                 <CookiePreferencesModal
                     onClose={() => setShowModal(false)}
                     onSave={handleModalSave}
+                    dict={dict}
                 />
             )}
         </>

@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
-import { defaultLocale, Locale } from "@/i18n/config";
+import { defaultLocale } from "@/i18n/config";
+import { normalizeLocale } from "@/lib/i18n";
 
 export type Source = {
   name: string;
@@ -69,15 +70,16 @@ function sanitizeText(text: string): string {
 /**
  * Maps DB Article with its translations to UiArticle for a specific locale
  */
-function mapDbToUi(article: any, targetLocale: string): UiArticle {
+function mapDbToUi(article: any, locale: string): UiArticle {
+  const normLocale = normalizeLocale(locale);
   const translations = article.translations || [];
   const availableLocales = translations.map((t: any) => t.locale);
 
   // Find translation for targetLocale, or fall back to defaultLocale, or first available
-  let trans = translations.find((t: any) => t.locale === targetLocale);
+  let trans = translations.find((t: any) => t.locale === normLocale);
   let isFallback = false;
 
-  if (!trans && targetLocale !== defaultLocale) {
+  if (!trans && normLocale !== defaultLocale) {
     trans = translations.find((t: any) => t.locale === defaultLocale);
     isFallback = true;
   }
@@ -107,29 +109,31 @@ function mapDbToUi(article: any, targetLocale: string): UiArticle {
       role: article.authorRole ?? null,
     },
     contentHtml: sanitizeText(trans?.contentHtml || ""),
-    locale: trans?.locale || targetLocale,
+    locale: trans?.locale || normLocale,
     isFallback,
     availableLocales,
   };
 }
 
 export async function getLatestArticles(locale: string, limit = 30): Promise<UiArticle[]> {
+  const normLocale = normalizeLocale(locale);
   const rows = await prisma.article.findMany({
     take: limit,
     orderBy: [{ createdAt: "desc" }, { id: "desc" }],
     include: { translations: true },
   });
 
-  return rows.map((r) => mapDbToUi(r, locale));
+  return rows.map((r) => mapDbToUi(r, normLocale));
 }
 
 export async function getArticleBySlug(locale: string, slug: string): Promise<UiArticle | null> {
+  const normLocale = normalizeLocale(locale);
   const row = await prisma.article.findFirst({
     where: { slug },
     include: { translations: true },
   });
 
-  return row ? mapDbToUi(row, locale) : null;
+  return row ? mapDbToUi(row, normLocale) : null;
 }
 
 export async function getRelatedArticles(
@@ -138,6 +142,7 @@ export async function getRelatedArticles(
   currentSlug: string,
   limit = 3
 ): Promise<UiArticle[]> {
+  const normLocale = normalizeLocale(locale);
   const rows = await prisma.article.findMany({
     where: {
       category,
@@ -148,7 +153,7 @@ export async function getRelatedArticles(
     include: { translations: true },
   });
 
-  return rows.map((r) => mapDbToUi(r, locale));
+  return rows.map((r) => mapDbToUi(r, normLocale));
 }
 
 export async function getArticlesByCategory(
@@ -156,6 +161,7 @@ export async function getArticlesByCategory(
   category: string,
   limit = 50
 ): Promise<UiArticle[]> {
+  const normLocale = normalizeLocale(locale);
   const rows = await prisma.article.findMany({
     where: { category },
     take: limit,
@@ -163,7 +169,7 @@ export async function getArticlesByCategory(
     include: { translations: true },
   });
 
-  return rows.map((r) => mapDbToUi(r, locale));
+  return rows.map((r) => mapDbToUi(r, normLocale));
 }
 
 export async function getAllArticleSlugs(): Promise<string[]> {
@@ -173,4 +179,59 @@ export async function getAllArticleSlugs(): Promise<string[]> {
   });
 
   return rows.map((r) => r.slug).filter(Boolean);
+}
+
+export async function searchArticles(
+  locale: string,
+  query: string,
+  limit = 20
+): Promise<UiArticle[]> {
+  if (!query.trim()) return [];
+  const normLocale = normalizeLocale(locale);
+  const lowQuery = query.toLowerCase();
+
+  // 1. Try to find articles matching in the requested locale
+  let rows = await prisma.article.findMany({
+    where: {
+      OR: [
+        { slug: { contains: lowQuery } },
+        {
+          translations: {
+            some: {
+              locale: normLocale,
+              OR: [
+                { title: { contains: lowQuery } },
+                { excerpt: { contains: lowQuery } }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    take: limit,
+    include: { translations: true },
+    orderBy: { createdAt: "desc" },
+  });
+
+  // 2. If no results and we are not already in the default locale, try the default locale
+  if (rows.length === 0 && normLocale !== defaultLocale) {
+    rows = await prisma.article.findMany({
+      where: {
+        translations: {
+          some: {
+            locale: defaultLocale,
+            OR: [
+              { title: { contains: lowQuery } },
+              { excerpt: { contains: lowQuery } }
+            ]
+          }
+        }
+      },
+      take: limit,
+      include: { translations: true },
+      orderBy: { createdAt: "desc" },
+    });
+  }
+
+  return rows.map((r) => mapDbToUi(r, normLocale));
 }

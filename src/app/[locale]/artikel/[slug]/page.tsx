@@ -83,7 +83,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const description = article.excerpt ?? "";
 
     // Canonical Logic
-    // If fallback to DE-CH, canonical points to /de-CH/
+    // If it's a fallback, we canonical to the default locale (de-CH) to avoid duplicate content
     const canonicalLocale = article.isFallback ? defaultLocale : locale;
     const canonicalUrl = `${SITE_CONFIG.url}/${canonicalLocale}/artikel/${article.slug}`;
 
@@ -92,11 +92,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const modifiedTime = toIsoDate(article.dateModified);
     const authorName = article.author?.name ?? SITE_CONFIG.name;
 
-    // Hreflang logic
+    // Hreflang logic - only include locales that actually have translations
     const languages: Record<string, string> = {};
     article.availableLocales.forEach(loc => {
         languages[loc] = `${SITE_CONFIG.url}/${loc}/artikel/${article.slug}`;
     });
+    // Add x-default pointing to the default language version
     languages['x-default'] = `${SITE_CONFIG.url}/${defaultLocale}/artikel/${article.slug}`;
 
     return {
@@ -107,6 +108,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             canonical: canonicalUrl,
             languages,
         },
+        // SEO Strategy: if it's a fallback, don't index this specific URL
+        ...(article.isFallback ? { robots: { index: false, follow: true } } : {}),
         openGraph: {
             title,
             description,
@@ -186,7 +189,7 @@ export default async function ArticlePage({ params }: Props) {
                     <div className="mb-8 flex flex-wrap items-center gap-3 border-b border-slate-100 pb-6 text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
                         <div className="flex items-center gap-1.5">
                             <span className="material-symbols-outlined text-base">calendar_today</span>
-                            <span>{formatSwissDate(article.datePublished)}</span>
+                            <span>{formatSwissDate(article.datePublished, locale)}</span>
                         </div>
                         <span className="opacity-30">|</span>
                         <div className="flex items-center gap-1.5">
@@ -212,7 +215,7 @@ export default async function ArticlePage({ params }: Props) {
                     </div>
 
                     <div className="my-10">
-                        <AdSlot slotId="article-mid" format="auto" pageType="article" category={article.category} label="Anzeige" />
+                        <AdSlot slotId="article-mid" format="auto" pageType="article" category={article.category} label={dict.ads.label} />
                     </div>
 
                     {article.sources?.length > 0 && (

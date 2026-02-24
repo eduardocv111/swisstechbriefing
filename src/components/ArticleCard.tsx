@@ -50,7 +50,7 @@ export default function ArticleCard({
                             dateTime={datePublished}
                             suppressHydrationWarning
                         >
-                            {formatSwissDate(datePublished)}
+                            {formatSwissDate(datePublished, locale)}
                         </time>
                     </div>
 

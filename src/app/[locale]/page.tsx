@@ -111,7 +111,7 @@ export default async function Home({ params }: PageProps) {
                     <section className="mb-12 md:mb-16">
                         <div className="mb-8 flex items-center gap-4">
                             <h3 className="whitespace-nowrap text-xs font-black uppercase tracking-[0.2em] text-primary">
-                                Aktuelle Analysen
+                                {dict.home.featured_title}
                             </h3>
                             <div className="h-px w-full bg-slate-200 dark:bg-slate-800" />
                         </div>
@@ -157,7 +157,7 @@ export default async function Home({ params }: PageProps) {
                         format="horizontal"
                         pageType="home"
                         minHeight={90}
-                        label="Anzeige"
+                        label={dict.ads.label}
                     />
                 </div>
 
@@ -166,7 +166,7 @@ export default async function Home({ params }: PageProps) {
                     <section>
                         <div className="mb-8 flex items-center gap-4">
                             <h3 className="whitespace-nowrap text-xs font-black uppercase tracking-[0.2em] text-primary">
-                                Weitere Meldungen
+                                {dict.home.latest_title}
                             </h3>
                             <div className="h-px w-full bg-slate-200 dark:bg-slate-800" />
                         </div>

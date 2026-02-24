@@ -98,3 +98,54 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Internal server error" }, { status: 500 });
   }
 }
+
+export async function DELETE(req: Request) {
+  const auth = req.headers.get("authorization") || "";
+  const token = process.env.ADMIN_PUBLISH_TOKEN;
+
+  if (!token || auth !== `Bearer ${token}`) {
+    return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const { slug } = await req.json();
+
+    if (!slug) {
+      return NextResponse.json({ ok: false, error: "Slug required" }, { status: 400 });
+    }
+
+    const article = await prisma.article.findUnique({
+      where: { slug }
+    });
+
+    if (!article) {
+      return NextResponse.json({ ok: false, error: "Article not found" }, { status: 404 });
+    }
+
+    // Delete translations first
+    await prisma.articleTranslation.deleteMany({
+      where: { articleId: article.id }
+    });
+
+    // Delete article
+    await prisma.article.delete({
+      where: { id: article.id }
+    });
+
+    // Revalidate affected paths
+    locales.forEach(loc => {
+      revalidatePath(`/${loc}`);
+      revalidatePath(`/${loc}/artikel/${slug}`);
+      const categorySlug = getSlugFromCategory(article.category);
+      if (categorySlug) {
+        revalidatePath(`/${loc}/kategorie/${categorySlug}`);
+      }
+    });
+    revalidatePath("/sitemap.xml");
+
+    return NextResponse.json({ ok: true, message: `Deleted ${slug}` });
+  } catch (err) {
+    console.error("Delete error:", err);
+    return NextResponse.json({ ok: false, error: "Internal server error" }, { status: 500 });
+  }
+}

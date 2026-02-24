@@ -5,6 +5,18 @@
         "newsletter": "Newsletter",
         "search": "Suche"
     },
+    "categories": {
+        "all": "Alle",
+        "ki": "KI",
+        "startups": "Startups",
+        "regulation": "Regulierung",
+        "defense": "Defense Tech"
+    },
+    "home": {
+        "featured_title": "Aktuelle Analysen",
+        "latest_title": "Weitere Meldungen",
+        "no_articles": "Aktuell liegen keine weiteren Meldungen zu diesem Thema vor."
+    },
     "article": {
         "readTime": "min Lesezeit",
         "by": "Von",
@@ -18,7 +30,100 @@
         "description": "Kuratiertes Medium für KI, Startups und Technologie in der Schweiz. Tägliche Einblicke in die digitale Transformation.",
         "navigation": "Navigation",
         "legal": "Rechtliches",
+        "imprint": "Impressum",
+        "privacy": "Datenschutz",
+        "contact": "Kontakt",
         "rights": "Alle Rechte vorbehalten.",
-        "location": "Zurich, Schweiz"
+        "location": "Zürich, Schweiz"
+    },
+    "newsletter": {
+        "badge": "Kostenloses Extra",
+        "offer": "Exklusives Angebot",
+        "title": "SwissTech Intelligence Briefing",
+        "headline": "Der Schweizer <span class='text-primary italic text-shadow-sm'>AI-Vorsprung</span> für Ihr Postfach.",
+        "description": "Abonnieren Sie unseren Newsletter und erhalten Sie zusätzlich den monatlichen <strong> «AI in Switzerland» Report (PDF)</strong> kostenlos direkt in Ihr Postfach.",
+        "description_extended": "Treten Sie 2.000+ Experten bei. Erhalten Sie wöchentliche Insights und den monatlichen <span class='font-bold text-slate-900 dark:text-white'> «AI in Switzerland» Report (PDF)</span> kostenlos.",
+        "email_label": "E-Mail-Adresse",
+        "placeholder": "Ihre E-Mail-Adresse",
+        "placeholder_extended": "Ihre professionelle E-Mail",
+        "button": "Report anfordern",
+        "button_subscribe": "Jetzt kostenlos abonnieren",
+        "submitting": "Wird gesendet...",
+        "privacy": "Wir respektieren Ihre Privatsphäre. Abmeldung jederzeit möglich. Spamschutz inklusive.",
+        "success_title": "Vielen Dank!",
+        "success_title_short": "Fast geschafft!",
+        "success_message": "Wir haben Ihre Anmeldung empfangen. Ihr <span class='font-bold'>AI Intelligence Report</span> wird in Kürze versandt. Prüfen Sie bitte auch Ihren Spam-Ordner.",
+        "success_message_extended": "Wir haben Ihnen soeben den Bestätigungslink und Ihren <span class='font-bold underline decoration-primary decoration-2'>AI Intelligence Report</span> zugeschickt. Bitte prüfen Sie Ihr Postfach.",
+        "error": "Entschuldigung! Etwas ist schief gelaufen. Bitte versuchen Sie es später erneut."
+    },
+    "ads": {
+        "label": "Anzeige",
+        "placeholder": "Werbefläche"
+    },
+    "about": {
+        "meta_title": "Über uns",
+        "meta_description": "Erfahren Sie mehr über die Mission und die Redaktion von SwissTech Briefing.",
+        "title": "Editorial Mission & Fokus",
+        "mission": "SwissTech Briefing ist das führende digitale Magazin für die Schnittstelle von Technologie, Wirtschaft und Sicherheit in der Schweiz. Unsere Mission ist es, komplexe technologische Entwicklungen präzise einzuordnen und ihre Relevanz für den Standort Schweiz aufzuzeigen.",
+        "focus_title": "Unsere Schwerpunkte",
+        "focus": {
+            "ki": {
+                "title": "Künstliche Intelligenz",
+                "desc": "Fokus auf ETH/EPFL-Forschung und Schweizer KI-Compliance."
+            },
+            "defense": {
+                "title": "Defense Tech",
+                "desc": "Cybersicherheit und technologische Innovationen der Armee."
+            },
+            "startups": {
+                "title": "Startups",
+                "desc": "Deep-Tech Investment-Trends und Unicorn-Wachstum."
+            },
+            "regulation": {
+                "title": "Regulierung",
+                "desc": "FINMA-Richtlinien und Auswirkungen globaler Gesetze (EU AI Act)."
+            }
+        },
+        "transparency_title": "Transparenz-Statement",
+        "transparency_text": "Wir glauben an unabhängigen, faktenbasierten Journalismus. Alle unsere Analysen werden von Fachredaktoren verfasst. Bei Gastbeiträgen von Experten legen wir deren Hintergründe und mögliche Interessenbindungen stets offen dar. Wir nutzen KI-Tools ausschliesslich zur Unterstützung bei Recherche und Formatierung, niemals zur ungeprüften Generierung von Inhalten.",
+        "editorial_title": "Die Redaktion",
+        "editorial_text": "Unser Team besteht aus erfahrenen Technologie-Journalisten und Fachreferenten mit Standorten in Zürich und Lausanne. Wir arbeiten eng mit Experten aus Wissenschaft und Industrie zusammen, um höchste fachliche Qualität zu garantieren."
+    },
+    "contact": {
+        "meta_title": "Kontakt",
+        "meta_description": "Kontaktieren Sie die Redaktion von SwissTech Briefing für Presseanfragen oder Feedback.",
+        "title": "Kontakt",
+        "subtitle": "Haben Sie Feedback, eine Newsmeldung oder Presseanfragen? Wir freuen uns auf Ihre Nachricht.",
+        "editorial_title": "Redaktion",
+        "editorial_desc": "Für allgemeine Anfragen und Newsmeldungen:",
+        "media_title": "Presseanfragen",
+        "media_desc": "Medienanfragen und Interview-Wünsche:",
+        "cta_title": "Bleiben Sie informiert",
+        "cta_desc": "Abonnieren Sie unseren Newsletter, um keine wichtige Meldung zu verpassen.",
+        "cta_button": "Zum Newsletter anmelden"
+    },
+    "search": {
+        "title": "Suche",
+        "placeholder": "Nach Themen, Artikeln oder Startups suchen...",
+        "results_for": "Ergebnisse für",
+        "no_results_title": "Keine Ergebnisse gefunden",
+        "no_results_desc": "Für \"{query}\" wurden leider keine passenden Artikel gefunden. Versuchen Sie es mit anderen Suchbegriffen.",
+        "initial_desc": "Geben Sie einen Suchbegriff ein, um zu beginnen.",
+        "fallback_results": ""
+    },
+    "cookies": {
+        "title": "Cookie-Einstellungen",
+        "description": "Wählen Sie, welche Cookies Sie zulassen möchten.",
+        "save": "Auswahl speichern",
+        "accept_all": "Alle akzeptieren",
+        "always_active": "Immer aktiv",
+        "privacy_policy": "Datenschutzerklärung",
+        "cookie_policy": "Cookie-Richtlinie lesen",
+        "close": "Schliessen",
+        "banner_title": "🍪 Wir respektieren Ihre Privatsphäre",
+        "banner_desc": "Wir verwenden Cookies, um Ihnen die bestmögliche Nutzererfahrung zu bieten. Notwendige Cookies sind für den Betrieb der Website erforderlich. Analyse- und Marketing-Cookies setzen wir nur mit Ihrer ausdrücklichen Einwilligung.",
+        "banner_note": "Sie können Ihre Auswahl jederzeit über «Cookie-Einstellungen» im Footer ändern.",
+        "settings": "Einstellungen",
+        "only_necessary": "Nur notwendige"
     }
 }

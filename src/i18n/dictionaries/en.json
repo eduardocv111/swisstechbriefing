@@ -5,20 +5,125 @@
         "newsletter": "Newsletter",
         "search": "Search"
     },
+    "categories": {
+        "all": "All",
+        "ki": "AI",
+        "startups": "Startups",
+        "regulation": "Regulation",
+        "defense": "Defense Tech"
+    },
+    "home": {
+        "featured_title": "Current Analyses",
+        "latest_title": "Latest News",
+        "no_articles": "There are currently no further reports on this topic."
+    },
     "article": {
         "readTime": "min read",
         "by": "By",
-        "readMore": "Read Article",
-        "backToHome": "Back to Home",
+        "readMore": "Read more",
+        "backToHome": "Back to home",
         "relatedTitle": "You might also be interested in",
         "sourcesTitle": "Sources & References",
         "fallbackNotice": "This article is currently only available in German."
     },
     "footer": {
-        "description": "Curated media for AI, startups, and technology in Switzerland. Daily insights into digital transformation.",
+        "description": "Curated medium for AI, startups, and technology in Switzerland. Daily insights into the digital transformation.",
         "navigation": "Navigation",
         "legal": "Legal",
+        "imprint": "Imprint",
+        "privacy": "Privacy",
+        "contact": "Contact",
         "rights": "All rights reserved.",
         "location": "Zurich, Switzerland"
+    },
+    "newsletter": {
+        "badge": "Free Extra",
+        "offer": "Exclusive Offer",
+        "title": "SwissTech Intelligence Briefing",
+        "headline": "The Swiss <span class='text-primary italic text-shadow-sm'>AI Advantage</span> for your inbox.",
+        "description": "Subscribe to our newsletter and receive the monthly <strong> «AI in Switzerland» Report (PDF)</strong> for free directly in your inbox.",
+        "description_extended": "Join 2,000+ experts. Get weekly insights and the monthly <span class='font-bold text-slate-900 dark:text-white'> «AI in Switzerland» Report (PDF)</span> for free.",
+        "email_label": "Email Address",
+        "placeholder": "Your email address",
+        "placeholder_extended": "Your professional email",
+        "button": "Request Report",
+        "button_subscribe": "Subscribe for free now",
+        "submitting": "Sending...",
+        "privacy": "We respect your privacy. Unsubscribe at any time. Spam protection included.",
+        "success_title": "Thank you!",
+        "success_title_short": "Almost there!",
+        "success_message": "We have received your registration. Your <span class='font-bold'>AI Intelligence Report</span> will be sent shortly. Please also check your spam folder.",
+        "success_message_extended": "We have just sent you the confirmation link and your <span class='font-bold underline decoration-primary decoration-2'>AI Intelligence Report</span>. Please check your inbox.",
+        "error": "Sorry! Something went wrong. Please try again later."
+    },
+    "ads": {
+        "label": "Advertisement",
+        "placeholder": "Ad Space"
+    },
+    "about": {
+        "meta_title": "About Us",
+        "meta_description": "Learn more about the mission and editorial team of SwissTech Briefing.",
+        "title": "Editorial Mission & Focus",
+        "mission": "SwissTech Briefing is the leading digital magazine at the intersection of technology, business, and security in Switzerland. Our mission is to precisely categorize complex technological developments and demonstrate their relevance to Switzerland as a business location.",
+        "focus_title": "Our Focus Areas",
+        "focus": {
+            "ki": {
+                "title": "Artificial Intelligence",
+                "desc": "Focus on ETH/EPFL research and Swiss AI compliance."
+            },
+            "defense": {
+                "title": "Defense Tech",
+                "desc": "Cybersecurity and technological innovations of the armed forces."
+            },
+            "startups": {
+                "title": "Startups",
+                "desc": "Deep-tech investment trends and unicorn growth."
+            },
+            "regulation": {
+                "title": "Regulation",
+                "desc": "FINMA guidelines and the impact of global laws (EU AI Act)."
+            }
+        },
+        "transparency_title": "Transparency Statement",
+        "transparency_text": "We believe in independent, fact-based journalism. All our analyses are written by specialist editors. For guest contributions from experts, we always disclose their backgrounds and possible conflicts of interest. We use AI tools exclusively to support research and formatting, never for the unchecked generation of content.",
+        "editorial_title": "The Editorial Team",
+        "editorial_text": "Our team consists of experienced technology journalists and subject matter experts located in Zurich and Lausanne. We work closely with experts from science and industry to guarantee the highest professional quality."
+    },
+    "contact": {
+        "meta_title": "Contact",
+        "meta_description": "Contact the SwissTech Briefing editorial team for press inquiries or feedback.",
+        "title": "Contact",
+        "subtitle": "Do you have feedback, a news tip, or press inquiries? We look forward to hearing from you.",
+        "editorial_title": "Editorial Team",
+        "editorial_desc": "For general inquiries and news tips:",
+        "media_title": "Press Inquiries",
+        "media_desc": "Media inquiries and interview requests:",
+        "cta_title": "Stay Informed",
+        "cta_desc": "Subscribe to our newsletter so you don't miss any important updates.",
+        "cta_button": "Sign up for Newsletter"
+    },
+    "search": {
+        "title": "Search",
+        "placeholder": "Search for topics, articles, or startups...",
+        "results_for": "Results for",
+        "no_results_title": "No results found",
+        "no_results_desc": "No matching articles were found for \"{query}\". Try other search terms.",
+        "initial_desc": "Enter a search term to begin.",
+        "fallback_results": "No results found in English. Showing results in German:"
+    },
+    "cookies": {
+        "title": "Cookie Settings",
+        "description": "Choose which cookies you want to allow.",
+        "save": "Save selection",
+        "accept_all": "Accept all",
+        "always_active": "Always active",
+        "privacy_policy": "Privacy Policy",
+        "cookie_policy": "Read Cookie Policy",
+        "close": "Close",
+        "banner_title": "🍪 We respect your privacy",
+        "banner_desc": "We use cookies to provide you with the best possible user experience. Necessary cookies are required for the operation of the website. We only set analysis and marketing cookies with your express consent.",
+        "banner_note": "You can change your selection at any time via \"Cookie Settings\" in the footer.",
+        "settings": "Settings",
+        "only_necessary": "Only necessary"
     }
 }

@@ -1,12 +1,16 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { locales, localeNames, Locale } from '@/i18n/config';
+import LanguageSelector from './LanguageSelector';
+import { getDictionary } from '@/i18n/get-dictionary';
+import { Suspense } from 'react';
 
 interface HeaderProps {
     locale?: string;
 }
 
-export default function Header({ locale = 'de-CH' }: HeaderProps) {
+export default async function Header({ locale = 'de-CH' }: HeaderProps) {
+    const dict = await getDictionary(locale);
+
     return (
         <header className="sticky top-0 z-50 bg-[#0a0f1a] text-white px-4 h-14 flex items-center justify-between shadow-sm border-b border-white/5">
             <Link href={`/${locale}`} className="hover:opacity-90 transition-opacity flex items-center gap-2.5 shrink-0">
@@ -30,27 +34,19 @@ export default function Header({ locale = 'de-CH' }: HeaderProps) {
 
             <div className="flex items-center gap-2 sm:gap-4">
                 {/* Language Selector */}
-                <div className="flex items-center gap-1.5 border-r border-white/10 pr-2 sm:pr-4 mr-1">
-                    {locales.map((loc) => (
-                        <Link
-                            key={loc}
-                            href={`/${loc}`}
-                            className={`text-[10px] font-bold px-1.5 py-0.5 rounded transition-colors ${locale === loc
-                                    ? 'bg-blue-500 text-white'
-                                    : 'text-slate-400 hover:text-white hover:bg-white/5'
-                                }`}
-                        >
-                            {localeNames[loc as Locale]}
-                        </Link>
-                    ))}
+                <div className="border-r border-white/10 pr-2 sm:pr-4 mr-1">
+                    <Suspense fallback={<div className="w-10 h-8" />}>
+                        <LanguageSelector currentLocale={locale} />
+                    </Suspense>
                 </div>
 
-                <button
+                <Link
+                    href={`/${locale}/suche`}
                     className="flex items-center justify-center p-2 hover:bg-white/10 rounded-full transition-colors shrink-0"
-                    aria-label="Suche"
+                    aria-label={dict.nav.search}
                 >
                     <span className="material-symbols-outlined text-2xl notranslate normal-case">search</span>
-                </button>
+                </Link>
             </div>
         </header>
     );

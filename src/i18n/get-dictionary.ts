@@ -1,5 +1,6 @@
 import 'server-only';
 import type { Locale } from './config';
+import { normalizeLocale } from '@/lib/i18n';
 
 const dictionaries = {
     'de-CH': () => import('./dictionaries/de-CH.json').then((module) => module.default),
@@ -8,7 +9,8 @@ const dictionaries = {
     'en': () => import('./dictionaries/en.json').then((module) => module.default),
 };
 
-export const getDictionary = async (locale: Locale) => {
-    const dictionaryLoader = dictionaries[locale] || dictionaries['de-CH'];
+export const getDictionary = async (locale: string) => {
+    const normLocale = normalizeLocale(locale);
+    const dictionaryLoader = dictionaries[normLocale] || dictionaries['de-CH'];
     return dictionaryLoader();
 };

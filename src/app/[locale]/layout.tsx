@@ -5,7 +5,9 @@ import GoogleConsentMode from "@/components/consent/GoogleConsentMode";
 import CookieBanner from "@/components/consent/CookieBanner";
 import AnalyticsLoader from "@/components/consent/AnalyticsLoader";
 import AdSenseLoader from "@/components/consent/AdSenseLoader";
-import { locales } from "@/i18n/config";
+import { locales, Locale } from "@/i18n/config";
+import { SITE_CONFIG } from "@/lib/seo/site";
+import { getDictionary } from "@/i18n/get-dictionary";
 
 const publicSans = Public_Sans({
     subsets: ["latin"],
@@ -19,10 +21,19 @@ export async function generateStaticParams() {
     return locales.map((locale) => ({ locale }));
 }
 
-export const metadata: Metadata = {
-    title: "SwissTech Briefing",
-    description: "Kuratiertes Medium für KI, Startups und Technologie in der Schweiz.",
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+    const { locale } = await params;
+    const dict = await getDictionary(locale as Locale);
+
+    return {
+        title: {
+            default: SITE_CONFIG.name,
+            template: `%s | ${SITE_CONFIG.name}`,
+        },
+        description: dict.footer.description,
+        metadataBase: new URL(SITE_CONFIG.url),
+    };
+}
 
 export default async function RootLayout({
     children,
@@ -32,6 +43,7 @@ export default async function RootLayout({
     params: Promise<{ locale: string }>;
 }) {
     const { locale } = await params;
+    const dict = await getDictionary(locale as Locale);
 
     return (
         <html lang={locale} className="dark">
@@ -91,7 +103,7 @@ export default async function RootLayout({
             >
                 <GoogleConsentMode />
                 {children}
-                <CookieBanner />
+                <CookieBanner dict={dict.cookies} />
                 <AnalyticsLoader />
                 <AdSenseLoader />
             </body>

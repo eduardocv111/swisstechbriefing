@@ -1,6 +1,8 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import NewsletterForm from '@/components/newsletter/NewsletterForm';
+import { getDictionary } from '@/i18n/get-dictionary';
+import { Locale } from '@/i18n/config';
 
 /**
  * NewsletterPage - Dedicated landing page for newsletter subscriptions.
@@ -13,6 +15,7 @@ export default async function NewsletterPage({
     params: Promise<{ locale: string }>
 }) {
     const { locale } = await params;
+    const dict = await getDictionary(locale as Locale);
 
     return (
         <div className="flex min-h-screen flex-col">
@@ -24,7 +27,7 @@ export default async function NewsletterPage({
                         {/* Decorative background element */}
                         <div className="absolute -top-24 -right-24 h-48 w-48 bg-primary/5 rounded-full blur-3xl" />
 
-                        <NewsletterForm />
+                        <NewsletterForm dict={dict.newsletter} />
                     </div>
                 </div>
             </main>
