@@ -7,19 +7,19 @@ export interface MarketSnapshot {
     created_at: string;
     payload: {
         fx: {
-            USDCHF: number;
-            EURCHF: number;
+            usd_chf: number;
+            eur_chf: number;
         };
-        indices: {
-            QQQ: {
+        markets: {
+            qqq: {
                 price: number;
                 change: number;
-                changePercent: string;
+                change_percent: string;
             };
-            SPY: {
+            spy: {
                 price: number;
                 change: number;
-                changePercent: string;
+                change_percent: string;
             };
         };
     };

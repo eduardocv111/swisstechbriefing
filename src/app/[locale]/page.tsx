@@ -25,7 +25,7 @@ function estimateReadingTime(html: string = ""): number {
 }
 
 export const runtime = "nodejs";
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 const FALLBACK_IMAGE = "/assets/images/news/default-news.svg";
 
