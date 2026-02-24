@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { CATEGORIES } from '@/lib/categories';
-import CookieSettingsButton from '@/components/consent/CookieSettingsButton';
+
 import { getDictionary } from '@/i18n/get-dictionary';
 import { Locale } from '@/i18n/config';
 
@@ -74,7 +74,7 @@ export default async function Footer({ locale = 'de-CH' }: FooterProps) {
                             <li><Link href={`/${locale}/impressum`} className="hover:text-primary transition-colors">{dict.footer.imprint}</Link></li>
                             <li><Link href={`/${locale}/datenschutz`} className="hover:text-primary transition-colors">{dict.footer.privacy}</Link></li>
                             <li><Link href={`/${locale}/kontakt`} className="hover:text-primary transition-colors">{dict.footer.contact}</Link></li>
-                            <li><CookieSettingsButton /></li>
+
                         </ul>
                     </div>
                 </div>
