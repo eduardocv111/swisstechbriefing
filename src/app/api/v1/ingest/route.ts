@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
         }
 
         const articleData = JSON.parse(articleJson);
+        const translations = articleData.translations || [];
 
         // 1. Save the image to public/assets/images/news/
         const bytes = await imageFile.arrayBuffer();
@@ -42,7 +43,7 @@ export async function POST(req: NextRequest) {
 
         const publicImageUrl = `/assets/images/news/${filename}`;
 
-        // 2. Create the article in the Database
+        // 2. Create the article and all translations in the Database
         const result = await prisma.$transaction(async (tx) => {
             return await tx.article.create({
                 data: {
@@ -54,14 +55,26 @@ export async function POST(req: NextRequest) {
                     imageUrl: publicImageUrl,
                     sourcesJson: articleData.sourcesJson,
                     translations: {
-                        create: {
-                            locale: 'de-CH',
-                            title: articleData.title,
-                            excerpt: articleData.excerpt,
-                            contentHtml: articleData.contentHtml,
-                            metaTitle: articleData.metaTitle,
-                            metaDescription: articleData.metaDescription
-                        }
+                        create: [
+                            // Include the primary translation (usually de-CH)
+                            {
+                                locale: 'de-CH',
+                                title: articleData.title,
+                                excerpt: articleData.excerpt,
+                                contentHtml: articleData.contentHtml,
+                                metaTitle: articleData.metaTitle,
+                                metaDescription: articleData.metaDescription
+                            },
+                            // Include all additional professional translations
+                            ...translations.map((t: any) => ({
+                                locale: t.locale,
+                                title: t.title,
+                                excerpt: t.excerpt,
+                                contentHtml: t.contentHtml,
+                                metaTitle: t.metaTitle,
+                                metaDescription: t.metaDescription
+                            }))
+                        ]
                     }
                 }
             });

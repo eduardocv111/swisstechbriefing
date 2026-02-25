@@ -1,5 +1,6 @@
 const { scanTrends } = require('./scanner');
 const AIBridge = require('./bridge');
+const Translator = require('./translator'); // New DeepL Translator
 const { PrismaClient } = require('@prisma/client');
 const fs = require('fs');
 const path = require('path');
@@ -60,9 +61,42 @@ async function runAutoBlogger() {
         console.log(`\n💎 New Topic Identified: ${selectedNews.title}`);
         console.log(`📡 Source: ${selectedNews.source}`);
 
-        // 3. GENERATE ARTICLE CONTENT (Llama 3.1)
-        console.log('🧠 Llama 3.1 is crafting the editorial content...');
-        const articleData = await AIBridge.generateArticle(selectedNews.title);
+        // 2.5 FETCH EDITORIAL MEMORY (Last 5 articles)
+        const pastArticles = await prisma.article.findMany({
+            take: 5,
+            orderBy: { createdAt: 'desc' },
+            include: { translations: { where: { locale: 'de-CH' } } }
+        });
+        const pastContext = pastArticles.map(a => a.translations[0]?.title).filter(Boolean).join(', ');
+
+        // 3. GENERATE ARTICLE CONTENT (Elite Multi-Agent Workflow)
+        const articleData = await AIBridge.generateArticle(selectedNews.title, pastContext);
+
+        // 3.1 GENERATE ELITE IMAGE PROMPT (Llama 3.1)
+        console.log('🎨 Generating elite editorial image prompt...');
+        const promptResponse = await fetch('http://localhost:11434/api/generate', {
+            method: 'POST',
+            body: JSON.stringify({
+                model: 'llama3.1:8b',
+                prompt: `You are a world-class creative director for a premium tech magazine like Wired or Bloomberg. 
+                        Create a highly detailed, professional English prompt for FLUX.1 (an AI image generator).
+                        
+                        TOPIC: ${articleData.title}
+                        THEME: SwissTech Briefing (Minimalist, Expensive, Tech-Editorial, Red and Black focus).
+                        
+                        RULES:
+                        - NO generic "robot" or "glowing brain" clichés.
+                        - Use technical photography terms: "Phase One XF camera, 80mm lens, f/8, crisp detail, macro photography, cinematic rim lighting".
+                        - Focus on high-end textures: "anodized aluminum, brushed titanium, matte OLED surfaces, glass refractions".
+                        - Color Palette: Deep shadows, obsidian blacks, surgical white highlights, and subtle Swiss-ruby-red glowing accents.
+                        - Composition: Negative space, rule of thirds, architectural symmetry.
+                        
+                        OUTPUT: Only the prompt text, no quotes, no extra talk.`,
+                stream: false
+            }),
+        });
+        const promptData = await promptResponse.json();
+        const elitePrompt = promptData.response.trim();
 
         // Clean and generate Slug
         const slug = selectedNews.title
@@ -73,10 +107,10 @@ async function runAutoBlogger() {
 
         // 4. GENERATE PREMIUM ART (FLUX)
         const imageFilename = `stb_${slug}.png`;
-        const imagePrompt = `Premium editorial high-tech photography for a news article titled "${articleData.title}". Focus on Swiss precision, minimalist design, deep OLED black background, glowing ruby red futuristic elements. 8k resolution, professional lighting, zero noise.`;
 
+        console.log(`\n📸 Elite Prompt: "${elitePrompt.substring(0, 100)}..."`);
         console.log('🎨 FLUX.1-schnell is rendering the cover art (Local GPU)...');
-        const imagePublicPath = await AIBridge.generateImage(imagePrompt, imageFilename);
+        const imagePublicPath = await AIBridge.generateImage(elitePrompt, imageFilename);
 
         // 5. ATOMIC PUBLICATION (Prisma Transaction)
         console.log('📤 Publishing to SwissTech Briefing Database...');
@@ -111,6 +145,10 @@ async function runAutoBlogger() {
         console.log(`\n✅ LOCAL STORAGE SUCCESSFUL!`);
         console.log(`📁 Image: ${imagePublicPath}`);
 
+        // --- DEEPL PROFESSIONAL TRANSLATION (NEW) ---
+        console.log('\n🌎 DeepL is performing professional translations (FR, EN)...');
+        const translations = await Translator.translateArticle(articleData, ['fr-CH', 'en']);
+
         // --- PRODUCTION SYNC (NEW) ---
         console.log('\n🌐 Synchronizing with Production Server (swisstechbriefing.ch)...');
 
@@ -128,7 +166,8 @@ async function runAutoBlogger() {
                 excerpt: articleData.excerpt,
                 contentHtml: articleData.contentHtml,
                 metaTitle: `${articleData.title} | SwissTech Briefing`,
-                metaDescription: articleData.excerpt
+                metaDescription: articleData.excerpt,
+                translations: translations // Include DeepL translations
             };
 
             formData.append('article', JSON.stringify(uploadData));

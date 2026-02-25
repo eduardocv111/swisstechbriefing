@@ -9,29 +9,38 @@ def generate(prompt, output_path):
     
     print(f"Loading model from {model_path}...")
     
-    # Load the pipeline
+    # Check for GPU
+    has_cuda = torch.cuda.is_available()
+    device = "cuda" if has_cuda else "cpu"
+    dtype = torch.float16 if has_cuda else torch.bfloat16
+    
+    print(f"Using Device: {device.upper()} | Precision: {dtype}")
+    
+    # Load the pipeline with optimizations
     pipe = FluxPipeline.from_pretrained(
         model_path, 
-        torch_dtype=torch.bfloat16
+        torch_dtype=dtype,
+        revision="main",
+        use_safetensors=True
     )
     
-    # Move to GPU if available
-    if torch.cuda.is_available():
-        print("Using CUDA GPU")
-        pipe.to("cuda")
-    else:
-        print("CUDA not available, using CPU (this will be slow)")
-        pipe.to("cpu")
+    pipe.to(device)
+    
+    # Optional: memory optimization for large models
+    if has_cuda:
+        print("Enabling VRAM offload (optimized for 12GB cards)")
+        pipe.enable_model_cpu_offload() 
+        pass
 
     print(f"Generating image for prompt: {prompt}")
     
-    # Generate
+    # Generate - Schnell is optimized for 4 steps and guidance_scale 0
     image = pipe(
         prompt,
         guidance_scale=0.0,
-        num_inference_steps=4, # Schnell is optimized for 4 steps
+        num_inference_steps=4,
         max_sequence_length=256,
-        generator=torch.Generator("cpu").manual_seed(42)
+        generator=torch.Generator(device=device).manual_seed(int(torch.randint(0, 1000000, (1,)).item()))
     ).images[0]
 
     # Save
