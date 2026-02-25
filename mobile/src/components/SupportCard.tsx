@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import { Heart, Mail, ExternalLink } from 'lucide-react-native';
 import { Colors } from '../theme/colors';
@@ -8,7 +8,7 @@ import { Colors } from '../theme/colors';
  * Premium Support & Newsletter CTA Card (Fase 2.0)
  * Optimized for Reader Conversion
  */
-export const SupportCard = () => {
+export const SupportCard: React.FC = () => {
     const handleNewsletter = () => {
         WebBrowser.openBrowserAsync('https://swisstechbriefing.ch/newsletter');
     };
