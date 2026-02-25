@@ -1,9 +1,18 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
 import { apiService } from '../api/services';
-import { HomeResponse, MobileArticle, Category } from '../api/types';
+import { MobileArticle } from '../api/types';
 
 /**
- * Hook for Mobile Home Feed Dashboard (Fase 1.1)
+ * Standard stale times
+ */
+const STALE_TIME = {
+    HOME: 5 * 60 * 1000,
+    ARTICLE: 60 * 60 * 1000,
+    CATEGORIES: 24 * 60 * 60 * 1000,
+};
+
+/**
+ * Get the Home Dashboard
  */
 export function useHome(locale: string = 'de-CH') {
     return useQuery({
@@ -12,12 +21,12 @@ export function useHome(locale: string = 'de-CH') {
             const response = await apiService.getHome(locale);
             return response.data;
         },
-        staleTime: 5 * 60 * 1000, // 5 min cache
+        staleTime: STALE_TIME.HOME,
     });
 }
 
 /**
- * Hook for Article Detail Content rendering
+ * Get Article Detail
  */
 export function useArticle(slug: string, locale: string = 'de-CH') {
     return useQuery({
@@ -26,12 +35,13 @@ export function useArticle(slug: string, locale: string = 'de-CH') {
             const response = await apiService.getArticle(slug, locale);
             return response.data;
         },
-        staleTime: 60 * 60 * 1000, // Long-term cache for evergreen content
+        staleTime: STALE_TIME.ARTICLE,
+        enabled: !!slug,
     });
 }
 
 /**
- * Hook for finding related articles in Detail screen
+ * Get Related Articles
  */
 export function useRelated(slug: string, locale: string = 'de-CH') {
     return useQuery({
@@ -45,7 +55,7 @@ export function useRelated(slug: string, locale: string = 'de-CH') {
 }
 
 /**
- * Hook for categories browsing
+ * Get all available categories
  */
 export function useCategories() {
     return useQuery({
@@ -54,5 +64,48 @@ export function useCategories() {
             const response = await apiService.getCategories();
             return response.data;
         },
+        staleTime: STALE_TIME.CATEGORIES,
+    });
+}
+
+/**
+ * INFINITE QUERY: Category Articles (with pagination)
+ */
+export function useCategoryArticles(slug: string, locale: string = 'de-CH', limit: number = 20) {
+    return useInfiniteQuery({
+        queryKey: ['category-articles', slug, locale],
+        queryFn: async ({ pageParam = 1 }) => {
+            const response = await apiService.getCategoryArticles(slug, locale, pageParam as number, limit);
+            return response;
+        },
+        initialPageParam: 1,
+        getNextPageParam: (lastPage) => {
+            if (lastPage.pagination?.hasNextPage) {
+                return lastPage.pagination.page + 1;
+            }
+            return undefined;
+        },
+        enabled: !!slug,
+    });
+}
+
+/**
+ * INFINITE QUERY: Search (with pagination)
+ */
+export function useSearch(query: string, locale: string = 'de-CH', limit: number = 20) {
+    return useInfiniteQuery({
+        queryKey: ['search', query, locale],
+        queryFn: async ({ pageParam = 1 }) => {
+            const response = await apiService.search(query, locale, pageParam as number, limit);
+            return response;
+        },
+        initialPageParam: 1,
+        getNextPageParam: (lastPage) => {
+            if (lastPage.pagination?.hasNextPage) {
+                return lastPage.pagination.page + 1;
+            }
+            return undefined;
+        },
+        enabled: query.trim().length >= 2,
     });
 }

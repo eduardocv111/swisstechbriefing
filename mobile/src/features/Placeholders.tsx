@@ -5,7 +5,7 @@ import { Colors } from '../../theme/colors';
 const EmptyPlaceholder = ({ title }: { title: string }) => (
     <View style={styles.container}>
         <Text style={styles.text}>{title}</Text>
-        <Text style={styles.subtext}>Fase 1.2: Coming soon</Text>
+        <Text style={styles.subtext}>Fase 2.0: Coming soon</Text>
     </View>
 );
 
@@ -15,6 +15,5 @@ const styles = StyleSheet.create({
     subtext: { color: Colors.dark.textMuted, fontSize: 16, marginTop: 8 }
 });
 
-export const CategoriesScreen = () => <EmptyPlaceholder title="Kategorien" />;
-export const SearchScreen = () => <EmptyPlaceholder title="Suche" />;
+// Categories and Search are now implemented, so we only need Mehr/Settings placeholder
 export const SettingsScreen = () => <EmptyPlaceholder title="Mehr" />;
