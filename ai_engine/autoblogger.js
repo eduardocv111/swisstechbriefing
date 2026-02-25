@@ -1,6 +1,7 @@
 const { scanTrends } = require('./scanner');
 const AIBridge = require('./bridge');
-const Translator = require('./translator'); // New DeepL Translator
+const Translator = require('./translator');
+const { updateMarketData } = require('./market_updater'); // New Market Updater
 const { PrismaClient } = require('@prisma/client');
 const fs = require('fs');
 const path = require('path');
@@ -16,6 +17,9 @@ async function runAutoBlogger() {
     console.log('\n--- 🚀 SwissTech AutoBlogger (Professional Edition) ---');
 
     try {
+        // 0. UPDATE MARKET TICKERS (Ensures no "STALE" data)
+        await updateMarketData();
+
         // 1. SCAN FOR TRENDS
         const trends = await scanTrends();
 
@@ -146,8 +150,8 @@ async function runAutoBlogger() {
         console.log(`📁 Image: ${imagePublicPath}`);
 
         // --- DEEPL PROFESSIONAL TRANSLATION (NEW) ---
-        console.log('\n🌎 DeepL is performing professional translations (FR, EN)...');
-        const translations = await Translator.translateArticle(articleData, ['fr-CH', 'en']);
+        console.log('\n🌎 DeepL is performing professional translations (FR, IT, ES, EN)...');
+        const translations = await Translator.translateArticle(articleData, ['fr-CH', 'it-CH', 'es-ES', 'en']);
 
         // --- PRODUCTION SYNC (NEW) ---
         console.log('\n🌐 Synchronizing with Production Server (swisstechbriefing.ch)...');

@@ -16,7 +16,7 @@ class Translator {
         }
     }
 
-    async translateArticle(article, targetLocales = ['fr-CH', 'en']) {
+    async translateArticle(article, targetLocales = ['fr-CH', 'it-CH', 'es-ES', 'en']) {
         if (!this.active) return [];
 
         const results = [];
@@ -27,9 +27,9 @@ class Translator {
                 let deepLTarget;
                 switch (locale) {
                     case 'fr-CH': deepLTarget = 'fr'; break;
-                    case 'en': deepLTarget = 'en-US'; break;
                     case 'it-CH': deepLTarget = 'it'; break;
                     case 'es-ES': deepLTarget = 'es'; break;
+                    case 'en': deepLTarget = 'en-US'; break;
                     default: deepLTarget = 'en-US';
                 }
 
