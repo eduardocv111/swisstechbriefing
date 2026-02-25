@@ -6,6 +6,12 @@ import { getLatestArticles } from '@/lib/articles.repo';
  * Ideal for Feed consumption in Mobile Apps (React Native / Flutter)
  */
 export async function GET(request: Request) {
+    // 1. Authorization Check
+    const apiKey = request.headers.get('x-api-key');
+    if (apiKey !== process.env.STB_API_KEY) {
+        return NextResponse.json({ status: 'error', message: 'Unauthorized' }, { status: 401 });
+    }
+
     const { searchParams } = new URL(request.url);
     const locale = (searchParams.get('locale') || 'de-CH') as any;
     const limit = parseInt(searchParams.get('limit') || '10');
