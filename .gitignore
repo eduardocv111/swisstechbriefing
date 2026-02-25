@@ -25,3 +25,17 @@ venv/
 # OS / editor
 .DS_Store
 Thumbs.db
+
+# AI Engine Models (Deep Learning Files)
+ai_engine/models/
+*.safetensors
+*.bin
+*.ckpt
+*.onnx
+
+# Mobile specific
+mobile/node_modules/
+mobile/.expo/
+mobile/dist/
+mobile/web-build/
+mobile/build_error*.txt
