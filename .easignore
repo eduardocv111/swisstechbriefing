@@ -1,0 +1,14 @@
+# Ignore EVERYTHING from the web project when building mobile
+node_modules/
+.next/
+.venv/
+data/
+public/assets/
+src/app/
+src/components/
+
+# Mobile specific ignores
+mobile/node_modules/
+mobile/.expo/
+mobile/dist/
+mobile/web-build/
