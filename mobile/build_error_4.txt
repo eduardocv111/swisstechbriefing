@@ -1,0 +1,31 @@
+Starting Metro Bundler
+Error: Unable to resolve module crypto from C:\web noticias\SwissTechBriefingClean\mobile\node_modules\axios\dist\node\axios.cjs: crypto could not be found within the project or in these directories:
+  node_modules
+  ..\node_modules
+  3 |
+  4 | const FormData$1 = require('form-data');
+> 5 | const crypto = require('crypto');
+    |                         ^
+  6 | const url = require('url');
+  7 | const proxyFromEnv = require('proxy-from-env');
+  8 | const http = require('http');
+Error: Unable to resolve module crypto from C:\web noticias\SwissTechBriefingClean\mobile\node_modules\axios\dist\node\axios.cjs: crypto could not be found within the project or in these directories:
+  node_modules
+  ..\node_modules
+  3 |
+  4 | const FormData$1 = require('form-data');
+> 5 | const crypto = require('crypto');
+    |                         ^
+  6 | const url = require('url');
+  7 | const proxyFromEnv = require('proxy-from-env');
+  8 | const http = require('http');
+    at ModuleResolver.resolveDependency (C:\web noticias\SwissTechBriefingClean\mobile\node_modules\metro\src\node-haste\DependencyGraph\ModuleResolution.js:150:15)
+    at DependencyGraph.resolveDependency (C:\web noticias\SwissTechBriefingClean\mobile\node_modules\metro\src\node-haste\DependencyGraph.js:248:43)
+    at C:\web noticias\SwissTechBriefingClean\mobile\node_modules\metro\src\lib\transformHelpers.js:165:21
+    at resolveDependencies (C:\web noticias\SwissTechBriefingClean\mobile\node_modules\metro\src\DeltaBundler\buildSubgraph.js:42:25)
+    at visit (C:\web noticias\SwissTechBriefingClean\mobile\node_modules\metro\src\DeltaBundler\buildSubgraph.js:83:30)
+    at async Promise.all (index 1)
+    at visit (C:\web noticias\SwissTechBriefingClean\mobile\node_modules\metro\src\DeltaBundler\buildSubgraph.js:92:5)
+    at async Promise.all (index 0)
+    at visit (C:\web noticias\SwissTechBriefingClean\mobile\node_modules\metro\src\DeltaBundler\buildSubgraph.js:92:5)
+    at async Promise.all (index 3)

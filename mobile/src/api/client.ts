@@ -1,74 +1,75 @@
-import axios, { AxiosInstance, AxiosError } from 'axios';
-import { ApiResponse } from './types';
-
 /**
  * Mobile Configuration for SwissTech Briefing
  */
 const API_CONFIG = {
     baseURL: 'https://swisstechbriefing.ch/api/v1',
     apiKey: 'SwissTech_App_Secret_2026_!#',
-    timeout: 10000, // Faster timeout for better mobile experience
+    timeout: 10000,
 };
 
 /**
- * Optimized API Client for React Native (Hardened v2.0)
+ * Native Fetch-based API Client for React Native (Hardened v2.1)
+ * Replaces Axios to avoid Metro bundler resolution issues with Node-specific modules.
  */
-export const apiClient: AxiosInstance = axios.create({
-    baseURL: API_CONFIG.baseURL,
-    timeout: API_CONFIG.timeout,
-    headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': API_CONFIG.apiKey,
-        'Accept': 'application/json',
-    },
-});
+export async function apiRequest<T>(
+    endpoint: string,
+    options: RequestInit = {}
+): Promise<T> {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), API_CONFIG.timeout);
 
-/**
- * Intercept responses to log requestId and handle errors globally
- */
-apiClient.interceptors.response.use(
-    (response) => response.data,
-    (error: AxiosError<ApiResponse<any>>) => {
-        const errorData = error.response?.data;
-        const requestId = errorData?.requestId;
+    const config = {
+        ...options,
+        headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': API_CONFIG.apiKey,
+            'Accept': 'application/json',
+            ...options.headers,
+        },
+        signal: controller.signal
+    };
 
-        // Detailed debug logging with RequestId
-        if (__DEV__) {
-            console.error(`[API ERROR] ${error.config?.method?.toUpperCase()} ${error.config?.url}`, {
-                status: error.response?.status,
-                requestId,
-                code: errorData?.error?.code,
-                message: errorData?.error?.message || error.message,
-            });
+    try {
+        const response = await fetch(`${API_CONFIG.baseURL}${endpoint}`, config);
+        clearTimeout(id);
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            // Detailed debug logging in dev
+            if (__DEV__) {
+                console.error(`[API ERROR] ${options.method || 'GET'} ${endpoint}`, {
+                    status: response.status,
+                    message: data?.error?.message || response.statusText,
+                });
+            }
+
+            if (response.status === 429) {
+                throw { message: 'Hui! Too direct! Bitte warte kurz.', code: 'RATE_LIMIT' };
+            }
+
+            if (response.status === 401) {
+                throw { message: 'Veraltete App-Version. Bitte im App Store actualizarisieren.', code: 'AUTH_FAILED' };
+            }
+
+            throw data?.error || { message: 'Ein unerwarteter Fehler ist aufgetreten.', code: 'UNKNOWN' };
         }
 
-        if (error.response?.status === 429) {
-            return Promise.reject({
-                ...error,
-                message: 'Hui! Too direct! Bitte warte kurz.',
-                code: 'RATE_LIMIT'
-            });
+        return data.data; // Return the actual data payload
+    } catch (error: any) {
+        clearTimeout(id);
+
+        if (error.name === 'AbortError') {
+            throw { message: 'Netzwerk-Timeout. Bitte prüfe deine Verbindung.', code: 'TIMEOUT' };
         }
 
-        if (error.code === 'ECONNABORTED') {
-            return Promise.reject({
-                ...error,
-                message: 'Netzwerk-Timeout. Bitte prüfe deine Verbindung.',
-                code: 'TIMEOUT'
-            });
-        }
-
-        if (error.response?.status === 401) {
-            return Promise.reject({
-                ...error,
-                message: 'Veraltete App-Version. Bitte im App Store aktualisieren.',
-                code: 'AUTH_FAILED'
-            });
-        }
-
-        return Promise.reject(errorData || {
-            message: 'Ein unerwarteter Fehler ist aufgetreten.',
-            code: 'UNKNOWN'
-        });
+        throw error;
     }
-);
+}
+
+// Mocking the axios interface for compatibility if needed elsewhere
+export const apiClient = {
+    get: <T>(url: string, config?: any) => apiRequest<T>(url, { ...config, method: 'GET' }),
+    post: <T>(url: string, data?: any, config?: any) =>
+        apiRequest<T>(url, { ...config, method: 'POST', body: JSON.stringify(data) }),
+};

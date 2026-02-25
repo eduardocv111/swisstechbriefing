@@ -1,0 +1,31 @@
+Starting Metro Bundler
+Error: Unable to resolve module react-native-svg from C:\web noticias\SwissTechBriefingClean\mobile\node_modules\lucide-react-native\dist\esm\createLucideIcon.js: react-native-svg could not be found within the project or in these directories:
+  node_modules
+  ..\node_modules
+   8 | import { forwardRef, createElement } from 'react';
+   9 | import PropTypes from 'prop-types';
+> 10 | import * as NativeSvg from 'react-native-svg';
+     |                             ^
+  11 | import defaultAttributes, { childDefaultAttributes } from './defaultAttributes.js';
+  12 |
+  13 | const createLucideIcon = (iconName, iconNode) => {
+Error: Unable to resolve module react-native-svg from C:\web noticias\SwissTechBriefingClean\mobile\node_modules\lucide-react-native\dist\esm\createLucideIcon.js: react-native-svg could not be found within the project or in these directories:
+  node_modules
+  ..\node_modules
+   8 | import { forwardRef, createElement } from 'react';
+   9 | import PropTypes from 'prop-types';
+> 10 | import * as NativeSvg from 'react-native-svg';
+     |                             ^
+  11 | import defaultAttributes, { childDefaultAttributes } from './defaultAttributes.js';
+  12 |
+  13 | const createLucideIcon = (iconName, iconNode) => {
+    at ModuleResolver.resolveDependency (C:\web noticias\SwissTechBriefingClean\mobile\node_modules\metro\src\node-haste\DependencyGraph\ModuleResolution.js:150:15)
+    at DependencyGraph.resolveDependency (C:\web noticias\SwissTechBriefingClean\mobile\node_modules\metro\src\node-haste\DependencyGraph.js:248:43)
+    at C:\web noticias\SwissTechBriefingClean\mobile\node_modules\metro\src\lib\transformHelpers.js:165:21
+    at resolveDependencies (C:\web noticias\SwissTechBriefingClean\mobile\node_modules\metro\src\DeltaBundler\buildSubgraph.js:42:25)
+    at visit (C:\web noticias\SwissTechBriefingClean\mobile\node_modules\metro\src\DeltaBundler\buildSubgraph.js:83:30)
+    at async Promise.all (index 1361)
+    at visit (C:\web noticias\SwissTechBriefingClean\mobile\node_modules\metro\src\DeltaBundler\buildSubgraph.js:92:5)
+    at async Promise.all (index 4)
+    at visit (C:\web noticias\SwissTechBriefingClean\mobile\node_modules\metro\src\DeltaBundler\buildSubgraph.js:92:5)
+    at async Promise.all (index 6)

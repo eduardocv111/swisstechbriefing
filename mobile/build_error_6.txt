@@ -1,0 +1,17 @@
+Starting Metro Bundler
+Android Bundled 4941ms index.js (3311 modules)
+
+ÔÇ║ Assets (17):
+node_modules\@react-navigation\elements\lib\module\assets\back-icon-mask.png (653 B)
+node_modules\@react-navigation\elements\lib\module\assets\back-icon.png (4 variations | 152 B)
+node_modules\@react-navigation\elements\lib\module\assets\clear-icon.png (4 variations | 425 B)
+node_modules\@react-navigation\elements\lib\module\assets\close-icon.png (4 variations | 235 B)
+node_modules\@react-navigation\elements\lib\module\assets\search-icon.png (4 variations | 599 B)
+
+ÔÇ║ android bundles (1):
+_expo/static/js/android/index-9cc819a3d2931f948c89761c24f07551.hbc (5.98 MB)
+
+ÔÇ║ Files (1):
+metadata.json (1.36 kB)
+
+Exported: dist
