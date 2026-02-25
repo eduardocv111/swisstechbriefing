@@ -6,12 +6,12 @@ import { ApiResponse } from './types';
  */
 const API_CONFIG = {
     baseURL: 'https://swisstechbriefing.ch/api/v1',
-    apiKey: 'SwissTech_App_Secret_2026_!#', // Should be in .env in production
-    timeout: 15000,
+    apiKey: 'SwissTech_App_Secret_2026_!#',
+    timeout: 10000, // Faster timeout for better mobile experience
 };
 
 /**
- * Optimized API Client for React Native (v1.1)
+ * Optimized API Client for React Native (Hardened v2.0)
  */
 export const apiClient: AxiosInstance = axios.create({
     baseURL: API_CONFIG.baseURL,
@@ -32,22 +32,43 @@ apiClient.interceptors.response.use(
         const errorData = error.response?.data;
         const requestId = errorData?.requestId;
 
-        // Log for mobile analytics/troubleshooting
-        console.error(`[API ERROR] ${error.config?.url} | reqId: ${requestId}`, {
-            code: errorData?.error?.code || error.code,
-            message: errorData?.error?.message || error.message,
-        });
+        // Detailed debug logging with RequestId
+        if (__DEV__) {
+            console.error(`[API ERROR] ${error.config?.method?.toUpperCase()} ${error.config?.url}`, {
+                status: error.response?.status,
+                requestId,
+                code: errorData?.error?.code,
+                message: errorData?.error?.message || error.message,
+            });
+        }
 
         if (error.response?.status === 429) {
-            // Handle rate limit (optional toast)
-            return Promise.reject({ ...error, message: 'Too many requests. Please slow down.' });
+            return Promise.reject({
+                ...error,
+                message: 'Hui! Too direct! Bitte warte kurz.',
+                code: 'RATE_LIMIT'
+            });
+        }
+
+        if (error.code === 'ECONNABORTED') {
+            return Promise.reject({
+                ...error,
+                message: 'Netzwerk-Timeout. Bitte prüfe deine Verbindung.',
+                code: 'TIMEOUT'
+            });
         }
 
         if (error.response?.status === 401) {
-            // Handle unauthorized (invalid x-api-key)
-            return Promise.reject({ ...error, message: 'Authentication failed. Please update the app.' });
+            return Promise.reject({
+                ...error,
+                message: 'Veraltete App-Version. Bitte im App Store aktualisieren.',
+                code: 'AUTH_FAILED'
+            });
         }
 
-        return Promise.reject(errorData || error);
+        return Promise.reject(errorData || {
+            message: 'Ein unerwarteter Fehler ist aufgetreten.',
+            code: 'UNKNOWN'
+        });
     }
 );

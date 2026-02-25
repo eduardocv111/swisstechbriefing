@@ -4,6 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AppNavigator from './src/navigation/AppNavigator';
+import { useNotifications } from './src/hooks/useNotifications';
 import { Colors } from './src/theme/colors';
 
 // Initialize TanStack Query Client
@@ -20,6 +21,7 @@ const queryClient = new QueryClient({
  * Root Application Component
  */
 export default function App() {
+    useNotifications();
     return (
         <SafeAreaProvider>
             <QueryClientProvider client={queryClient}>

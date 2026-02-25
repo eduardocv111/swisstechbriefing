@@ -6,6 +6,7 @@ import { Share2, Clock, User, ChevronLeft } from 'lucide-react-native';
 import { useArticle, useRelated } from '../../hooks/useHome';
 import { ArticleCard } from '../../components/ArticleCards';
 import { LoadingSkeleton, ErrorState } from '../../components/States';
+import { SupportCard } from '../../components/SupportCard';
 import { Colors } from '../../theme/colors';
 
 const { width } = Dimensions.get('window');
@@ -75,6 +76,9 @@ const ArticleDetailScreen = () => {
                         tagsStyles={htmlTagsStyles}
                     />
                 </View>
+
+                {/* Newsletter & Support CTA */}
+                <SupportCard />
 
                 {/* 3. Related Articles Section */}
                 {related && related.length > 0 && (

@@ -7,6 +7,7 @@
         "icon": "./assets/icon.png",
         "userInterfaceStyle": "dark",
         "newArchEnabled": true,
+        "scheme": "swisstech",
         "splash": {
             "image": "./assets/splash.png",
             "resizeMode": "contain",
@@ -14,17 +15,34 @@
         },
         "ios": {
             "supportsTablet": true,
-            "bundleIdentifier": "ch.swisstechbriefing.app"
+            "bundleIdentifier": "ch.swisstechbriefing.app",
+            "infoPlist": {
+                "NSCameraUsageDescription": "This app does not require camera access.",
+                "NSPhotoLibraryUsageDescription": "This app does not require photo library access."
+            }
         },
         "android": {
             "adaptiveIcon": {
                 "foregroundImage": "./assets/adaptive-icon.png",
                 "backgroundColor": "#0a0a0a"
             },
-            "package": "ch.swisstechbriefing.app"
+            "package": "ch.swisstechbriefing.app",
+            "permissions": [
+                "NOTIFICATIONS"
+            ]
         },
         "web": {
             "favicon": "./assets/favicon.png"
+        },
+        "plugins": [
+            "expo-notifications"
+        ],
+        "extra": {
+            "eas": {
+                "projectId": "PLACEHOLDER_PROJECT_ID"
+            },
+            "apiUrl": "https://swisstechbriefing.ch/api/v1",
+            "apiKey": "SwissTech_App_Secret_2026_!#"
         }
     }
 }

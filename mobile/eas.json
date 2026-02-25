@@ -1,0 +1,28 @@
+{
+    "cli": {
+        "version": ">= 10.0.0"
+    },
+    "build": {
+        "development": {
+            "developmentClient": true,
+            "distribution": "internal"
+        },
+        "preview": {
+            "distribution": "internal",
+            "channel": "preview"
+        },
+        "production": {
+            "channel": "production",
+            "autoIncrement": true
+        }
+    },
+    "submit": {
+        "production": {
+            "ios": {
+                "appleId": "耶稣-jesus@example.com",
+                "ascAppId": "1234567890",
+                "appleTeamId": "TEAMID123"
+            }
+        }
+    }
+}
