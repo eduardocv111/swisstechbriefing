@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useHome } from '../../hooks/useHome';
 import { ArticleCard, FeaturedCard } from '../../components/ArticleCards';
 import { LoadingSkeleton, ErrorState } from '../../components/States';
+import { Category, MobileArticle } from '../../api/types';
 import { Colors } from '../../theme/colors';
 
 /**
@@ -49,7 +50,7 @@ const HomeScreen = () => {
             {/* 1. Category Quick Filters */}
             <View style={styles.categoryContainer}>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryScroll}>
-                    {categories.map((cat) => (
+                    {categories.map((cat: Category) => (
                         <TouchableOpacity key={cat.id} style={styles.chip}>
                             <Text style={styles.chipText}>{cat.label}</Text>
                         </TouchableOpacity>
@@ -68,7 +69,7 @@ const HomeScreen = () => {
             </View>
 
             <View style={styles.feed}>
-                {latest.map((article) => (
+                {latest.map((article: MobileArticle) => (
                     <ArticleCard
                         key={article.id}
                         article={article}

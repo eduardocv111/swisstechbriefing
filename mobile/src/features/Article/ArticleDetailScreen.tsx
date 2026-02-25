@@ -7,6 +7,7 @@ import { useArticle, useRelated } from '../../hooks/useHome';
 import { ArticleCard } from '../../components/ArticleCards';
 import { LoadingSkeleton, ErrorState } from '../../components/States';
 import { SupportCard } from '../../components/SupportCard';
+import { MobileArticle } from '../../api/types';
 import { Colors } from '../../theme/colors';
 
 const { width } = Dimensions.get('window');
@@ -85,11 +86,11 @@ const ArticleDetailScreen = () => {
                     <View style={styles.relatedSection}>
                         <Text style={styles.relatedTitle}>Mehr zum Thema</Text>
                         <View style={styles.relatedList}>
-                            {related.map(rel => (
+                            {related.map((rel: MobileArticle) => (
                                 <ArticleCard
                                     key={rel.id}
                                     article={rel}
-                                    onPress={(slug) => navigation.push('ArticleDetail', { slug })}
+                                    onPress={(slug: string) => navigation.push('ArticleDetail', { slug })}
                                 />
                             ))}
                         </View>
