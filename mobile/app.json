@@ -8,6 +8,12 @@
         "userInterfaceStyle": "dark",
         "newArchEnabled": true,
         "scheme": "swisstech",
+        "updates": {
+            "url": "https://u.expo.dev/9a383b55-de5f-4ea5-942b-aa1baecb1089"
+        },
+        "runtimeVersion": {
+            "policy": "appVersion"
+        },
         "splash": {
             "image": "./assets/splash.png",
             "resizeMode": "contain",
