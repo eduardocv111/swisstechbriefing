@@ -14,12 +14,16 @@ export const NEWSLETTER_CONFIG = {
         "de-CH": {
             title: "SwissTech Briefing Newsletter",
             description: "Analysen zu KI, Startups und digitaler Souveränität. Direkt in Ihre Inbox.",
-            placeholder: "Email Adresse",
-            button: "Abonnieren",
-            consent: "Ich stimme zu, dass SwissTech Briefing mich per E-Mail kontaktiert.",
-            success: "Vielen Dank! Bitte prüfen Sie Ihren Posteingang zur Bestätigung.",
-            error_duplicate: "Sie sind bereits angemeldet.",
-            error_generic: "Etwas ist schiefgelaufen. Bitte versuchen Sie es später erneut.",
+            placeholder: "E-Mail-Adresse",
+            button: "ABONNIEREN",
+            button_loading: "Wird gesendet...",
+            consent: "Ich möchte den Newsletter von SwissTech Briefing erhalten und stimme der Verarbeitung meiner Daten gemäss Datenschutzerklärung zu.",
+            success: "Bitte prüfe deinen Posteingang und bestätige deine Anmeldung.",
+            error_duplicate: "Diese E-Mail-Adresse ist bereits registriert.",
+            error_generic: "Die Anmeldung konnte nicht abgeschlossen werden. Bitte versuche es erneut.",
+            error_email: "Bitte gib eine gültige E-Mail-Adresse ein.",
+            error_consent: "Bitte stimme der Datenschutzerklärung zu.",
+            trust_note: "Kostenlos. Abmeldung jederzeit möglich.",
             privacy_note: "Datenschutz",
             imprint_note: "Impressum"
         }

@@ -75,14 +75,14 @@ export async function subscribeToNewsletter(prevState: any, formData: FormData) 
         }
 
         // Handle common Sender.net errors
-        // 422 usually means validation error or already exists
         if (response.status === 422) {
+            const data = await response.json();
             if (data.errors && JSON.stringify(data.errors).includes("taken")) {
-                return { status: "success" }; // Silent success if already subscribed
+                return { status: "error", message: NEWSLETTER_CONFIG.messages["de-CH"].error_duplicate };
             }
         }
 
-        console.error("[Newsletter] Sender.net API error:", data);
+        console.error("[Newsletter] Sender.net API error:", response.status);
         return { status: "error", message: NEWSLETTER_CONFIG.messages["de-CH"].error_generic };
 
     } catch (error) {
