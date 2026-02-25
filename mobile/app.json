@@ -39,7 +39,7 @@
         ],
         "extra": {
             "eas": {
-                "projectId": "PLACEHOLDER_PROJECT_ID"
+                "projectId": "9a383b55-de5f-4ea5-942b-aa1baecb1089"
             },
             "apiUrl": "https://swisstechbriefing.ch/api/v1",
             "apiKey": "SwissTech_App_Secret_2026_!#"
