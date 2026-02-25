@@ -9,10 +9,47 @@ const shortToFull: Record<string, string> = {
     en: "en",
 };
 
+/**
+ * Global Proxy / Middleware for SwissTech Briefing
+ * Handles:
+ * 1. CORS for API v1
+ * 2. Locale-based redirections and normalization
+ */
 export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
+    const origin = request.headers.get('origin');
+    const allowedOrigins = (process.env.ALLOWED_ORIGINS || '').split(',');
 
-    // Skip paths that don't need locale prefixes
+    // ── 1. API v1 CORS & Security Handling ──
+    if (pathname.startsWith('/api/v1')) {
+        const corsHeaders: Record<string, string> = {
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, x-api-key',
+        };
+
+        if (origin && (allowedOrigins.includes(origin) || origin.includes('localhost'))) {
+            corsHeaders['Access-Control-Allow-Origin'] = origin;
+        }
+
+        // Handle Preflight
+        if (request.method === 'OPTIONS') {
+            return new NextResponse(null, {
+                status: 204,
+                headers: corsHeaders,
+            });
+        }
+
+        const response = NextResponse.next();
+
+        // Add headers to regular requests
+        Object.entries(corsHeaders).forEach(([key, value]) => {
+            response.headers.set(key, value);
+        });
+
+        return response;
+    }
+
+    // ── 2. Skip paths that don't need locale prefixes ──
     if (
         pathname.startsWith("/_next") ||
         pathname.startsWith("/api") ||
@@ -26,8 +63,7 @@ export function proxy(request: NextRequest) {
     const segments = pathname.split("/").filter(Boolean);
     const first = segments[0] ?? "";
 
-    // 1) Normalize short locale: /de/... -> /de-CH/...
-    // Only redirect if the target state is DIFFERENT from current state to avoid loops (e.g. /en)
+    // ── 3. Normalize short locale: /de/... -> /de-CH/... ──
     if (shortToFull[first] && shortToFull[first] !== first) {
         const url = request.nextUrl.clone();
         const rest = segments.slice(1).join("/");
@@ -35,14 +71,13 @@ export function proxy(request: NextRequest) {
         return NextResponse.redirect(url, 308);
     }
 
-    // 2) If missing locale, prepend default
+    // ── 4. If missing locale, prepend default ──
     const hasLocale = locales.some(
         (loc) => pathname === `/${loc}` || pathname.startsWith(`/${loc}/`)
     );
 
     if (!hasLocale) {
         const url = request.nextUrl.clone();
-        // Ensure / -> /de-CH (exactly, no trailing slash added by concatenation)
         url.pathname = `/${defaultLocale}${pathname === "/" ? "" : pathname}`;
         return NextResponse.redirect(url, 308);
     }
@@ -52,6 +87,6 @@ export function proxy(request: NextRequest) {
 
 export const config = {
     matcher: [
-        "/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js|robots.txt|sitemap.xml|ads.txt|rss.xml).*)",
+        "/((?!_next/static|_next/image|assets|favicon.ico|sw.js|robots.txt|sitemap.xml|ads.txt|rss.xml).*)",
     ],
 };
