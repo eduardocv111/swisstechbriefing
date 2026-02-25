@@ -4,6 +4,7 @@ import { CATEGORIES } from '@/lib/categories';
 
 import { getDictionary } from '@/i18n/get-dictionary';
 import { Locale } from '@/i18n/config';
+import NewsletterBox from './newsletter/NewsletterBox';
 
 interface FooterProps {
     locale?: string;
@@ -67,15 +68,18 @@ export default async function Footer({ locale = 'de-CH' }: FooterProps) {
                             <li><Link href={`/${locale}/newsletter`} className="hover:text-primary transition-colors font-medium text-white">{dict.nav.newsletter}</Link></li>
                         </ul>
                     </div>
-                    {/* Column 3: Rechtliches */}
-                    <div>
-                        <h3 className="text-white font-bold mb-6 text-xs uppercase tracking-widest">{dict.footer.legal}</h3>
-                        <ul className="space-y-3 text-sm">
-                            <li><Link href={`/${locale}/impressum`} className="hover:text-primary transition-colors">{dict.footer.imprint}</Link></li>
-                            <li><Link href={`/${locale}/datenschutz`} className="hover:text-primary transition-colors">{dict.footer.privacy}</Link></li>
-                            <li><Link href={`/${locale}/kontakt`} className="hover:text-primary transition-colors">{dict.footer.contact}</Link></li>
+                    {/* Column 3: Newsletter \u0026 Rechtliches */}
+                    <div className="space-y-12">
+                        <NewsletterBox locale={locale} variant="footer" />
 
-                        </ul>
+                        <div>
+                            <h3 className="text-white font-bold mb-6 text-xs uppercase tracking-widest">{dict.footer.legal}</h3>
+                            <ul className="space-y-3 text-sm">
+                                <li><Link href={`/${locale}/impressum`} className="hover:text-primary transition-colors">{dict.footer.imprint}</Link></li>
+                                <li><Link href={`/${locale}/datenschutz`} className="hover:text-primary transition-colors">{dict.footer.privacy}</Link></li>
+                                <li><Link href={`/${locale}/kontakt`} className="hover:text-primary transition-colors">{dict.footer.contact}</Link></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 {/* Bottom Line */}

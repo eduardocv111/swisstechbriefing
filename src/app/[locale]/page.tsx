@@ -2,7 +2,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CategoryTabs from "@/components/CategoryTabs";
 import ArticleCard from "@/components/ArticleCard";
-import NewsletterInlineCard from "@/components/NewsletterInlineCard";
+import NewsletterBox from "@/components/newsletter/NewsletterBox";
 import AdSlot from "@/components/consent/AdSlot";
 import Link from "next/link";
 import Image from "next/image";
@@ -157,7 +157,7 @@ export default async function Home({ params }: PageProps) {
                 )}
 
                 {/* ── Ad slot: after hero ── */}
-                <div className="mb-12 md:mb-16">
+                <div className="mb-12 md:mb-20">
                     <AdSlot
                         slotId="home-after-hero"
                         format="horizontal"
@@ -166,6 +166,11 @@ export default async function Home({ params }: PageProps) {
                         label={dict.ads.label}
                     />
                 </div>
+
+                {/* ================= NEWSLETTER HERO ================= */}
+                <section className="mb-16 md:mb-24">
+                    <NewsletterBox locale={locale} variant="hero" />
+                </section>
 
                 {/* ================= REMAINING ARTICLES LIST ================= */}
                 {rest.length > 0 && (

@@ -1,127 +1,100 @@
-'use client';
+"use client";
 
-import { useNewsletterSignup } from '@/hooks/useNewsletterSignup';
+import React, { useActionState, useEffect } from "react";
+import { subscribeToNewsletter } from "@/app/actions/newsletter";
+import { trackEvent } from "@/lib/ga";
 
 interface NewsletterFormProps {
-    dict: {
-        badge: string;
-        offer: string;
-        title: string;
-        headline: string;
-        description_extended: string;
-        email_label: string;
-        placeholder_extended: string;
-        button_subscribe: string;
-        submitting: string;
-        privacy: string;
-        success_title_short: string;
-        success_message_extended: string;
-        error: string;
-    };
+    locale?: string;
+    variant?: "compact" | "default";
 }
 
-export default function NewsletterForm({ dict }: NewsletterFormProps) {
-    const {
-        email,
-        setEmail,
-        company,
-        setCompany,
-        handleSubmit,
-        isSubmitting,
-        isSuccess,
-        isError
-    } = useNewsletterSignup({
-        source: 'dedicated_landing_page'
+export default function NewsletterForm({ locale = "de-CH", variant = "default" }: NewsletterFormProps) {
+    const [state, formAction, isPending] = useActionState(subscribeToNewsletter, {
+        status: "idle",
     });
 
-    if (isSuccess) {
+    useEffect(() => {
+        if (state.status === "success") {
+            trackEvent("newsletter_signup_success", { method: "sender_net" });
+        } else if (state.status === "error") {
+            trackEvent("newsletter_signup_error", { error: state.message });
+        }
+    }, [state.status, state.message]);
+
+    const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        trackEvent("newsletter_signup_submit", { variant });
+    };
+
+    if (state.status === "success") {
         return (
-            <div className="py-12 animate-in fade-in zoom-in duration-500">
-                <div className="mb-6 inline-flex h-20 w-20 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
-                    <svg className="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
-                    </svg>
-                </div>
-                <h2 className="text-3xl font-bold mb-4 text-slate-900 dark:text-white">{dict.success_title_short}</h2>
-                <p className="text-lg text-slate-600 dark:text-slate-400" dangerouslySetInnerHTML={{ __html: dict.success_message_extended }} />
+            <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-6 text-center animate-in fade-in zoom-in duration-500">
+                <span className="material-symbols-outlined text-emerald-500 text-4xl mb-3">check_circle</span>
+                <p className="text-emerald-500 font-bold text-sm tracking-tight uppercase">Danke für Ihr Interesse</p>
+                <p className="text-slate-400 text-sm mt-1">Bitte prüfen Sie Ihren Posteingang zur Bestätigung.</p>
             </div>
         );
     }
 
     return (
-        <>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-primary">
-                <span className="relative flex h-2 w-2">
-                    <span className={`absolute inline-flex h-full w-full rounded-full bg-primary opacity-75 ${!isSubmitting ? 'animate-ping' : ''}`}></span>
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
-                </span>
-                {dict.offer}
+        <form action={formAction} onSubmit={handleFormSubmit} className="space-y-5">
+            {/* Honeypot Field */}
+            <input type="text" name="full_name_field" style={{ display: "none" }} tabIndex={-1} autoComplete="off" />
+
+            <div className="relative group">
+                <input
+                    type="email"
+                    name="email"
+                    required
+                    placeholder="Email Adresse"
+                    className="w-full bg-slate-900 border border-white/5 rounded-xl px-5 py-3.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all group-hover:border-white/10"
+                />
             </div>
 
-            <h1
-                className="text-3xl md:text-4xl font-black mb-4 tracking-tight text-slate-900 dark:text-white leading-tight"
-                dangerouslySetInnerHTML={{ __html: dict.headline }}
-            />
-
-            <p
-                className="text-slate-600 dark:text-slate-400 mb-8 text-lg leading-relaxed"
-                dangerouslySetInnerHTML={{ __html: dict.description_extended }}
-            />
-
-            <form onSubmit={handleSubmit} className="space-y-4 relative" noValidate>
-                {/* Honeypot field */}
-                <div className="hidden" aria-hidden="true">
+            <div className="flex items-start gap-3 px-1">
+                <div className="flex items-center h-5">
                     <input
-                        type="text"
-                        name="company"
-                        value={company}
-                        onChange={(e) => setCompany(e.target.value)}
-                        tabIndex={-1}
-                        autoComplete="off"
-                    />
-                </div>
-
-                <div className="relative group">
-                    <label htmlFor="newsletter-email-page" className="sr-only">{dict.email_label}</label>
-                    <input
-                        id="newsletter-email-page"
-                        name="email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder={dict.placeholder_extended}
+                        id="consent"
+                        name="consent"
+                        type="checkbox"
                         required
-                        disabled={isSubmitting}
-                        className={`w-full rounded-2xl border bg-white dark:bg-slate-950 px-6 py-4 text-lg outline-none transition-all focus:ring-4 focus:ring-primary/10 ${isError ? 'border-red-500' : 'border-slate-300 dark:border-slate-700 focus:border-primary'
-                            }`}
+                        className="h-4 w-4 rounded border-slate-700 bg-slate-900 text-primary focus:ring-primary focus:ring-offset-slate-950"
                     />
                 </div>
-                <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full rounded-2xl bg-primary px-8 py-4 text-lg font-bold text-white shadow-lg shadow-primary/20 transition-all hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center min-h-[64px]"
-                >
-                    {isSubmitting ? (
-                        <span className="flex items-center gap-3">
-                            <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                            </svg>
-                            {dict.submitting}
-                        </span>
-                    ) : dict.button_subscribe}
-                </button>
-            </form>
+                <div className="text-xs leading-5">
+                    <label htmlFor="consent" className="text-slate-500 select-none">
+                        Ich stimme zu, dass SwissTech Briefing mich per E-Mail kontaktiert.
+                    </label>
+                </div>
+            </div>
 
-            {isError && (
-                <p className="mt-4 text-sm text-red-500 font-medium animate-in slide-in-from-bottom-2">
-                    {dict.error}
-                </p>
+            <button
+                type="submit"
+                disabled={isPending}
+                className="w-full bg-primary hover:bg-primary/90 text-white font-black py-4 rounded-xl text-xs uppercase tracking-widest shadow-lg shadow-primary/20 transition-all transform active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+                {isPending ? (
+                    <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                ) : (
+                    <>
+                        <span>Abonnieren</span>
+                        <span className="material-symbols-outlined text-sm">send</span>
+                    </>
+                )}
+            </button>
+
+            {state.status === "error" && (
+                <div className="flex items-center gap-2 text-rose-500 text-[10px] font-black uppercase tracking-widest animate-in fade-in slide-in-from-top-1 px-1">
+                    <span className="material-symbols-outlined text-sm">error</span>
+                    {state.message}
+                </div>
             )}
 
-            <p className="mt-6 text-sm text-slate-500 italic">
-                {dict.privacy}
+            <p className="text-[10px] text-slate-700 uppercase tracking-widest text-center">
+                <a href={`/${locale}/datenschutz`} className="hover:text-slate-500 transition-colors">Datenschutz</a>
+                <span className="mx-2 opacity-50">•</span>
+                <a href={`/${locale}/impressum`} className="hover:text-slate-500 transition-colors">Impressum</a>
             </p>
-        </>
+        </form>
     );
 }

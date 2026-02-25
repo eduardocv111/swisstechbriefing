@@ -1,33 +1,54 @@
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import NewsletterForm from '@/components/newsletter/NewsletterForm';
-import { getDictionary } from '@/i18n/get-dictionary';
-import { Locale } from '@/i18n/config';
+import React from "react";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import NewsletterBox from "@/components/newsletter/NewsletterBox";
+import { getDictionary } from "@/i18n/get-dictionary";
+import { Locale } from "@/i18n/config";
 
-/**
- * NewsletterPage - Dedicated landing page for newsletter subscriptions.
- * Refactored to Server Component to allow importing Header/Footer without build errors.
- * Signup logic is moved to NewsletterForm (Client Component).
- */
-export default async function NewsletterPage({
-    params
-}: {
-    params: Promise<{ locale: string }>
-}) {
+interface PageProps {
+    params: Promise<{ locale: string }>;
+}
+
+export default async function NewsletterPage({ params }: PageProps) {
     const { locale } = await params;
     const dict = await getDictionary(locale as Locale);
 
     return (
-        <div className="flex min-h-screen flex-col">
+        <div className="flex min-h-screen flex-col bg-slate-50 dark:bg-slate-950">
             <Header locale={locale} />
 
-            <main className="flex-1 flex items-center justify-center p-6 bg-slate-50 dark:bg-slate-950">
-                <div className="max-w-xl w-full">
-                    <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 md:p-12 shadow-2xl border border-slate-200 dark:border-slate-800 text-center relative overflow-hidden" aria-live="polite">
-                        {/* Decorative background element */}
-                        <div className="absolute -top-24 -right-24 h-48 w-48 bg-primary/5 rounded-full blur-3xl" />
+            <main className="flex-1 flex items-center justify-center px-4 py-20 md:py-32">
+                <div className="w-full max-w-5xl">
+                    <NewsletterBox locale={locale} variant="hero" />
 
-                        <NewsletterForm dict={dict.newsletter} />
+                    <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
+                        <div>
+                            <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 mx-auto md:mx-0">
+                                <span className="material-symbols-outlined text-primary">analytics</span>
+                            </div>
+                            <h4 className="text-white font-bold mb-3 tracking-tight">Exklusive Analysen</h4>
+                            <p className="text-slate-500 text-sm leading-relaxed">
+                                Erhalten Sie Einblicke in die Schweizer Tech-Szene, die Sie sonst nirgendwo finden.
+                            </p>
+                        </div>
+                        <div>
+                            <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 mx-auto md:mx-0">
+                                <span className="material-symbols-outlined text-primary">security</span>
+                            </div>
+                            <h4 className="text-white font-bold mb-3 tracking-tight">Digitale Souveränität</h4>
+                            <p className="text-slate-500 text-sm leading-relaxed">
+                                Berichte über Cybersecurity, Datenschutz und die Zukunft der digitalen Schweiz.
+                            </p>
+                        </div>
+                        <div>
+                            <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 mx-auto md:mx-0">
+                                <span className="material-symbols-outlined text-primary">rocket_launch</span>
+                            </div>
+                            <h4 className="text-white font-bold mb-3 tracking-tight">Startup Monitor</h4>
+                            <p className="text-slate-500 text-sm leading-relaxed">
+                                Bleiben Sie informiert über die spannendsten Neugründungen und Finanzierungen.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </main>

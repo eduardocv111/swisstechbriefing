@@ -11,7 +11,7 @@ import {
     getRelatedArticles,
     getAllArticleSlugs,
 } from "@/lib/articles.repo";
-import NewsletterInlineCard from "@/components/NewsletterInlineCard";
+import NewsletterBox from "@/components/newsletter/NewsletterBox";
 import ScrollProgress from "@/components/ScrollProgress";
 import ShareButtons from "@/components/ShareButtons";
 import AdSlot from "@/components/consent/AdSlot";
@@ -217,6 +217,8 @@ export default async function ArticlePage({ params }: Props) {
                     <div className="my-10">
                         <AdSlot slotId="article-mid" format="auto" pageType="article" category={article.category} label={dict.ads.label} />
                     </div>
+
+                    <NewsletterBox locale={locale} variant="inline" />
 
                     {article.sources?.length > 0 && (
                         <div className="mt-12 rounded-2xl border border-slate-100 bg-slate-50 p-6 dark:border-slate-800 dark:bg-slate-800/50">
