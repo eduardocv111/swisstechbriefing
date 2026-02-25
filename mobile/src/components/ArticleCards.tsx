@@ -139,7 +139,6 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         padding: 20,
-        backgroundGradient: 'transparent',
         backgroundColor: 'rgba(0,0,0,0.6)',
     },
     featuredCategory: {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Colors } from '../../theme/colors';
+import { Colors } from '../theme/colors';
 
 const EmptyPlaceholder = ({ title }: { title: string }) => (
     <View style={styles.container}>

@@ -15,7 +15,7 @@ export const SearchInput: React.FC<{
     return (
         <View style={styles.searchContainer}>
             <View style={styles.inputWrapper}>
-                <Search size={20} color={Colors.dark.textMuted} style={styles.icon} />
+                <Search size={20} color={Colors.dark.textMuted} style={styles.icon as any} />
                 <TextInput
                     style={styles.input}
                     value={value}
@@ -28,7 +28,7 @@ export const SearchInput: React.FC<{
                     <ActivityIndicator size="small" color={Colors.dark.primary} style={styles.icon} />
                 ) : value.length > 0 ? (
                     <TouchableOpacity onPress={() => onChange('')}>
-                        <X size={20} color={Colors.dark.textMuted} style={styles.icon} />
+                        <X size={20} color={Colors.dark.textMuted} style={styles.icon as any} />
                     </TouchableOpacity>
                 ) : null}
             </View>
