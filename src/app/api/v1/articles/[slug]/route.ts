@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
 import { getArticleBySlug } from '@/lib/articles.repo';
 import { SITE_CONFIG } from '@/lib/seo/site';
+import { successResponse, errorResponse, validateAuth, checkRateLimit, getClientIp } from '@/lib/api-utils';
 
 /**
  * Helper to ensure absolute image URL
@@ -19,10 +19,13 @@ export async function GET(
     request: Request,
     { params }: { params: Promise<{ slug: string }> }
 ) {
-    // 1. Authorization Check
-    const apiKey = request.headers.get('x-api-key');
-    if (apiKey !== process.env.STB_API_KEY) {
-        return NextResponse.json({ status: 'error', message: 'Unauthorized' }, { status: 401 });
+    const ip = getClientIp(request);
+    if (!checkRateLimit(ip)) {
+        return errorResponse('Too Many Requests', 'TOO_MANY_REQUESTS', 429);
+    }
+
+    if (!validateAuth(request)) {
+        return errorResponse('Unauthorized access', 'UNAUTHORIZED', 401);
     }
 
     const { slug } = await params;
@@ -33,47 +36,30 @@ export async function GET(
         const article = await getArticleBySlug(locale, slug);
 
         if (!article) {
-            return NextResponse.json({
-                status: 'error',
-                message: 'Article not found'
-            }, { status: 404 });
+            return errorResponse('Article not found', 'NOT_FOUND', 404);
         }
 
-        // Clean JSON structure for Mobile App
-        return NextResponse.json({
-            status: 'success',
-            version: '1.0',
-            data: {
-                id: article.id,
-                slug: article.slug,
-                title: article.title,
-                excerpt: article.excerpt,
-                category: article.category,
-                imageUrl: toAbsoluteUrl(article.image),
-                publishedAt: article.datePublished,
-                lastModified: article.dateModified,
-                author: {
-                    name: article.author?.name || 'Redaktion',
-                    role: article.author?.role || 'SwissTech Briefing'
-                },
-                contentHtml: article.contentHtml, // The App can render this with a WebView or Markdown parser
-                sources: article.sources || [],
-                webUrl: `${SITE_CONFIG.url}/${locale}/artikel/${article.slug}`
+        const data = {
+            id: article.id,
+            slug: article.slug,
+            title: article.title,
+            excerpt: article.excerpt,
+            category: article.category,
+            imageUrl: toAbsoluteUrl(article.image),
+            publishedAt: article.datePublished,
+            lastModified: article.dateModified,
+            author: {
+                name: article.author?.name || 'Redaktion',
+                role: article.author?.role || 'SwissTech Briefing'
             },
-            metadata: {
-                locale,
-                timestamp: new Date().toISOString()
-            }
-        }, {
-            headers: {
-                'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=600'
-            }
-        });
+            contentHtml: article.contentHtml,
+            sources: article.sources || [],
+            webUrl: `${SITE_CONFIG.url}/${locale}/artikel/${article.slug}`
+        };
+
+        return successResponse(data, { locale });
     } catch (error) {
         console.error(`[API v1] Error fetching article detail: ${slug}`, error);
-        return NextResponse.json({
-            status: 'error',
-            message: 'Internal server error'
-        }, { status: 500 });
+        return errorResponse('Internal server error', 'INTERNAL_ERROR', 500);
     }
 }

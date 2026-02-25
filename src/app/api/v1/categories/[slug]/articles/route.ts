@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server';
 import { getCategoryBySlug } from '@/lib/categories';
 import { getPaginatedArticlesByCategory, countArticlesByCategory } from '@/lib/articles.repo';
 import { SITE_CONFIG } from '@/lib/seo/site';
+import { successResponse, errorResponse, validateAuth, checkRateLimit, getClientIp } from '@/lib/api-utils';
 
 /**
  * Helper to ensure absolute image URL
@@ -19,14 +19,16 @@ export async function GET(
     request: Request,
     { params }: { params: Promise<{ slug: string }> }
 ) {
-    const { slug } = await params;
-
-    // Authorization Check
-    const apiKey = request.headers.get('x-api-key');
-    if (apiKey !== process.env.STB_API_KEY) {
-        return NextResponse.json({ status: 'error', message: 'Unauthorized' }, { status: 401 });
+    const ip = getClientIp(request);
+    if (!checkRateLimit(ip)) {
+        return errorResponse('Too Many Requests', 'TOO_MANY_REQUESTS', 429);
     }
 
+    if (!validateAuth(request)) {
+        return errorResponse('Unauthorized access', 'UNAUTHORIZED', 401);
+    }
+
+    const { slug } = await params;
     const { searchParams } = new URL(request.url);
     const locale = (searchParams.get('locale') || 'de-CH') as any;
     const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
@@ -34,10 +36,7 @@ export async function GET(
 
     const category = getCategoryBySlug(slug);
     if (!category) {
-        return NextResponse.json({
-            status: 'error',
-            message: 'Category not found'
-        }, { status: 404 });
+        return errorResponse('Category not found', 'NOT_FOUND', 404);
     }
 
     try {
@@ -60,30 +59,18 @@ export async function GET(
             webUrl: `${SITE_CONFIG.url}/${locale}/artikel/${article.slug}`
         }));
 
-        return NextResponse.json({
-            status: 'success',
-            version: '1.0',
-            data: cleanArticles,
-            pagination: {
-                total,
-                page,
-                limit,
-                totalPages,
-                hasNextPage: page < totalPages,
-                hasPrevPage: page > 1
-            },
-            metadata: {
-                category: category.slug,
-                locale,
-                timestamp: new Date().toISOString()
-            }
-        }, {
-            headers: {
-                'Cache-Control': 'public, s-maxage=1800, stale-while-revalidate=300'
-            }
-        });
+        const pagination = {
+            total,
+            page,
+            limit,
+            totalPages,
+            hasNextPage: page < totalPages,
+            hasPrevPage: page > 1
+        };
+
+        return successResponse(cleanArticles, { category: category.slug, locale }, pagination);
     } catch (error) {
         console.error(`[API v1] Error fetching category articles: ${slug}`, error);
-        return NextResponse.json({ status: 'error', message: 'Internal server error' }, { status: 500 });
+        return errorResponse('Internal server error', 'INTERNAL_ERROR', 500);
     }
 }

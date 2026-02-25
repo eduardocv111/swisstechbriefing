@@ -1,6 +1,8 @@
-import { successResponse, errorResponse, validateAuth, checkRateLimit, getClientIp } from '@/lib/api-utils';
+import { NextResponse } from 'next/server';
 import { getLatestArticles } from '@/lib/articles.repo';
+import { CATEGORIES } from '@/lib/categories';
 import { SITE_CONFIG } from '@/lib/seo/site';
+import { successResponse, errorResponse, validateAuth, checkRateLimit, getClientIp } from '@/lib/api-utils';
 
 /**
  * Helper to ensure absolute image URL
@@ -12,27 +14,29 @@ function toAbsoluteUrl(pathOrUrl?: string | null): string {
 }
 
 /**
- * API v1: Get Latest Articles
- * Ideal for Feed consumption in Mobile Apps (React Native / Flutter)
+ * API v1: Get Full Home Data
+ * Featured + Latest + Categories
  */
 export async function GET(request: Request) {
     const ip = getClientIp(request);
     if (!checkRateLimit(ip)) {
-        return errorResponse('Too Many Requests', 'TOO_MANY_REQUESTS', 429);
+        return errorResponse('Rate limit exceeded', 'TOO_MANY_REQUESTS', 429);
     }
 
     if (!validateAuth(request)) {
-        return errorResponse('Unauthorized access', 'UNAUTHORIZED', 401);
+        return errorResponse('Unauthorized', 'UNAUTHORIZED', 401);
     }
 
     const { searchParams } = new URL(request.url);
     const locale = (searchParams.get('locale') || 'de-CH') as any;
-    const limit = Math.max(1, Math.min(100, parseInt(searchParams.get('limit') || '10')));
 
     try {
-        const articles = await getLatestArticles(locale, limit);
+        const articles = await getLatestArticles(locale, 20);
 
-        const cleanArticles = articles.map(article => ({
+        const featured = articles.length > 0 ? articles[0] : null;
+        const latest = articles.slice(1, 10);
+
+        const mapArticle = (article: any) => ({
             id: article.id,
             slug: article.slug,
             title: article.title,
@@ -42,11 +46,21 @@ export async function GET(request: Request) {
             publishedAt: article.datePublished,
             author: article.author?.name || 'Redaktion',
             webUrl: `${SITE_CONFIG.url}/${locale}/artikel/${article.slug}`
-        }));
+        });
 
-        return successResponse(cleanArticles, { count: cleanArticles.length, locale });
+        const data = {
+            featured: featured ? mapArticle(featured) : null,
+            latest: latest.map(mapArticle),
+            categories: CATEGORIES.map(c => ({
+                id: c.slug,
+                slug: c.slug,
+                label: c.label
+            }))
+        };
+
+        return successResponse(data, { locale }, null);
     } catch (error) {
-        console.error('[API v1] Error fetching latest articles:', error);
-        return errorResponse('Failed to fetch articles', 'INTERNAL_ERROR', 500);
+        console.error('[API v1] Error fetching home data:', error);
+        return errorResponse('Failed to fetch home data', 'INTERNAL_ERROR', 500);
     }
 }

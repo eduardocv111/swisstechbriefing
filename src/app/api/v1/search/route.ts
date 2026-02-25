@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
 import { getPaginatedSearchArticles, countSearchArticles } from '@/lib/articles.repo';
 import { SITE_CONFIG } from '@/lib/seo/site';
+import { successResponse, errorResponse, validateAuth, checkRateLimit, getClientIp } from '@/lib/api-utils';
 
 /**
  * Helper to ensure absolute image URL
@@ -15,10 +15,13 @@ function toAbsoluteUrl(pathOrUrl?: string | null): string {
  * API v1: Search articles with pagination
  */
 export async function GET(request: Request) {
-    // Authorization Check
-    const apiKey = request.headers.get('x-api-key');
-    if (apiKey !== process.env.STB_API_KEY) {
-        return NextResponse.json({ status: 'error', message: 'Unauthorized' }, { status: 401 });
+    const ip = getClientIp(request);
+    if (!checkRateLimit(ip)) {
+        return errorResponse('Too Many Requests', 'TOO_MANY_REQUESTS', 429);
+    }
+
+    if (!validateAuth(request)) {
+        return errorResponse('Unauthorized access', 'UNAUTHORIZED', 401);
     }
 
     const { searchParams } = new URL(request.url);
@@ -28,10 +31,7 @@ export async function GET(request: Request) {
     const limit = Math.max(1, Math.min(100, parseInt(searchParams.get('limit') || '20')));
 
     if (!q || q.trim().length < 2) {
-        return NextResponse.json({
-            status: 'error',
-            message: 'Query parameter "q" must be at least 2 characters'
-        }, { status: 400 });
+        return errorResponse('Search query must be at least 2 characters', 'VALIDATION_ERROR', 400);
     }
 
     try {
@@ -54,26 +54,18 @@ export async function GET(request: Request) {
             webUrl: `${SITE_CONFIG.url}/${locale}/artikel/${article.slug}`
         }));
 
-        return NextResponse.json({
-            status: 'success',
-            version: '1.0',
-            data: cleanArticles,
-            pagination: {
-                total,
-                page,
-                limit,
-                totalPages,
-                hasNextPage: page < totalPages,
-                hasPrevPage: page > 1
-            },
-            metadata: {
-                query: q,
-                locale,
-                timestamp: new Date().toISOString()
-            }
-        });
+        const pagination = {
+            total,
+            page,
+            limit,
+            totalPages,
+            hasNextPage: page < totalPages,
+            hasPrevPage: page > 1
+        };
+
+        return successResponse(cleanArticles, { query: q, locale }, pagination);
     } catch (error) {
         console.error(`[API v1] Error searching articles: ${q}`, error);
-        return NextResponse.json({ status: 'error', message: 'Internal server error' }, { status: 500 });
+        return errorResponse('Internal server error', 'INTERNAL_ERROR', 500);
     }
 }
