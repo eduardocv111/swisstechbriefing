@@ -1,5 +1,7 @@
 const deepl = require('deepl-node');
-require('dotenv').config({ path: '../.env' }); // Load API key from root .env
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
+// Load API key from root .env
 
 /**
  * Professional Translator using DeepL API

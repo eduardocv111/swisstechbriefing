@@ -34,13 +34,13 @@ const MobileAppCTA: React.FC<MobileAppCTAProps> = async ({ locale }) => {
                     <div className="flex flex-col items-center gap-4 sm:flex-row lg:justify-start">
                         {/* Download APK Button */}
                         <Link
-                            href="/downloads/swisstech-briefing-v1.apk"
+                            href="https://expo.dev/accounts/swisstechbriefing/projects/mobile/builds/b157d065-f509-4ea6-844a-c389936fd720"
                             className="group flex items-center gap-3 rounded-xl bg-primary px-8 py-4 font-bold text-white transition-all hover:bg-primary/90 hover:scale-[1.02] shadow-lg shadow-primary/20"
                         >
-                            <span className="material-symbols-outlined text-2xl notranslate">download</span>
+                            <span className="material-symbols-outlined text-2xl notranslate">install_mobile</span>
                             <div className="flex flex-col items-start leading-none">
-                                <span className="text-[10px] uppercase tracking-wider opacity-80">Download para Android</span>
-                                <span className="text-base">Beta APK v1.0.0</span>
+                                <span className="text-[10px] uppercase tracking-wider opacity-80">Descargar App Móvil</span>
+                                <span className="text-base">Android Preview v1.0.0</span>
                             </div>
                         </Link>
 

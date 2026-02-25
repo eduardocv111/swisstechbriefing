@@ -92,16 +92,51 @@ class AIBridge {
                 method: 'POST',
                 body: JSON.stringify({
                     model: 'llama3.1:8b',
-                    prompt: `Refactor the article into its final premium form. Use subheaders <h3> and paragraphs <p>.
+                    system: "You are a JSON generator for a news site. Return ONLY raw JSON. No markdown. No intro. No outro. Strictly valid JSON.",
+                    prompt: `Refactor the technical news article. 
                             ARTICLE: ${initialDraft}
                             FEEDBACK: ${feedback}
-                            Format: JSON { "title": "...", "excerpt": "...", "contentHtml": "..." }`,
+                            
+                            Required JSON format:
+                            {
+                                "title": "Headline",
+                                "excerpt": "Short summary",
+                                "contentHtml": "Full article with <h3> and <p> tags"
+                            }`,
                     stream: false,
                     format: 'json'
                 }),
             });
             const finalData = await finalResponse.json();
-            return JSON.parse(finalData.response);
+
+            let cleanResponse = finalData.response.trim();
+
+            // 1. Remove Markdown code blocks
+            if (cleanResponse.startsWith('```')) {
+                cleanResponse = cleanResponse.replace(/^```[a-z]*\n?/, '').replace(/\n?```$/, '');
+            }
+
+            try {
+                return JSON.parse(cleanResponse);
+            } catch (parseError) {
+                console.warn('[AI Bridge] ⚠️ Standard parse failed. Attempting truncated JSON recovery...');
+
+                // Truncated JSON recovery: If it ends abruptly, try to close the strings and object
+                let repaired = cleanResponse;
+                if (!repaired.endsWith('}')) {
+                    // Count quotes to see if we need to close one
+                    const quoteCount = (repaired.match(/"/g) || []).length;
+                    if (quoteCount % 2 !== 0) repaired += '"';
+                    repaired += '}';
+                }
+
+                try {
+                    return JSON.parse(repaired);
+                } catch (secondError) {
+                    console.error('[AI Bridge] ❌ Failed to recover JSON. Raw output:', cleanResponse);
+                    throw secondError;
+                }
+            }
 
         } catch (error) {
             console.error('[AI Bridge] Elite Workflow Error:', error);

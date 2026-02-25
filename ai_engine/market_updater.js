@@ -2,7 +2,7 @@ const YahooFinance = require('yahoo-finance2').default;
 const yahooFinance = new YahooFinance();
 const Database = require('better-sqlite3');
 const path = require('path');
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
 
 // 1. Database Setup
 const url = process.env.DATABASE_URL || "file:./data/stb.db";

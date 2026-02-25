@@ -5,6 +5,10 @@ import os
 from PIL import Image
 
 def generate(prompt, output_path):
+    # Clear CUDA cache to free up memory from potential zombie processes
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+    
     model_path = os.path.join(os.path.dirname(__file__), "models", "FLUX.1-schnell")
     
     print(f"Loading model from {model_path}...")
@@ -24,13 +28,16 @@ def generate(prompt, output_path):
         use_safetensors=True
     )
     
-    pipe.to(device)
-    
-    # Optional: memory optimization for large models
+    # Check for GPU and apply specific memory strategies for 12GB cards
     if has_cuda:
-        print("Enabling VRAM offload (optimized for 12GB cards)")
-        pipe.enable_model_cpu_offload() 
-        pass
+        print("Enabling Advanced VRAM Management (RTX 12GB+ Mode)...")
+        # Do NOT use pipe.to(device) here if using cpu_offload
+        pipe.enable_sequential_cpu_offload() # More aggressive than model_offload, essential if Ollama is running
+        pipe.enable_vae_tiling()
+        pipe.enable_vae_slicing()
+        # pipe.enable_attention_slicing() # Optional, can be slow but saves more VRAM
+    else:
+        pipe.to("cpu")
 
     print(f"Generating image for prompt: {prompt}")
     

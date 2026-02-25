@@ -1,13 +1,23 @@
 const { scanTrends } = require('./scanner');
 const AIBridge = require('./bridge');
 const Translator = require('./translator');
-const { updateMarketData } = require('./market_updater'); // New Market Updater
-const { PrismaClient } = require('@prisma/client');
+const { updateMarketData } = require('./market_updater');
+const { PrismaClient } = require('../src/generated/prisma');
+const { PrismaBetterSqlite3 } = require('@prisma/adapter-better-sqlite3');
+const Database = require('better-sqlite3');
 const fs = require('fs');
 const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
 
-// Initialize Prisma
-const prisma = new PrismaClient();
+// Initialize Prisma with Adapter
+// We assume the DB is always in the root 'data' folder
+const dbParamPath = path.resolve(__dirname, '..', 'data', 'stb.db');
+console.log(`[AI Engine] 💾 Using Database at: ${dbParamPath}`);
+
+const adapter = new PrismaBetterSqlite3({
+    url: `file:${dbParamPath}`,
+});
+const prisma = new PrismaClient({ adapter });
 
 /**
  * Professional AutoBlogger 2.0
@@ -89,13 +99,14 @@ async function runAutoBlogger() {
                         THEME: SwissTech Briefing (Minimalist, Expensive, Tech-Editorial, Red and Black focus).
                         
                         RULES:
-                        - NO generic "robot" or "glowing brain" clichés.
-                        - Use technical photography terms: "Phase One XF camera, 80mm lens, f/8, crisp detail, macro photography, cinematic rim lighting".
-                        - Focus on high-end textures: "anodized aluminum, brushed titanium, matte OLED surfaces, glass refractions".
-                        - Color Palette: Deep shadows, obsidian blacks, surgical white highlights, and subtle Swiss-ruby-red glowing accents.
-                        - Composition: Negative space, rule of thirds, architectural symmetry.
+                        - STYLE: High-end photojournalism, editorial photography for a premium tech magazine (Wired, Bloomberg).
+                        - NO generic clichés: No robots, no glowing brains, no neon cyberpunk lights.
+                        - PHOTOGRAPHY: Sharp focus, natural or clean studio lighting, 35mm lens, realistic depth of field, high-resolution RAW quality.
+                        - SETTINGS: Modern Swiss corporate architecture, clean tech labs, high-end server rooms, professional boardrooms with mountain views in the background.
+                        - COLORS: Natural color palette, clean surgical whites, deep professional greys, and minimal wooden or metallic accents. No artificial glowing neons.
+                        - AESTHETICS: Swiss precision, minimalist, authoritative, and sophisticated.
                         
-                        OUTPUT: Only the prompt text, no quotes, no extra talk.`,
+                        OUTPUT: Only the prompt text in English, no quotes, no extra talk.`,
                 stream: false
             }),
         });
