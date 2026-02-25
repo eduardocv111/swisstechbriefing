@@ -68,7 +68,7 @@ async function updateMarketData() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-ai-secret': 'SwissTech_AI_Secret_2026_!#'
+                    'x-ai-secret': process.env.AI_INGESTION_SECRET || 'SwissTech_AI_Secret_2026_!#'
                 },
                 body: JSON.stringify({ payload: snapshot })
             });

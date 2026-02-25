@@ -196,7 +196,7 @@ async function runAutoBlogger() {
             const syncResponse = await fetch('https://swisstechbriefing.ch/api/v1/ingest', {
                 method: 'POST',
                 headers: {
-                    'x-ai-secret': 'SwissTech_AI_Secret_2026_!#'
+                    'x-ai-secret': process.env.AI_INGESTION_SECRET || 'SwissTech_AI_Secret_2026_!#'
                 },
                 body: formData
             });

@@ -9,8 +9,8 @@ import path from "path";
  */
 export async function POST(req: NextRequest) {
     try {
-        const authHeader = req.headers.get("x-ai-secret");
-        const AI_SECRET = process.env.AI_INGESTION_SECRET || "SwissTech_AI_Secret_2026_!#";
+        const authHeader = req.headers.get("x-ai-secret")?.trim();
+        const AI_SECRET = (process.env.AI_INGESTION_SECRET || "SwissTech_AI_Secret_2026_!#").trim();
 
         if (authHeader !== AI_SECRET) {
             return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
