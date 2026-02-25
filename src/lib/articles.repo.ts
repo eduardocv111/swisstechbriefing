@@ -127,7 +127,7 @@ function mapDbToUi(article: DbArticle, locale: string): UiArticle {
       name: article.authorName,
       role: article.authorRole ?? null,
     },
-    contentHtml: sanitizeText(trans?.contentHtml || ""),
+    contentHtml: sanitizeText(trans?.title && trans?.contentHtml ? trans.contentHtml : ""),
     locale: trans?.locale || normLocale,
     isFallback,
     availableLocales,
@@ -253,4 +253,93 @@ export async function searchArticles(
   }
 
   return rows.map((r) => mapDbToUi(r, normLocale));
+}
+
+// ── Paginated Functions ──
+
+export async function getPaginatedArticlesByCategory(
+  locale: string,
+  categoryLabel: string,
+  page = 1,
+  limit = 20
+): Promise<UiArticle[]> {
+  const normLocale = normalizeLocale(locale);
+  const skip = (page - 1) * limit;
+
+  const rows = await prisma.article.findMany({
+    where: { category: categoryLabel },
+    skip,
+    take: limit,
+    orderBy: { createdAt: "desc" },
+    include: { translations: true },
+  });
+
+  return rows.map((r) => mapDbToUi(r, normLocale));
+}
+
+export async function countArticlesByCategory(categoryLabel: string): Promise<number> {
+  return prisma.article.count({
+    where: { category: categoryLabel },
+  });
+}
+
+export async function getPaginatedSearchArticles(
+  locale: string,
+  query: string,
+  page = 1,
+  limit = 20
+): Promise<UiArticle[]> {
+  if (!query.trim()) return [];
+  const normLocale = normalizeLocale(locale);
+  const lowQuery = query.toLowerCase();
+  const skip = (page - 1) * limit;
+
+  const whereClause = {
+    OR: [
+      { slug: { contains: lowQuery } },
+      {
+        translations: {
+          some: {
+            OR: [
+              { title: { contains: lowQuery } },
+              { excerpt: { contains: lowQuery } }
+            ]
+          }
+        }
+      }
+    ]
+  };
+
+  const rows = await prisma.article.findMany({
+    where: whereClause,
+    skip,
+    take: limit,
+    include: { translations: true },
+    orderBy: { createdAt: "desc" },
+  });
+
+  return rows.map((r) => mapDbToUi(r, normLocale));
+}
+
+export async function countSearchArticles(query: string): Promise<number> {
+  if (!query.trim()) return 0;
+  const lowQuery = query.toLowerCase();
+
+  return prisma.article.count({
+    where: {
+      OR: [
+        { slug: { contains: lowQuery } },
+        {
+          translations: {
+            some: {
+              OR: [
+                { title: { contains: lowQuery } },
+                { excerpt: { contains: lowQuery } }
+              ]
+            }
+          }
+        }
+      ]
+    },
+  });
 }
