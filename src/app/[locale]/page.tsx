@@ -6,6 +6,7 @@ import NewsletterBox from "@/components/newsletter/NewsletterBox";
 import AdSlot from "@/components/consent/AdSlot";
 import Link from "next/link";
 import Image from "next/image";
+import MobileAppCTA from "@/components/MobileAppCTA";
 import { formatSwissDate } from "@/lib/formatDate";
 import { getLatestArticles } from "@/lib/articles.repo";
 import { getDictionary } from "@/i18n/get-dictionary";
@@ -166,6 +167,11 @@ export default async function Home({ params }: PageProps) {
                         label={dict.ads.label}
                     />
                 </div>
+
+                {/* ================= MOBILE APP CTA ================= */}
+                <section className="mb-16 md:mb-24">
+                    <MobileAppCTA locale={locale} />
+                </section>
 
                 {/* ================= NEWSLETTER HERO ================= */}
                 <section className="mb-16 md:mb-24">

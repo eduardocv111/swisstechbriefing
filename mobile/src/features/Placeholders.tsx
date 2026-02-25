@@ -15,5 +15,4 @@ const styles = StyleSheet.create({
     subtext: { color: Colors.dark.textMuted, fontSize: 16, marginTop: 8 }
 });
 
-// Categories and Search are now implemented, so we only need Mehr/Settings placeholder
-export const SettingsScreen = () => <EmptyPlaceholder title="Mehr" />;
+// Categories and Search are now implemented

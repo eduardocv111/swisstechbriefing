@@ -10,7 +10,7 @@ import ArticleDetailScreen from '../features/Article/ArticleDetailScreen';
 import CategoriesScreen from '../features/Categories/CategoriesScreen';
 import CategoryFeedScreen from '../features/Categories/CategoryFeedScreen';
 import SearchScreen from '../features/Search/SearchScreen';
-import { SettingsScreen } from '../features/Placeholders';
+import SettingsScreen from '../features/Settings/SettingsScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();

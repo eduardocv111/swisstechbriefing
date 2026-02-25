@@ -23,6 +23,11 @@ eas build --profile preview --platform android
 ```
 Download the resulting APK and install it on any Android device.
 
+### Manual Distribution (Free)
+1. Download the APK from the link provided by EAS.
+2. Place the file in the website project: `public/downloads/swisstech-briefing-v1.apk`.
+3. Users can then download it directly from the website bypasssing Google Play fees.
+
 ### Production (AAB)
 ```bash
 eas build --profile production --platform android
