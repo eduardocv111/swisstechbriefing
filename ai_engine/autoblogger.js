@@ -225,6 +225,19 @@ async function runAutoBlogger() {
     }
 }
 
+const THIRTY_MINUTES = 30 * 60 * 1000;
+
+async function startService() {
+    while (true) {
+        await runAutoBlogger();
+
+        console.log(`\n[Scheduler] ☕ Job finished. Sleeping for 30 minutes...`);
+        console.log(`[Scheduler] Next run at: ${new Date(Date.now() + THIRTY_MINUTES).toLocaleTimeString()}`);
+
+        await new Promise(resolve => setTimeout(resolve, THIRTY_MINUTES));
+    }
+}
+
 if (require.main === module) {
-    runAutoBlogger();
+    startService();
 }

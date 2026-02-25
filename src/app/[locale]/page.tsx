@@ -12,6 +12,8 @@ import { getLatestArticles } from "@/lib/articles.repo";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { Locale } from "@/i18n/config";
 
+export const revalidate = 60; // Refresh page every 60 seconds to show new AI news
+
 import MarketSnapshotCard from "@/components/MarketSnapshotCard";
 import MarketTicker from "@/components/MarketTicker";
 import { getLatestMarketSnapshot } from "@/lib/market.repo";
