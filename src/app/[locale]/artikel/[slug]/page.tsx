@@ -15,6 +15,7 @@ import NewsletterBox from "@/components/newsletter/NewsletterBox";
 import ScrollProgress from "@/components/ScrollProgress";
 import ShareButtons from "@/components/ShareButtons";
 import AdSlot from "@/components/consent/AdSlot";
+import GoogleRrmScript from "@/components/analytics/GoogleRrmScript";
 import { Locale, defaultLocale, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 
@@ -164,6 +165,7 @@ export default async function ArticlePage({ params }: Props) {
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(newsArticleJsonLd) }} />
             <Header locale={locale} />
             <ScrollProgress />
+            <GoogleRrmScript />
 
             <main className="mx-auto min-h-screen max-w-3xl px-6 pt-10 pb-16">
                 {article.isFallback && (
