@@ -6,21 +6,21 @@ const adapter = new PrismaBetterSqlite3({ url });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-    const slug = "linux-7-0-rc1-neuer-kernel-aenderungen-installation-2026";
-    const category = "Infrastruktur";
-    const authorName = "Redaktion";
-    const authorRole = "SwissTech Briefing";
-    const date = new Date();
-    const imageUrl = `/assets/images/articles/${slug}/cover-linux-7-0-rc1-kernel.webp`;
+  const slug = "linux-7-0-rc1-neuer-kernel-aenderungen-installation-2026";
+  const category = "Infrastruktur";
+  const authorName = "Redaktion";
+  const authorRole = "SwissTech Briefing";
+  const date = new Date();
+  const imageUrl = `/assets/images/articles/${slug}/cover-linux-7-0-rc1-kernel.webp`;
 
-    const sources = [
-        { name: "Linux Kernel Archives", url: "https://kernel.org" },
-        { name: "LKML", url: "https://lore.kernel.org/lkml/" },
-        { name: "Intel TSX Documentation", url: "https://www.intel.com/content/www/us/en/developer/articles/technical/transactional-synchronization-extensions.html" },
-        { name: "Rust for Linux", url: "https://rust-for-linux.com" }
-    ];
+  const sources = [
+    { name: "Linux Kernel Archives", url: "https://kernel.org" },
+    { name: "LKML", url: "https://lore.kernel.org/lkml/" },
+    { name: "Intel TSX Documentation", url: "https://www.intel.com/content/www/us/en/developer/articles/technical/transactional-synchronization-extensions.html" },
+    { name: "Rust for Linux", url: "https://rust-for-linux.com" }
+  ];
 
-    const contentDe = `
+  const contentDe = `
 <p>Die Entwicklung des Linux-Kernels tritt offiziell in eine neue Phase ein. Nach der Veröffentlichung des Zweigs 6.19 vor wenigen Wochen bestätigte Linus Torvalds selbst den Versionssprung auf Linux 7.0 – eine Entscheidung, die einen symbolischen Meilenstein in der Entwicklung des Kerns markiert, auch wenn sie keinen radikalen architektonischen Bruch bedeutet.</p>
 
 <p>Mit der Veröffentlichung des Linux 7.0 Release Candidate 1 (RC1) tritt das Projekt in die Stabilisierungsphase ein. Ab diesem Zeitpunkt liegt der Fokus primär auf Fehlerbehebung, Treiber-Refinement und Sicherheitshärtung, während die Einführung neuer Funktionen gestoppt wird.</p>
@@ -135,62 +135,87 @@ sudo apt install mainline</code></pre>
 </ul>
   `;
 
-    // Content for other languages via simplistic translation placeholder or empty for now
-    // In real scenario we would use translate-articles.ts but let's at least create the entries
+  // Content for other languages via simplistic translation placeholder or empty for now
+  // In real scenario we would use translate-articles.ts but let's at least create the entries
 
+  try {
+    const article = await prisma.article.upsert({
+      where: { slug },
+      update: {
+        category,
+        date,
+        authorName,
+        authorRole,
+        imageUrl,
+        sourcesJson: JSON.stringify(sources),
+        createdAt: new Date(), // Push to top
+      },
+      create: {
+        slug,
+        category,
+        date,
+        authorName,
+        authorRole,
+        imageUrl,
+        sourcesJson: JSON.stringify(sources),
+        createdAt: new Date(),
+      },
+    });
+
+    // de-CH (Main)
+    await prisma.articleTranslation.upsert({
+      where: { articleId_locale: { articleId: article.id, locale: "de-CH" } },
+      update: {
+        title: "Linux 7.0 erreicht RC1: Was sich im neuen Kernel wirklich ändert und wie man ihn testet",
+        excerpt: "Die Entwicklung des Linux-Kernels tritt offiziell in eine neue Phase ein. Mit dem Sprung auf Version 7.0 setzt Linus Torvalds ein symbolisches Zeichen, während technische Optimierungen voranschreiten.",
+        contentHtml: contentDe,
+        metaTitle: "Linux 7.0 RC1: Neuerungen & Installation Anleitung | SwissTech",
+        metaDescription: "Linux 7.0 RC1 ist da. Entdecken Sie Hardware-Support, Speicher-Optimierungen und wie Sie den neuen Kernel unter Linux testen.",
+      },
+      create: {
+        articleId: article.id,
+        locale: "de-CH",
+        title: "Linux 7.0 erreicht RC1: Was sich im neuen Kernel wirklich ändert und wie man ihn testet",
+        excerpt: "Die Entwicklung des Linux-Kernels tritt offiziell in eine neue Phase ein. Mit dem Sprung auf Version 7.0 setzt Linus Torvalds ein symbolisches Zeichen, während technische Optimierungen voranschreiten.",
+        contentHtml: contentDe,
+        metaTitle: "Linux 7.0 RC1: Neuerungen & Installation Anleitung | SwissTech",
+        metaDescription: "Linux 7.0 RC1 ist da. Entdecken Sie Hardware-Support, Speicher-Optimierungen und wie Sie den neuen Kernel unter Linux testen.",
+      },
+    });
+
+    console.log("Article metadata published for de-CH:", slug);
+
+    // --- Added: Notify the Server to revalidate cache ---
+    console.log("Notifying server to revalidate cache...");
     try {
-        const article = await prisma.article.upsert({
-            where: { slug },
-            update: {
-                category,
-                date,
-                authorName,
-                authorRole,
-                imageUrl,
-                sourcesJson: JSON.stringify(sources),
-                createdAt: new Date(), // Push to top
-            },
-            create: {
-                slug,
-                category,
-                date,
-                authorName,
-                authorRole,
-                imageUrl,
-                sourcesJson: JSON.stringify(sources),
-                createdAt: new Date(),
-            },
-        });
+      const url = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+      const apiKey = process.env.STB_API_KEY || 'SwissTech_App_Secret_2026_!#';
 
-        // de-CH (Main)
-        await prisma.articleTranslation.upsert({
-            where: { articleId_locale: { articleId: article.id, locale: "de-CH" } },
-            update: {
-                title: "Linux 7.0 erreicht RC1: Was sich im neuen Kernel wirklich ändert und wie man ihn testet",
-                excerpt: "Die Entwicklung des Linux-Kernels tritt offiziell in eine neue Phase ein. Mit dem Sprung auf Version 7.0 setzt Linus Torvalds ein symbolisches Zeichen, während technische Optimierungen voranschreiten.",
-                contentHtml: contentDe,
-                metaTitle: "Linux 7.0 RC1: Neuerungen & Installation Anleitung | SwissTech",
-                metaDescription: "Linux 7.0 RC1 ist da. Entdecken Sie Hardware-Support, Speicher-Optimierungen und wie Sie den neuen Kernel unter Linux testen.",
-            },
-            create: {
-                articleId: article.id,
-                locale: "de-CH",
-                title: "Linux 7.0 erreicht RC1: Was sich im neuen Kernel wirklich ändert und wie man ihn testet",
-                excerpt: "Die Entwicklung des Linux-Kernels tritt offiziell in eine neue Phase ein. Mit dem Sprung auf Version 7.0 setzt Linus Torvalds ein symbolisches Zeichen, während technische Optimierungen voranschreiten.",
-                contentHtml: contentDe,
-                metaTitle: "Linux 7.0 RC1: Neuerungen & Installation Anleitung | SwissTech",
-                metaDescription: "Linux 7.0 RC1 ist da. Entdecken Sie Hardware-Support, Speicher-Optimierungen und wie Sie den neuen Kernel unter Linux testen.",
-            },
-        });
+      const response = await fetch(`${url}/api/admin/revalidate`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ slug: slug })
+      });
 
-        console.log("Article metadata published for de-CH:", slug);
-        console.log("IMPORTANT: Running automatic translation for EN, FR, IT...");
-
-    } catch (error) {
-        console.error("Error publishing article:", error);
-    } finally {
-        await prisma.$disconnect();
+      if (response.ok) {
+        console.log(`[Revalidation] Server notified successfully: ${response.statusText}`);
+      } else {
+        console.error(`[Revalidation] Server notification failed: ${response.status} ${response.statusText}`);
+      }
+    } catch (err: any) {
+      console.error(`[Revalidation] Error notifying server: ${err.message}`);
     }
+
+    console.log("IMPORTANT: Running automatic translation for EN, FR, IT...");
+
+  } catch (error) {
+    console.error("Error publishing article:", error);
+  } finally {
+    await prisma.$disconnect();
+  }
 }
 
 main();

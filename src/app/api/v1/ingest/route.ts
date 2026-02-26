@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
         // 1. Process Main Image (Hero)
         const bytes = await imageFile.arrayBuffer();
         const buffer = Buffer.from(bytes);
-        const mainFilename = `stb_${articleData.slug}.png`;
+        const mainFilename = `stb_${articleData.slug}_hero.png`;
         await writeFile(path.join(uploadDir, mainFilename), buffer);
 
         // 2. Process Support Images (Detail & Context)
@@ -93,6 +93,22 @@ export async function POST(req: NextRequest) {
         });
 
         console.log(`[AI Ingestion] Successfully published: ${result.slug}`);
+
+        // --- AUTOMATIC REVALIDATION ---
+        try {
+            const { revalidatePath } = await import("next/cache");
+            const { locales } = await import("@/i18n/config");
+
+            locales.forEach(loc => {
+                revalidatePath(`/${loc}`);
+                revalidatePath(`/${loc}/artikel/${result.slug}`);
+                revalidatePath(`/${loc}/sitemap.xml`);
+            });
+            revalidatePath("/sitemap.xml");
+            console.log(`[AI Ingestion] Cache revalidation triggered for: ${result.slug}`);
+        } catch (revErr) {
+            console.error("[AI Ingestion] Cache revalidation failed:", revErr);
+        }
 
         return NextResponse.json({
             success: true,

@@ -41,7 +41,15 @@
             "favicon": "./assets/favicon.png"
         },
         "plugins": [
-            "expo-notifications"
+            "expo-notifications",
+            [
+                "expo-build-properties",
+                {
+                    "android": {
+                        "kotlinVersion": "1.9.25"
+                    }
+                }
+            ]
         ],
         "extra": {
             "eas": {

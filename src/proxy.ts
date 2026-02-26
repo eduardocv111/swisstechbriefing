@@ -17,6 +17,12 @@ const shortToFull: Record<string, string> = {
  */
 export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
+
+    // ── 0. EXEMPT API FROM ALL MIDDLEWARE LOGIC ──
+    if (pathname.startsWith('/api')) {
+        return NextResponse.next();
+    }
+
     const origin = request.headers.get('origin');
     const allowedOrigins = (process.env.ALLOWED_ORIGINS || '').split(',');
 
@@ -52,7 +58,6 @@ export function proxy(request: NextRequest) {
     // ── 2. Skip paths that don't need locale prefixes ──
     if (
         pathname.startsWith("/_next") ||
-        pathname.startsWith("/api") ||
         pathname.startsWith("/assets") ||
         pathname === "/favicon.ico" ||
         pathname.includes(".")
@@ -87,6 +92,6 @@ export function proxy(request: NextRequest) {
 
 export const config = {
     matcher: [
-        "/((?!_next/static|_next/image|assets|favicon.ico|sw.js|robots.txt|sitemap.xml|ads.txt|rss.xml).*)",
+        "/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js|robots.txt|sitemap.xml|ads.txt|rss.xml).*)",
     ],
 };

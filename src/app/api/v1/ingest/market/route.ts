@@ -35,6 +35,10 @@ export async function POST(req: NextRequest) {
             payloadJson
         );
 
+        // Revalidate home page to show new market data
+        const { revalidatePath } = await import("next/cache");
+        revalidatePath("/");
+
         return NextResponse.json({ success: true });
     } catch (error: any) {
         console.error("Market Ingest Error:", error);

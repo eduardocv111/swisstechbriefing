@@ -192,8 +192,15 @@ export default async function ArticlePage({ params }: Props) {
 
                 <article>
                     <div className="mb-4">
-                        <span className="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">
-                            {article.category}
+                        <span className="inline-block rounded-full bg-primary/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-primary">
+                            {(() => {
+                                const key = article.category.toLowerCase();
+                                if (key.includes('ki') || key.includes('ai')) return dict.categories.ki;
+                                if (key.includes('startup')) return dict.categories.startups;
+                                if (key.includes('regulierung') || key.includes('regulation')) return dict.categories.regulation;
+                                if (key.includes('defense') || key.includes('security')) return dict.categories.defense;
+                                return article.category;
+                            })()}
                         </span>
                     </div>
 
@@ -220,12 +227,40 @@ export default async function ArticlePage({ params }: Props) {
 
                     <ShareButtons url={articleUrl} title={article.title} />
 
-                    <div className="relative my-8 aspect-video overflow-hidden rounded-xl">
+                    <div className="relative mt-10 mb-5 aspect-video overflow-hidden rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800">
                         <Image src={getArticleImageOrFallback(article.image)} alt={article.title} fill className="object-cover" sizes="100vw" unoptimized />
                     </div>
 
-                    <div className="prose prose-slate max-w-none dark:prose-invert">
-                        <p className="text-lg font-medium leading-relaxed">{article.excerpt}</p>
+                    {/* Image Caption & Company Review Section (Following reference example) */}
+                    <div className="mb-12 border-b border-slate-100 pb-10 dark:border-slate-800/50">
+                        <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-3">
+                                <span className="text-primary font-black text-sm tracking-tighter">STB 1/1</span>
+                                <div className="flex items-center gap-1 text-slate-300 dark:text-slate-700">
+                                    <span className="material-symbols-outlined text-base">chevron_left</span>
+                                    <span className="material-symbols-outlined text-base">chevron_right</span>
+                                </div>
+                            </div>
+                            <div className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
+                                Foto: <span className="text-primary/80">Archivos SwissTech Briefing</span>
+                            </div>
+                        </div>
+
+                        <p className="text-[13px] font-medium leading-relaxed text-slate-600 dark:text-slate-400 border-l-2 border-primary/20 pl-4 py-1">
+                            {article.excerpt || dict.footer.description}
+                        </p>
+
+                        <div className="mt-6 flex items-center gap-4">
+                            <div className="h-px flex-1 bg-slate-100 dark:bg-slate-800" />
+                            <div className="text-[9px] font-bold uppercase tracking-widest text-slate-400 bg-white dark:bg-slate-950 px-3 italic">
+                                {dict.footer.description}
+                            </div>
+                            <div className="h-px flex-1 bg-slate-100 dark:bg-slate-800" />
+                        </div>
+                    </div>
+
+                    <div className="prose prose-slate max-w-none dark:prose-invert prose-p:leading-relaxed prose-strong:text-slate-900 dark:prose-strong:text-white">
+                        {/* Excerpt removed from here as it is now in the caption section */}
 
                         {/* Expert Quote Block */}
                         {article.expertQuote && (
