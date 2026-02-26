@@ -16,6 +16,9 @@ model Article {
   authorRole   String?
   sourcesJson  String
   imageUrl     String?
+  expertQuote  String?
+  keyFactsJson String?
+  isVerified   Boolean              @default(false)
   createdAt    DateTime             @default(now())
   updatedAt    DateTime             @updatedAt
   translations ArticleTranslation[]
@@ -48,4 +51,36 @@ model NewsletterSubscription {
   createdAt  DateTime @default(now())
 
   @@index([email])
+}
+
+model MarketSnapshot {
+  id          Int    @id @default(autoincrement())
+  createdAt   String @map("created_at")
+  payloadJson String @map("payload_json")
+
+  @@map("market_snapshots")
+}
+
+model MacroSnapshot {
+  id          Int    @id @default(autoincrement())
+  createdAt   String @map("created_at")
+  payloadJson String @map("payload_json")
+
+  @@map("macro_snapshots")
+}
+
+model SnbSnapshot {
+  id          Int    @id @default(autoincrement())
+  createdAt   String @map("created_at")
+  payloadJson String @map("payload_json")
+
+  @@map("snb_snapshots")
+}
+
+model SwissOpenDataSnapshot {
+  id          Int    @id @default(autoincrement())
+  createdAt   String @map("created_at")
+  payloadJson String @map("payload_json")
+
+  @@map("swiss_open_data_snapshots")
 }

@@ -24,7 +24,9 @@
         "backToHome": "Retour à l'accueil",
         "relatedTitle": "Ceci pourrait également vous intéresser",
         "sourcesTitle": "Sources & Références",
-        "fallbackNotice": "Cet article n'est actuellement disponible qu'en allemand."
+        "fallbackNotice": "Cet article n'est actuellement disponible qu'en allemand.",
+        "factChecked": "Vérifié & Validé",
+        "hardDataTitle": "Données et Chiffres"
     },
     "footer": {
         "description": "Média curaté pour l'IA, les startups et la technologie en Suisse. Un aperçu quotidien de la transformation numérique.",

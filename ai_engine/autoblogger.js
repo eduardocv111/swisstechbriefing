@@ -75,6 +75,17 @@ async function runAutoBlogger() {
         console.log(`\n💎 New Topic Identified: ${selectedNews.title}`);
         console.log(`📡 Source: ${selectedNews.source}`);
 
+        // --- STEP 2.2: ENHANCED MULTI-SOURCE RESEARCH ---
+        const Researcher = require('./researcher');
+        console.log(`[AutoBlogger] 🔎 Initiating Elite Multi-Source Investigation...`);
+        const researchResult = await Researcher.deepResearch(selectedNews.link, selectedNews.title);
+
+        if (researchResult.success) {
+            console.log(`[AutoBlogger] 🛡️ Investigation Complete: ${researchResult.sourceCount} sources integrated.`);
+        } else {
+            console.log(`[AutoBlogger] ⚠️ Context gathering failed. Using headline only.`);
+        }
+
         // 2.5 FETCH EDITORIAL MEMORY (Last 5 articles)
         const pastArticles = await prisma.article.findMany({
             take: 5,
@@ -84,48 +95,93 @@ async function runAutoBlogger() {
         const pastContext = pastArticles.map(a => a.translations[0]?.title).filter(Boolean).join(', ');
 
         // 3. GENERATE ARTICLE CONTENT (Elite Multi-Agent Workflow)
-        const articleData = await AIBridge.generateArticle(selectedNews.title, pastContext);
+        // Pass the extracted facts to give the agents more "Hard Data"
+        const articleData = await AIBridge.generateArticle(selectedNews.title, pastContext, researchResult.rawText);
 
-        // 3.1 GENERATE ELITE IMAGE PROMPT (Llama 3.1)
-        console.log('🎨 Generating elite editorial image prompt...');
-        const promptResponse = await fetch('http://localhost:11434/api/generate', {
-            method: 'POST',
-            body: JSON.stringify({
-                model: 'llama3.1:8b',
-                prompt: `You are a world-class creative director for a premium tech magazine like Wired or Bloomberg. 
-                        Create a highly detailed, professional English prompt for FLUX.1 (an AI image generator).
-                        
-                        TOPIC: ${articleData.title}
-                        THEME: SwissTech Briefing (Minimalist, Expensive, Tech-Editorial, Red and Black focus).
-                        
-                        RULES:
-                        - STYLE: High-end photojournalism, editorial photography for a premium tech magazine (Wired, Bloomberg).
-                        - NO generic clichés: No robots, no glowing brains, no neon cyberpunk lights.
-                        - PHOTOGRAPHY: Sharp focus, natural or clean studio lighting, 35mm lens, realistic depth of field, high-resolution RAW quality.
-                        - SETTINGS: Modern Swiss corporate architecture, clean tech labs, high-end server rooms, professional boardrooms with mountain views in the background.
-                        - COLORS: Natural color palette, clean surgical whites, deep professional greys, and minimal wooden or metallic accents. No artificial glowing neons.
-                        - AESTHETICS: Swiss precision, minimalist, authoritative, and sophisticated.
-                        
-                        OUTPUT: Only the prompt text in English, no quotes, no extra talk.`,
-                stream: false
-            }),
-        });
-        const promptData = await promptResponse.json();
-        const elitePrompt = promptData.response.trim();
+        // --- STEP 3.1: SMART ART DIRECTION FOR MULTIPLE IMAGES ---
+        console.log('🎨 AI Art Director is designing a coherent visual set (3 images)...');
 
-        // Clean and generate Slug
-        const slug = selectedNews.title
-            .toLowerCase()
-            .replace(/ /g, '-')
-            .replace(/[^\w-]+/g, '')
-            .substring(0, 60) + '-' + Math.floor(Math.random() * 1000);
+        const LORA_MAP = {
+            'altman': 'sam_altman.safetensors',
+            'sam': 'sam_altman.safetensors',
+            'huang': 'jensen_huang.safetensors',
+            'jensen': 'jensen_huang.safetensors',
+            'zuckerberg': 'zuckerberg.safetensors',
+            'mark': 'zuckerberg.safetensors',
+            'putin': 'putin.safetensors',
+            'xi jinping': 'xi_jinping.safetensors',
+            'nvidia': 'jensen_huang.safetensors',
+            'openai': 'sam_altman.safetensors',
+            'musk': 'musk.safetensors',
+            'elon': 'musk.safetensors',
+            'trump': 'trump.safetensors',
+            'default': 'super_realism.safetensors'
+        };
 
-        // 4. GENERATE PREMIUM ART (FLUX)
-        const imageFilename = `stb_${slug}.png`;
+        const detectedActor = Object.keys(LORA_MAP).find(actor =>
+            actor !== 'default' &&
+            (articleData.title.toLowerCase().includes(actor) || articleData.contentHtml.toLowerCase().includes(actor))
+        );
 
-        console.log(`\n📸 Elite Prompt: "${elitePrompt.substring(0, 100)}..."`);
-        console.log('🎨 FLUX.1-schnell is rendering the cover art (Local GPU)...');
-        const imagePublicPath = await AIBridge.generateImage(elitePrompt, imageFilename);
+        let masterLoraPath = detectedActor ? path.join(__dirname, 'loras', LORA_MAP[detectedActor]) : path.join(__dirname, 'loras', LORA_MAP['default']);
+
+        const finalImages = {};
+        const imageTypes = ['hero', 'detail', 'context'];
+
+        const slugBase = selectedNews.title.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '').substring(0, 50);
+        const uniqueId = Math.floor(Math.random() * 1000);
+        const slug = `${slugBase}-${uniqueId}`;
+
+        // Prepare prompts for all images
+        const batchPrompts = { hero: "", detail: "", context: "" };
+
+        for (const type of imageTypes) {
+            const rawPrompt = articleData.imagePrompts[type] || articleData.title;
+
+            console.log(`[Art Director] 🎨 Designing ${type} image DNA...`);
+
+            const promptResponse = await fetch('http://localhost:11434/api/generate', {
+                method: 'POST',
+                body: JSON.stringify({
+                    model: 'llama3.1:8b',
+                    prompt: `Refine this image prompt for a LUXURY TECH MAGAZINE (Wired/Bloomberg).
+                            BASE THEME: ${articleData.title}
+                            IMAGE PURPOSE: ${type}
+                            RAW IDEA: ${rawPrompt}
+                            
+                            DNA REQUIREMENTS (MUST BE CONSISTENT):
+                            - STYLE: Cinematic, 8k, photorealistic, minimal and clean.
+                            - COLORS: Deep Black, Surgical White, and bold Swiss Red (#FF0000).
+                            - LIGHTING: Dramatic studio lighting, high contrast.
+                            - TONE: Authoritative and expensive.
+                            
+                            Return ONLY the refined English prompt.`,
+                    stream: false
+                }),
+            });
+            batchPrompts[type] = (await promptResponse.json()).response.trim();
+        }
+
+        console.log(`📸 Generating BATCH images (3)...`);
+        Object.assign(finalImages, await AIBridge.generateImagesBatch(batchPrompts, slug, masterLoraPath));
+
+        const imagePublicPath = finalImages.hero;
+
+
+        // --- STEP 4: PLACEHOLDER INJECTION ---
+        console.log('💉 Injecting support images into article body...');
+        let finalHtml = articleData.contentHtml;
+
+        // Replacement Logic (using production-relative paths)
+        finalHtml = finalHtml.replace('[IMAGE_2]',
+            `<figure class="my-8"><img src="/assets/images/news/stb_${slug}_detail.png" alt="Technical Detail" class="rounded-xl shadow-2xl w-full border border-gray-800"/><figcaption class="text-center text-sm text-gray-400 mt-2">Technical Insight: ${articleData.title}</figcaption></figure>`);
+
+        finalHtml = finalHtml.replace('[IMAGE_3]',
+            `<figure class="my-8"><img src="/assets/images/news/stb_${slug}_context.png" alt="Contextual Atmosphere" class="rounded-xl shadow-2xl w-full border border-gray-800"/><figcaption class="text-center text-sm text-gray-400 mt-2">Strategic Context</figcaption></figure>`);
+
+        articleData.contentHtml = finalHtml;
+        const mainImage = finalImages.hero;
+
 
         // 5. ATOMIC PUBLICATION (Prisma Transaction)
         console.log('📤 Publishing to SwissTech Briefing Database...');
@@ -142,6 +198,9 @@ async function runAutoBlogger() {
                     authorRole: 'Automated Insight Engine',
                     imageUrl: imagePublicPath,
                     sourcesJson: sourceJson,
+                    expertQuote: articleData.expertQuote,
+                    keyFactsJson: articleData.keyFacts,
+                    isVerified: true,
                     translations: {
                         create: {
                             locale: 'de-CH',
@@ -177,6 +236,9 @@ async function runAutoBlogger() {
                 authorName: 'SwissTech AI Editor',
                 authorRole: 'Automated Insight Engine',
                 sourcesJson: sourceJson,
+                expertQuote: articleData.expertQuote,
+                keyFactsJson: articleData.keyFacts,
+                isVerified: true,
                 title: articleData.title,
                 excerpt: articleData.excerpt,
                 contentHtml: articleData.contentHtml,
@@ -187,11 +249,18 @@ async function runAutoBlogger() {
 
             formData.append('article', JSON.stringify(uploadData));
 
-            // Attach the actual image file
-            const fullImagePath = path.join(__dirname, '..', 'public', imagePublicPath);
-            const imageBuffer = fs.readFileSync(fullImagePath);
-            const imageBlob = new Blob([imageBuffer], { type: 'image/png' });
-            formData.append('image', imageBlob, imageFilename);
+            // Attach all generated images
+            for (const type of imageTypes) {
+                const imgPath = finalImages[type];
+                if (imgPath) {
+                    const fullPath = path.join(__dirname, '..', 'public', imgPath);
+                    if (fs.existsSync(fullPath)) {
+                        const buffer = fs.readFileSync(fullPath);
+                        const blob = new Blob([buffer], { type: 'image/png' });
+                        formData.append(type === 'hero' ? 'image' : `image_${type}`, blob, `stb_${slug}_${type}.png`);
+                    }
+                }
+            }
 
             const syncResponse = await fetch('https://swisstechbriefing.ch/api/v1/ingest', {
                 method: 'POST',
@@ -201,18 +270,28 @@ async function runAutoBlogger() {
                 body: formData
             });
 
+            if (!syncResponse.ok) {
+                const errorText = await syncResponse.text();
+                throw new Error(`Server responded with ${syncResponse.status}: ${errorText}`);
+            }
+
             const syncResult = await syncResponse.json();
 
             if (syncResult.success) {
-                console.log('✨ PUBLISHED TO LIVE SITE SUCCESSFULLY!');
+                console.log('\n✨ [AutoBlogger] PUBLISHED TO LIVE SITE SUCCESSFULLY!');
                 console.log(`🔗 Live URL: ${syncResult.url}`);
+
+                // --- LEARNING PHASE (NEW) ---
+                const KnowledgeManager = require('./knowledge_manager');
+                articleData.slug = slug; // Añadir slug para referencia
+                await KnowledgeManager.learnFromArticle(articleData);
             } else {
-                console.error('❌ Sync Failed:', syncResult.error);
+                console.error('\n❌ [AutoBlogger] Sync Failed (Logic Error):', syncResult.error);
             }
 
         } catch (syncError) {
-            console.error('❌ Network Error during Sync:', syncError.message);
-            console.log('⚠️ Article is saved locally but could not reach the server.');
+            console.error('\n❌ [AutoBlogger] Network/Sync Error:', syncError.message);
+            console.log('⚠️ [AutoBlogger] Article is saved locally but could not reach the server.');
         }
 
     } catch (error) {

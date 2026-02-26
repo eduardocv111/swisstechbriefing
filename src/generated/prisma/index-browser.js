@@ -126,6 +126,9 @@ exports.Prisma.ArticleScalarFieldEnum = {
   authorRole: 'authorRole',
   sourcesJson: 'sourcesJson',
   imageUrl: 'imageUrl',
+  expertQuote: 'expertQuote',
+  keyFactsJson: 'keyFactsJson',
+  isVerified: 'isVerified',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -150,6 +153,30 @@ exports.Prisma.NewsletterSubscriptionScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.MarketSnapshotScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  payloadJson: 'payloadJson'
+};
+
+exports.Prisma.MacroSnapshotScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  payloadJson: 'payloadJson'
+};
+
+exports.Prisma.SnbSnapshotScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  payloadJson: 'payloadJson'
+};
+
+exports.Prisma.SwissOpenDataSnapshotScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  payloadJson: 'payloadJson'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -164,7 +191,11 @@ exports.Prisma.NullsOrder = {
 exports.Prisma.ModelName = {
   Article: 'Article',
   ArticleTranslation: 'ArticleTranslation',
-  NewsletterSubscription: 'NewsletterSubscription'
+  NewsletterSubscription: 'NewsletterSubscription',
+  MarketSnapshot: 'MarketSnapshot',
+  MacroSnapshot: 'MacroSnapshot',
+  SnbSnapshot: 'SnbSnapshot',
+  SwissOpenDataSnapshot: 'SwissOpenDataSnapshot'
 };
 
 /**

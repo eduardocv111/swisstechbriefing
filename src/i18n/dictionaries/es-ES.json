@@ -24,7 +24,9 @@
         "backToHome": "Volver al inicio",
         "relatedTitle": "También te podría interesar",
         "sourcesTitle": "Fuentes y referencias",
-        "fallbackNotice": "Este artículo actualmente solo está disponible en alemán."
+        "fallbackNotice": "Este artículo actualmente solo está disponible en alemán.",
+        "factChecked": "Verificado & Validado",
+        "hardDataTitle": "Datos y Cifras"
     },
     "footer": {
         "description": "Medio curado para IA, startups y tecnología en Suiza. Información diaria sobre la transformación digital.",

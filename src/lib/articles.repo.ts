@@ -23,6 +23,9 @@ export type UiArticle = {
     role?: string | null;
   };
   contentHtml: string;
+  expertQuote?: string | null;
+  keyFacts?: string | null;
+  isVerified: boolean;
   // i18n metadata
   locale: string;
   isFallback: boolean;
@@ -54,7 +57,7 @@ function safeJsonParseSources(raw: string | null | undefined): Source[] {
   }
 }
 
-function sanitizeText(text: string): string {
+function sanitizeText(text: string | null | undefined): string {
   if (!text) return "";
   return text
     .replace(/\uFFFD/g, "ü")
@@ -78,6 +81,9 @@ interface DbArticle {
   sourcesJson?: string | null;
   authorName: string;
   authorRole?: string | null;
+  expertQuote?: string | null;
+  keyFactsJson?: string | null;
+  isVerified: boolean;
   translations?: Array<{
     locale: string;
     title: string;
@@ -128,6 +134,9 @@ function mapDbToUi(article: DbArticle, locale: string): UiArticle {
       role: article.authorRole ?? null,
     },
     contentHtml: sanitizeText(trans?.title && trans?.contentHtml ? trans.contentHtml : ""),
+    expertQuote: sanitizeText(article.expertQuote || null),
+    keyFacts: sanitizeText(article.keyFactsJson || null),
+    isVerified: article.isVerified,
     locale: trans?.locale || normLocale,
     isFallback,
     availableLocales,

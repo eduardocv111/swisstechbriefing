@@ -1,14 +1,11 @@
-# Ignore EVERYTHING from the web project when building mobile
-node_modules/
-.next/
-.venv/
+# Exclude heavy AI folders
+ai_engine/
 data/
-public/assets/
-src/app/
-src/components/
+.next/
+node_modules/
+public/assets/images/news/
 
-# Mobile specific ignores
+# Do NOT exclude mobile folder contents except node_modules
 mobile/node_modules/
 mobile/.expo/
 mobile/dist/
-mobile/web-build/

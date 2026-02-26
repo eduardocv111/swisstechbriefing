@@ -6,7 +6,7 @@
         "orientation": "portrait",
         "icon": "./assets/icon.png",
         "userInterfaceStyle": "dark",
-        "newArchEnabled": true,
+        "newArchEnabled": false,
         "scheme": "swisstech",
         "updates": {
             "url": "https://u.expo.dev/9a383b55-de5f-4ea5-942b-aa1baecb1089"

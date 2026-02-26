@@ -27,21 +27,30 @@ export async function POST(req: NextRequest) {
         const articleData = JSON.parse(articleJson);
         const translations = articleData.translations || [];
 
-        // 1. Save the image to public/assets/images/news/
-        const bytes = await imageFile.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-
         // Ensure directory exists
         const uploadDir = path.join(process.cwd(), "public", "assets", "images", "news");
         try {
             await mkdir(uploadDir, { recursive: true });
         } catch (e) { }
 
-        const filename = `stb_${articleData.slug}.png`;
-        const imagePath = path.join(uploadDir, filename);
-        await writeFile(imagePath, buffer);
+        // 1. Process Main Image (Hero)
+        const bytes = await imageFile.arrayBuffer();
+        const buffer = Buffer.from(bytes);
+        const mainFilename = `stb_${articleData.slug}.png`;
+        await writeFile(path.join(uploadDir, mainFilename), buffer);
 
-        const publicImageUrl = `/assets/images/news/${filename}`;
+        // 2. Process Support Images (Detail & Context)
+        const supportTypes = ['detail', 'context'];
+        for (const type of supportTypes) {
+            const supportFile = formData.get(`image_${type}`) as File;
+            if (supportFile) {
+                const sBytes = await supportFile.arrayBuffer();
+                const sBuffer = Buffer.from(sBytes);
+                await writeFile(path.join(uploadDir, `stb_${articleData.slug}_${type}.png`), sBuffer);
+            }
+        }
+
+        const publicImageUrl = `/assets/images/news/${mainFilename}`;
 
         // 2. Create the article and all translations in the Database
         const result = await prisma.$transaction(async (tx) => {
@@ -54,6 +63,9 @@ export async function POST(req: NextRequest) {
                     authorRole: articleData.authorRole || "Automated Insight Engine",
                     imageUrl: publicImageUrl,
                     sourcesJson: articleData.sourcesJson,
+                    expertQuote: articleData.expertQuote,
+                    keyFactsJson: articleData.keyFactsJson,
+                    isVerified: articleData.isVerified || false,
                     translations: {
                         create: [
                             // Include the primary translation (usually de-CH)

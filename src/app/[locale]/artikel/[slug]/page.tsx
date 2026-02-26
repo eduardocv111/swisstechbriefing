@@ -156,8 +156,14 @@ export default async function ArticlePage({ params }: Props) {
         image: imageUrl ? [imageUrl] : [],
         datePublished: publishedTime,
         dateModified: modifiedTime,
-        author: [{ "@type": "Person", name: article.author?.name ?? SITE_CONFIG.name }],
+        author: [{
+            "@type": "Person",
+            "name": article.author?.name ?? SITE_CONFIG.name,
+            "jobTitle": article.author?.role ?? "Technology Analyst"
+        }],
         publisher: { "@type": "Organization", name: SITE_CONFIG.name, url: SITE_CONFIG.url },
+        "isAccessibleForFree": "True",
+        "hasPart": article.isVerified ? { "@type": "WebPageElement", "isVerified": "True" } : undefined
     };
 
     return (
@@ -168,6 +174,13 @@ export default async function ArticlePage({ params }: Props) {
             <GoogleRrmScript />
 
             <main className="mx-auto min-h-screen max-w-3xl px-6 pt-10 pb-16">
+                {article.isVerified && (
+                    <div className="mb-6 flex items-center gap-2 rounded-full bg-green-500/10 px-4 py-1.5 text-[10px] font-black uppercase tracking-widest text-green-600 dark:bg-green-500/20 dark:text-green-400 w-fit border border-green-500/20">
+                        <span className="material-symbols-outlined text-sm">verified</span>
+                        <span>{dict.article.factChecked || 'Fact-Checked & Verified'}</span>
+                    </div>
+                )}
+
                 {article.isFallback && (
                     <div className="mb-8 rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800 dark:border-blue-900/30 dark:bg-blue-900/20 dark:text-blue-300">
                         <div className="flex items-center gap-2">
@@ -213,7 +226,40 @@ export default async function ArticlePage({ params }: Props) {
 
                     <div className="prose prose-slate max-w-none dark:prose-invert">
                         <p className="text-lg font-medium leading-relaxed">{article.excerpt}</p>
+
+                        {/* Expert Quote Block */}
+                        {article.expertQuote && (
+                            <div className="my-8 rounded-2xl border-l-4 border-primary bg-slate-50 p-8 dark:bg-slate-900/50">
+                                <span className="material-symbols-outlined text-4xl text-primary/20 mb-2">format_quote</span>
+                                <p className="italic text-xl font-serif text-slate-700 dark:text-slate-300 leading-relaxed">
+                                    {article.expertQuote}
+                                </p>
+                                <div className="mt-4 flex items-center gap-3">
+                                    <div className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
+                                    <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Analyst Insight</span>
+                                </div>
+                            </div>
+                        )}
+
                         <div className="mt-6" dangerouslySetInnerHTML={{ __html: article.contentHtml }} />
+
+                        {/* Key Facts / Hard Data Section */}
+                        {article.keyFacts && (
+                            <div className="my-10 rounded-2xl border border-slate-100 p-8 dark:border-slate-800">
+                                <h3 className="mb-6 flex items-center gap-2 text-sm font-black uppercase tracking-widest text-slate-900 dark:text-white">
+                                    <span className="material-symbols-outlined text-primary">data_usage</span>
+                                    {dict.article.hardDataTitle || 'Fakten & Daten'}
+                                </h3>
+                                <div className="space-y-4 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                                    {article.keyFacts.split('\n').filter(line => line.trim()).map((fact, i) => (
+                                        <div key={i} className="flex gap-3">
+                                            <span className="text-primary mt-1">•</span>
+                                            <p>{fact.replace(/^[*-]\s*/, '')}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     <div className="my-10">

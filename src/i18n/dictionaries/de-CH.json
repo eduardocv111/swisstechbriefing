@@ -24,7 +24,9 @@
         "backToHome": "Zurück zur Startseite",
         "relatedTitle": "Das könnte Sie auch interessieren",
         "sourcesTitle": "Quellen & Referenzen",
-        "fallbackNotice": "Dieser Artikel ist derzeit nur auf Deutsch verfügbar."
+        "fallbackNotice": "Dieser Artikel ist derzeit nur auf Deutsch verfügbar.",
+        "factChecked": "Faktencheck bestanden",
+        "hardDataTitle": "Fakten & Daten"
     },
     "footer": {
         "description": "Kuratiertes Medium für KI, Startups und Technologie in der Schweiz. Tägliche Einblicke in die digitale Transformation.",

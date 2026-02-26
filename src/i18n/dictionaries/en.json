@@ -24,7 +24,9 @@
         "backToHome": "Back to home",
         "relatedTitle": "You might also be interested in",
         "sourcesTitle": "Sources & References",
-        "fallbackNotice": "This article is currently only available in German."
+        "fallbackNotice": "This article is currently only available in German.",
+        "factChecked": "Fact-Checked & Verified",
+        "hardDataTitle": "Hard Data & Figures"
     },
     "footer": {
         "description": "Curated medium for AI, startups, and technology in Switzerland. Daily insights into the digital transformation.",
