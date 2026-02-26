@@ -7,6 +7,8 @@ const API_CONFIG = {
     timeout: 10000,
 };
 
+import { ApiResponse } from './types';
+
 /**
  * Native Fetch-based API Client for React Native (Hardened v2.1)
  * Replaces Axios to avoid Metro bundler resolution issues with Node-specific modules.
@@ -14,7 +16,7 @@ const API_CONFIG = {
 export async function apiRequest<T>(
     endpoint: string,
     options: RequestInit = {}
-): Promise<T> {
+): Promise<ApiResponse<T>> {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), API_CONFIG.timeout);
 
@@ -55,7 +57,7 @@ export async function apiRequest<T>(
             throw data?.error || { message: 'Ein unerwarteter Fehler ist aufgetreten.', code: 'UNKNOWN' };
         }
 
-        return data.data; // Return the actual data payload
+        return data; // Return the full ApiResponse structure
     } catch (error: any) {
         clearTimeout(id);
 

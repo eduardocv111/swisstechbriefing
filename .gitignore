@@ -26,8 +26,19 @@ venv/
 .DS_Store
 Thumbs.db
 
-# AI Engine Models (Deep Learning Files)
+# AI Engine Assets (Local Only)
+ai_engine/
+ai_engine/.venv-flux/
 ai_engine/models/
+ai_engine/knowledge/
+ai_engine/google_news_sample.html
+ai_engine/*.log
+
+# Generated Local News Images
+public/assets/images/news/*.png
+!public/assets/images/news/.gitkeep
+
+# AI Engine Models (Deep Learning Files)
 *.safetensors
 *.bin
 *.ckpt
@@ -39,3 +50,4 @@ mobile/.expo/
 mobile/dist/
 mobile/web-build/
 mobile/build_error*.txt
+mobile/assets/*.exe
