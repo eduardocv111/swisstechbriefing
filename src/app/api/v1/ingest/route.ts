@@ -106,20 +106,27 @@ export async function POST(req: NextRequest) {
 
         console.log(`[AI Ingestion] Successfully published: ${result.slug}`);
 
-        // --- AUTOMATIC REVALIDATION ---
+        // --- AUTOMATIC REVALIDATION (PRO ACTIVE) ---
         try {
             const { revalidatePath } = await import("next/cache");
             const { locales } = await import("@/i18n/config");
 
-            locales.forEach(loc => {
+            console.log(`[AI Ingestion] 🔄 Triggering global revalidation for ${result.slug}...`);
+
+            // Revalidate the Root for all locales (The News Lists)
+            for (const loc of locales) {
                 revalidatePath(`/${loc}`);
                 revalidatePath(`/${loc}/artikel/${result.slug}`);
                 revalidatePath(`/${loc}/sitemap.xml`);
-            });
+                console.log(`[AI Ingestion] -> Revalidated: /${loc}`);
+            }
+
+            revalidatePath("/");
             revalidatePath("/sitemap.xml");
-            console.log(`[AI Ingestion] Cache revalidation triggered for: ${result.slug}`);
+
+            console.log(`[AI Ingestion] ✅ All cache tags cleared.`);
         } catch (revErr) {
-            console.error("[AI Ingestion] Cache revalidation failed:", revErr);
+            console.error("[AI Ingestion] ❌ Cache revalidation failed:", revErr);
         }
 
         return NextResponse.json({
