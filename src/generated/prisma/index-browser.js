@@ -126,6 +126,7 @@ exports.Prisma.ArticleScalarFieldEnum = {
   authorRole: 'authorRole',
   sourcesJson: 'sourcesJson',
   imageUrl: 'imageUrl',
+  videoUrl: 'videoUrl',
   expertQuote: 'expertQuote',
   keyFactsJson: 'keyFactsJson',
   isVerified: 'isVerified',

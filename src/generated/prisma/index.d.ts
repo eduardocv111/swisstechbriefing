@@ -1457,6 +1457,7 @@ export namespace Prisma {
     authorRole: string | null
     sourcesJson: string | null
     imageUrl: string | null
+    videoUrl: string | null
     expertQuote: string | null
     keyFactsJson: string | null
     isVerified: boolean | null
@@ -1473,6 +1474,7 @@ export namespace Prisma {
     authorRole: string | null
     sourcesJson: string | null
     imageUrl: string | null
+    videoUrl: string | null
     expertQuote: string | null
     keyFactsJson: string | null
     isVerified: boolean | null
@@ -1489,6 +1491,7 @@ export namespace Prisma {
     authorRole: number
     sourcesJson: number
     imageUrl: number
+    videoUrl: number
     expertQuote: number
     keyFactsJson: number
     isVerified: number
@@ -1507,6 +1510,7 @@ export namespace Prisma {
     authorRole?: true
     sourcesJson?: true
     imageUrl?: true
+    videoUrl?: true
     expertQuote?: true
     keyFactsJson?: true
     isVerified?: true
@@ -1523,6 +1527,7 @@ export namespace Prisma {
     authorRole?: true
     sourcesJson?: true
     imageUrl?: true
+    videoUrl?: true
     expertQuote?: true
     keyFactsJson?: true
     isVerified?: true
@@ -1539,6 +1544,7 @@ export namespace Prisma {
     authorRole?: true
     sourcesJson?: true
     imageUrl?: true
+    videoUrl?: true
     expertQuote?: true
     keyFactsJson?: true
     isVerified?: true
@@ -1628,6 +1634,7 @@ export namespace Prisma {
     authorRole: string | null
     sourcesJson: string
     imageUrl: string | null
+    videoUrl: string | null
     expertQuote: string | null
     keyFactsJson: string | null
     isVerified: boolean
@@ -1661,6 +1668,7 @@ export namespace Prisma {
     authorRole?: boolean
     sourcesJson?: boolean
     imageUrl?: boolean
+    videoUrl?: boolean
     expertQuote?: boolean
     keyFactsJson?: boolean
     isVerified?: boolean
@@ -1679,6 +1687,7 @@ export namespace Prisma {
     authorRole?: boolean
     sourcesJson?: boolean
     imageUrl?: boolean
+    videoUrl?: boolean
     expertQuote?: boolean
     keyFactsJson?: boolean
     isVerified?: boolean
@@ -1695,6 +1704,7 @@ export namespace Prisma {
     authorRole?: boolean
     sourcesJson?: boolean
     imageUrl?: boolean
+    videoUrl?: boolean
     expertQuote?: boolean
     keyFactsJson?: boolean
     isVerified?: boolean
@@ -1711,6 +1721,7 @@ export namespace Prisma {
     authorRole?: boolean
     sourcesJson?: boolean
     imageUrl?: boolean
+    videoUrl?: boolean
     expertQuote?: boolean
     keyFactsJson?: boolean
     isVerified?: boolean
@@ -1718,7 +1729,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ArticleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "category" | "date" | "authorName" | "authorRole" | "sourcesJson" | "imageUrl" | "expertQuote" | "keyFactsJson" | "isVerified" | "createdAt" | "updatedAt", ExtArgs["result"]["article"]>
+  export type ArticleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "category" | "date" | "authorName" | "authorRole" | "sourcesJson" | "imageUrl" | "videoUrl" | "expertQuote" | "keyFactsJson" | "isVerified" | "createdAt" | "updatedAt", ExtArgs["result"]["article"]>
   export type ArticleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     translations?: boolean | Article$translationsArgs<ExtArgs>
     _count?: boolean | ArticleCountOutputTypeDefaultArgs<ExtArgs>
@@ -1740,6 +1751,7 @@ export namespace Prisma {
       authorRole: string | null
       sourcesJson: string
       imageUrl: string | null
+      videoUrl: string | null
       expertQuote: string | null
       keyFactsJson: string | null
       isVerified: boolean
@@ -2177,6 +2189,7 @@ export namespace Prisma {
     readonly authorRole: FieldRef<"Article", 'String'>
     readonly sourcesJson: FieldRef<"Article", 'String'>
     readonly imageUrl: FieldRef<"Article", 'String'>
+    readonly videoUrl: FieldRef<"Article", 'String'>
     readonly expertQuote: FieldRef<"Article", 'String'>
     readonly keyFactsJson: FieldRef<"Article", 'String'>
     readonly isVerified: FieldRef<"Article", 'Boolean'>
@@ -8735,6 +8748,7 @@ export namespace Prisma {
     authorRole: 'authorRole',
     sourcesJson: 'sourcesJson',
     imageUrl: 'imageUrl',
+    videoUrl: 'videoUrl',
     expertQuote: 'expertQuote',
     keyFactsJson: 'keyFactsJson',
     isVerified: 'isVerified',
@@ -8878,6 +8892,7 @@ export namespace Prisma {
     authorRole?: StringNullableFilter<"Article"> | string | null
     sourcesJson?: StringFilter<"Article"> | string
     imageUrl?: StringNullableFilter<"Article"> | string | null
+    videoUrl?: StringNullableFilter<"Article"> | string | null
     expertQuote?: StringNullableFilter<"Article"> | string | null
     keyFactsJson?: StringNullableFilter<"Article"> | string | null
     isVerified?: BoolFilter<"Article"> | boolean
@@ -8895,6 +8910,7 @@ export namespace Prisma {
     authorRole?: SortOrderInput | SortOrder
     sourcesJson?: SortOrder
     imageUrl?: SortOrderInput | SortOrder
+    videoUrl?: SortOrderInput | SortOrder
     expertQuote?: SortOrderInput | SortOrder
     keyFactsJson?: SortOrderInput | SortOrder
     isVerified?: SortOrder
@@ -8915,6 +8931,7 @@ export namespace Prisma {
     authorRole?: StringNullableFilter<"Article"> | string | null
     sourcesJson?: StringFilter<"Article"> | string
     imageUrl?: StringNullableFilter<"Article"> | string | null
+    videoUrl?: StringNullableFilter<"Article"> | string | null
     expertQuote?: StringNullableFilter<"Article"> | string | null
     keyFactsJson?: StringNullableFilter<"Article"> | string | null
     isVerified?: BoolFilter<"Article"> | boolean
@@ -8932,6 +8949,7 @@ export namespace Prisma {
     authorRole?: SortOrderInput | SortOrder
     sourcesJson?: SortOrder
     imageUrl?: SortOrderInput | SortOrder
+    videoUrl?: SortOrderInput | SortOrder
     expertQuote?: SortOrderInput | SortOrder
     keyFactsJson?: SortOrderInput | SortOrder
     isVerified?: SortOrder
@@ -8954,6 +8972,7 @@ export namespace Prisma {
     authorRole?: StringNullableWithAggregatesFilter<"Article"> | string | null
     sourcesJson?: StringWithAggregatesFilter<"Article"> | string
     imageUrl?: StringNullableWithAggregatesFilter<"Article"> | string | null
+    videoUrl?: StringNullableWithAggregatesFilter<"Article"> | string | null
     expertQuote?: StringNullableWithAggregatesFilter<"Article"> | string | null
     keyFactsJson?: StringNullableWithAggregatesFilter<"Article"> | string | null
     isVerified?: BoolWithAggregatesFilter<"Article"> | boolean
@@ -9274,6 +9293,7 @@ export namespace Prisma {
     authorRole?: string | null
     sourcesJson: string
     imageUrl?: string | null
+    videoUrl?: string | null
     expertQuote?: string | null
     keyFactsJson?: string | null
     isVerified?: boolean
@@ -9291,6 +9311,7 @@ export namespace Prisma {
     authorRole?: string | null
     sourcesJson: string
     imageUrl?: string | null
+    videoUrl?: string | null
     expertQuote?: string | null
     keyFactsJson?: string | null
     isVerified?: boolean
@@ -9308,6 +9329,7 @@ export namespace Prisma {
     authorRole?: NullableStringFieldUpdateOperationsInput | string | null
     sourcesJson?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     expertQuote?: NullableStringFieldUpdateOperationsInput | string | null
     keyFactsJson?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -9325,6 +9347,7 @@ export namespace Prisma {
     authorRole?: NullableStringFieldUpdateOperationsInput | string | null
     sourcesJson?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     expertQuote?: NullableStringFieldUpdateOperationsInput | string | null
     keyFactsJson?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -9342,6 +9365,7 @@ export namespace Prisma {
     authorRole?: string | null
     sourcesJson: string
     imageUrl?: string | null
+    videoUrl?: string | null
     expertQuote?: string | null
     keyFactsJson?: string | null
     isVerified?: boolean
@@ -9358,6 +9382,7 @@ export namespace Prisma {
     authorRole?: NullableStringFieldUpdateOperationsInput | string | null
     sourcesJson?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     expertQuote?: NullableStringFieldUpdateOperationsInput | string | null
     keyFactsJson?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -9374,6 +9399,7 @@ export namespace Prisma {
     authorRole?: NullableStringFieldUpdateOperationsInput | string | null
     sourcesJson?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     expertQuote?: NullableStringFieldUpdateOperationsInput | string | null
     keyFactsJson?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -9744,6 +9770,7 @@ export namespace Prisma {
     authorRole?: SortOrder
     sourcesJson?: SortOrder
     imageUrl?: SortOrder
+    videoUrl?: SortOrder
     expertQuote?: SortOrder
     keyFactsJson?: SortOrder
     isVerified?: SortOrder
@@ -9760,6 +9787,7 @@ export namespace Prisma {
     authorRole?: SortOrder
     sourcesJson?: SortOrder
     imageUrl?: SortOrder
+    videoUrl?: SortOrder
     expertQuote?: SortOrder
     keyFactsJson?: SortOrder
     isVerified?: SortOrder
@@ -9776,6 +9804,7 @@ export namespace Prisma {
     authorRole?: SortOrder
     sourcesJson?: SortOrder
     imageUrl?: SortOrder
+    videoUrl?: SortOrder
     expertQuote?: SortOrder
     keyFactsJson?: SortOrder
     isVerified?: SortOrder
@@ -10340,6 +10369,7 @@ export namespace Prisma {
     authorRole?: string | null
     sourcesJson: string
     imageUrl?: string | null
+    videoUrl?: string | null
     expertQuote?: string | null
     keyFactsJson?: string | null
     isVerified?: boolean
@@ -10356,6 +10386,7 @@ export namespace Prisma {
     authorRole?: string | null
     sourcesJson: string
     imageUrl?: string | null
+    videoUrl?: string | null
     expertQuote?: string | null
     keyFactsJson?: string | null
     isVerified?: boolean
@@ -10388,6 +10419,7 @@ export namespace Prisma {
     authorRole?: NullableStringFieldUpdateOperationsInput | string | null
     sourcesJson?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     expertQuote?: NullableStringFieldUpdateOperationsInput | string | null
     keyFactsJson?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -10404,6 +10436,7 @@ export namespace Prisma {
     authorRole?: NullableStringFieldUpdateOperationsInput | string | null
     sourcesJson?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     expertQuote?: NullableStringFieldUpdateOperationsInput | string | null
     keyFactsJson?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean

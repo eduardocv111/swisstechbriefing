@@ -16,6 +16,7 @@ model Article {
   authorRole   String?
   sourcesJson  String
   imageUrl     String?
+  videoUrl     String?
   expertQuote  String?
   keyFactsJson String?
   isVerified   Boolean              @default(false)

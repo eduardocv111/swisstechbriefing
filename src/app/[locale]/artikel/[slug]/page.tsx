@@ -228,7 +228,19 @@ export default async function ArticlePage({ params }: Props) {
                     <ShareButtons url={articleUrl} title={article.title} />
 
                     <div className="relative mt-10 mb-5 aspect-video overflow-hidden rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800">
-                        <Image src={getArticleImageOrFallback(article.image)} alt={article.title} fill className="object-cover" sizes="100vw" unoptimized />
+                        {article.videoUrl ? (
+                            <video
+                                src={article.videoUrl}
+                                poster={getArticleImageOrFallback(article.image)}
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                className="h-full w-full object-cover"
+                            />
+                        ) : (
+                            <Image src={getArticleImageOrFallback(article.image)} alt={article.title} fill className="object-cover transition group-hover:scale-105" sizes="100vw" unoptimized />
+                        )}
                     </div>
 
                     {/* Image Caption & Company Review Section (Following reference example) */}

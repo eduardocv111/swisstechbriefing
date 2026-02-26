@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
         const formData = await req.formData();
         const articleJson = formData.get("article") as string;
         const imageFile = formData.get("image") as File;
+        const videoFile = formData.get("video") as File;
 
         if (!articleJson || !imageFile) {
             return NextResponse.json({ error: "Missing article data or image" }, { status: 400 });
@@ -38,6 +39,16 @@ export async function POST(req: NextRequest) {
         const buffer = Buffer.from(bytes);
         const mainFilename = `stb_${articleData.slug}_hero.png`;
         await writeFile(path.join(uploadDir, mainFilename), buffer);
+
+        // 1.1 Process Video (if exists)
+        let publicVideoUrl = null;
+        if (videoFile) {
+            const vBytes = await videoFile.arrayBuffer();
+            const vBuffer = Buffer.from(vBytes);
+            const videoFilename = `stb_${articleData.slug}_hero.mp4`;
+            await writeFile(path.join(uploadDir, videoFilename), vBuffer);
+            publicVideoUrl = `/assets/images/news/${videoFilename}`;
+        }
 
         // 2. Process Support Images (Detail & Context)
         const supportTypes = ['detail', 'context'];
@@ -62,6 +73,7 @@ export async function POST(req: NextRequest) {
                     authorName: articleData.authorName || "SwissTech AI Editor",
                     authorRole: articleData.authorRole || "Automated Insight Engine",
                     imageUrl: publicImageUrl,
+                    videoUrl: publicVideoUrl,
                     sourcesJson: articleData.sourcesJson,
                     expertQuote: articleData.expertQuote,
                     keyFactsJson: articleData.keyFactsJson,
