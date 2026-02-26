@@ -1,0 +1,61 @@
+{
+  "articles": [
+    {
+      "slug": "soft-power-ranking-2026-global-analysis",
+      "keyFactsJson": "[{\"fact\":\"Hier sind 5 Schlüsseltatsachen, die aus dem Artikel \\\"Soft Power Ranking 2026: USA vor China und Japan – Ein strategisches Briefing\\\" extrahiert werden können:\"},{\"fact\":\"**USA behalten Spitzenposition**: Die Vereinigten Staaten behaupten ihre Spitzenposition im Soft Power Index 2026.\"},{\"fact\":\"**China steigt massiv auf**: Das chinesische Reich erlebt einen erheblichen Aufstieg in der Rangliste, was ein Ende der westlichen Dominanz im Bereich der \\\"Anziehungskraft ohne Zwang\\\" signalisiert.\"},{\"fact\":\"**Japan konsolidiert seine Stellung**: Japan behauptet seine Position in der Rangliste und zeigt sich als stabil in seiner Ausübung von Soft Power.\"},{\"fact\":\"**Soft Power wird sicherheitspolitisch relevanter**: Der Global Soft Power Index 2026 definiert die Parameter nationaler Einflussnahme neu und macht deutlich, dass Soft Power im Jahr 2026 ein integraler Bestandteil der nationalen Sicherheitsarchitektur ist.\"}]"
+    },
+    {
+      "slug": "deutsche-telekom-quanten-teleportation-glasfaser-qunnect-carina",
+      "keyFactsJson": "[{\"fact\":\"Hier sind 5 Schlüssel Fakten:\"},{\"fact\":\"Deutsche Telekom hat in Berlin eine Quanten-Teleportation über rund 30 Kilometer kommerzielle Glasfaser demonstriert.\"},{\"fact\":\"Die Demonstration zeigt, dass die Kombination von großen Distanzen und einer stabilen Glasfaserverbindung möglich ist.\"},{\"fact\":\"Dies verschoben die Debatte über Quantennetzwerke weg von der Frage ihrer technischen Machbarkeit hin zur Frage, wie sie als Infrastrukturkomponente betrieben werden können.\"},{\"fact\":\"Die Demonstration wurde in Zusammenarbeit zwischen T-Labs und Qunnect durchgeführt.\"}]"
+    },
+    {
+      "slug": "bitdeer-btc-reserve-verkauft-ki-hpc-pivot-mining-rentabilitaet-2026",
+      "keyFactsJson": "[{\"fact\":\"Hier sind 5 wichtige Fakten, die ich aus dem Artikel extrahiert habe:\"},{\"fact\":\"**Bitdeer liquidiert gesamte BTC-Treasury**: Der in Singapur ansässige Bitcoin-Miner Bitdeer hat seine gesamte Reserve an Bitcoins liquidiert und hält nun keine eigenen BTC mehr (ohne Kundeneinlagen).\"},{\"fact\":\"**Priorisierung von Liquidität und Kapitalallokation**: Die Entscheidung des Unternehmens signalisiert, dass es derzeit wichtig ist, die Liquidität zu sichern, die Schuldenstruktur zu optimieren und Kapital in neue Wachstumsfelder wie KI- und HPC zu investieren.\"},{\"fact\":\"**Mining-Margen unter Druck**: Das Unternehmen muss mit zunehmend schwierigen Marktbedingungen für Miner umgehen, was sich negativ auf die Margen auswirkt.\"},{\"fact\":\"**Künstliche Intelligenz (KI) und High-Performance-Computing (HPC)**: Bitdeer zielt darauf ab, sein Kapital in neue Wachstumsfelder wie KI und HPC zu investieren, was ein Schwenk im Geschäftsmodell darstellt.\"}]"
+    },
+    {
+      "slug": "argentinien-legaltech-ki-rechtsprechungssuche-jurisprudenciaarg",
+      "keyFactsJson": "[{\"fact\":\"Hier sind 5 Schlüssel Fakten über das LegalTech-Projekt \\\"JurisprudenciaARG.com\\\":\"},{\"fact\":\"**Automatisierte Rechtsprechungsrecherche**: Die Plattform verwendet Künstliche Intelligenz (KI) für die automatische Recherche nach relevanten Urteilen.\"},{\"fact\":\"**Bereitstellung von über 700 neuen Entscheidungen pro Tag**: Die Plattform verarbeitet bereits mehr als 700 neue Urteile pro Tag und baut damit eine umfangreiche Datenbasis auf.\"},{\"fact\":\"**Über 450'000 Dokumente in der Datenbank**: Die Plattform hat eine strukturierte Datenbasis von über 450'000 Dokumenten, die Juristen schneller zu relevanten Präzedenzfällen führen soll.\"},{\"fact\":\"**Zeitaufwendige Recherche**: Die Suche nach relevanter Rechtsprechung ist in vielen Rechtssystemen zeitaufwendig, insbesondere wenn Datenquellen fragmentiert, technisch veraltet oder schwer durchsuchbar sind.\"}]"
+    },
+    {
+      "slug": "usa-portugal-f35-statt-f16-nato-interoperabilitaet",
+      "keyFactsJson": "[{\"fact\":\"Hier sind 5 wichtige Fakten, die aus dem Artikel hervorgehen:\"},{\"fact\":\"Der US-Botschafter in Portugal, John Arrigo, hat die portugiesische Regierung aufgefordert, die F-16-Flotte durch den F-35 Lightning II von Lockheed Martin zu ersetzen.\"},{\"fact\":\"Arrigos Hauptziel ist es, die Interoperabilität Portugals mit der EU und NATO zu erhöhen, um sich auf das Niveau führender europäischer Luftstreitkräfte zu bringen.\"},{\"fact\":\"Der F-35 wird als technologisch stärkster Kandidat für eine Ersetzung der bestehenden F-16-Flotte bezeichnet und wird als Stealth-Plattform der fünften Generation geführt.\"},{\"fact\":\"Die Einbindung des F-35 in ein zunehmend vernetztes NATO- und EU-Verteidigungsumfeld steht im Fokus von Arrigos Argumentation.\"}]"
+    },
+    {
+      "slug": "nvidia-openclaw-lokale-ki-agenten-rtx-schweiz-europa-2026",
+      "keyFactsJson": "[{\"fact\":\"Hier sind 5 wichtige Fakten, die aus dem Text extrahiert wurden:\"},{\"fact\":\"**NVIDIA unterstützt OpenClaw**: NVIDIA fördert die Ausführung von OpenClaw auf ihren RTX-Systemen in Europa und der Schweiz.\"},{\"fact\":\"**Schwerpunkt verlagert sich auf Agenten**: Die Debatte um künstliche Intelligenz (KI) wird nicht mehr nur auf Modellleistung, sondern auf die operative Einbettung von KI-Agenten in reale Arbeitsumgebungen fokussiert.\"},{\"fact\":\"**Lokale KI-Agenten erhöhen die Kontrolle**: Durch die lokale Ausführung von KI-Agenten können sensible Daten nicht standardmäßig in externe Cloud-Workflows fließen, was mehr Kontrolle am Netzrand (Edge/Endpoint) bietet.\"},{\"fact\":\"**Gegenmodell zum dominanten Plattformansatz**: Diese Lösung bietet ein relevantes Gegenmodell zu den großen US-Cloudanbietern, indem sie die GPU-beschleunigte Inferenz auf PCs kombiniert.\"}]"
+    },
+    {
+      "slug": "linux-7-0-rc1-neuer-kernel-aenderungen-installation-2026",
+      "keyFactsJson": "[{\"fact\":\"Hier sind 5 wichtige Fakten über Linux 7.0:\"},{\"fact\":\"**Neuer Kernel-Version**: Der Linux-Kernel tritt in eine neue Phase ein, nachdem Linus Torvalds den Versionssprung auf Linux 7.0 bestätigt hat.\"},{\"fact\":\"**Release Candidate 1 (RC1)**: Die Veröffentlichung des RC1 markiert das Eintreten der Stabilisierungsphase, in der die Fehlerbehebung und Sicherheitshärtung im Vordergrund stehen.\"},{\"fact\":\"**Keine radikalen Änderungen**: Der Sprung auf Linux 7.0 bedeutet keinen radikalen architektonischen Bruch, sondern eher einen symbolischen Meilenstein in der Entwicklung des Kerns.\"},{\"fact\":\"**Fokus auf Fehlerbehebung**: Ab dem RC1-Launch liegt der Fokus primär auf Fehlerbehebung, Treiber-Refinement und Sicherheitshärtung, während die Einführung neuer Funktionen gestoppt wird.\"}]"
+    },
+    {
+      "slug": "die-schweiz-spielt-bei-knstlicher-intelligenz-eine-schlsselr-343",
+      "keyFactsJson": "[{\"fact\":\"Hier sind 5 Schlüssel-Fakten über die Rolle der Schweiz bei künstlicher Intelligenz:\"},{\"fact\":\"**Schweiz als Hotspot für KI**: Die Schweiz hat sich in den letzten Jahren als wichtiger Standort für die Forschung und Entwicklung von künstlicher Intelligenz (KI) etabliert.\"},{\"fact\":\"**Wirtschaftliche Bedeutung**: Die Schweizer Wirtschaft ist stark exportorientiert, was ein hohes Interesse an der Entwicklung und Nutzung von KI-Technologien bedeutet.\"},{\"fact\":\"**Unternehmen nutzen KI erfolgreich**: Es gibt in der Schweiz eine Reihe von Unternehmen, die KI-Technologien bereits erfolgreich einsetzen.\"},{\"fact\":\"**Forschungseinrichtungen für KI**: In der Schweiz gibt es eine Reihe von Forschungseinrichtungen, die sich mit der Entwicklung von KI-Technologien beschäftigen.\"}]"
+    },
+    {
+      "slug": "norwegens-staatsfonds-setzt-ki-zur-erkennung-von-e-477",
+      "keyFactsJson": "[{\"fact\":\"Hier sind 5 Schlüsseltatsachen:\"},{\"fact\":\"Norwegens Staatsfonds setzt KI-Technologien zur Erkennung von ESG-Risiken ein.\"},{\"fact\":\"Durch den Einsatz von KI können Investoren riesige Mengen an Daten schnell und effizient analysieren und potenzielle Risiken identifizieren.\"},{\"fact\":\"ESG-Faktoren (Umweltverträglichkeit, soziale Verantwortung und Governance) sind heute ein wichtiger Bestandteil der Anlageentscheidungen.\"},{\"fact\":\"Der Einsatz von KI bei Norwegens Staatsfonds dient dem Ziel, ESG-Risiken frühzeitig zu erkennen.\"}]"
+    },
+    {
+      "slug": "falsche-informationen-durch-ki-eine-bedrohung-fr-d-967",
+      "keyFactsJson": "[{\"name\":\"Swiss Tech\",\"number\":\"2022\",\"specificEvent\":\"Regulierungen eingeführt\"},{\"name\":\"Europäische Kommission\",\"number\":\"500 Millionen Euro\",\"specificEvent\":\"Bildungsprogramme aufgesetzt\"}]"
+    },
+    {
+      "slug": "snapcheck-will-transparenz-in-den-krankenkassen-ds-848",
+      "keyFactsJson": "[{\"name\":\"Swiss Healthcare System\",\"number\":\"high costs and complex insurance system\"},{\"name\":\"Patient Dissatisfaction\",\"number\":\"significant dissatisfaction among patients and service providers\"},{\"name\":\"SnapCheck's Goal\",\"number\":\"revolutionize patient access to information about treatment costs, scope, and quality\"},{\"name\":\"Blockchain-based System\",\"number\":\"secure and tamper-proof storage of patient data\"},{\"name\":\"Impact on Patient Safety\",\"number\":\"enhanced patient safety, increased satisfaction among patients, and optimized resource allocation\"}]"
+    },
+    {
+      "slug": "ubs-schweiz-chefin-keller-busse-generative-knstlic-181",
+      "keyFactsJson": "[{\"name\":\"Sabine Keller-Busse\",\"number\":null},{\"event\":\"Einführung von Generativen KI in der Bildung\",\"date\":null},{\"impact\":\"Erhöhung der Produktivität durch AI-gesteuerte Automation\",\"value\":12},{\"example\":\"Verwendung von Generative AI in der Medizin für die Analyse großer Datenmengen und Identifizierung neuer Behandlungen\",\"date\":null},{\"estimate\":\"Zunahme des Schweizer GDP durch Blockchain-Technologie bis zu 1,5% bis 2025\",\"source\":\"KPMG\"}]"
+    },
+    {
+      "slug": "kommentar-ki-ist-kein-buchdruck-moment---handelsze-75",
+      "keyFactsJson": "[{\"name\":\"AlphaGo\",\"number\":\"1\"},{\"name\":\"KI-Unternehmen in der Schweiz\",\"number\":\"10\"},{\"name\":\"KI-Forschungsbudget in Europa\",\"number\":\"100 Millionen Euro\"},{\"name\":\"Arbeitsplätze durch KI-Unternehmen\",\"number\":\"5000\"},{\"name\":\"KI-Zeitpunkt: \",\"number\":\"2025\"}]"
+    },
+    {
+      "slug": "kommentar-ki-ist-kein-buchdruck-moment---handelsze-697",
+      "keyFactsJson": "[{\"name\":\"European Research Council (ERC)\",\"value\":\"2020\",\"unit\":\"\"},{\"name\":\"World Economic Forum (WEF)\",\"value\":\"2018\",\"unit\":\"\"},{\"name\":\"International Data Corporation (IDC)\",\"value\":\"2025\",\"unit\":\"\"},{\"name\":\"KI-Technologie-Investitionen\",\"value\":\"10 Milliarden US-Dollar pro Jahr\",\"unit\":\"\"},{\"name\":\"Globale Investition in KI-Technologie bis 2025\",\"value\":\"150 Milliarden US-Dollar pro Jahr\",\"unit\":\"\"}]"
+    }
+  ],
+  "translations": []
+}
