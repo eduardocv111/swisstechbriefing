@@ -8,20 +8,20 @@ datasource db {
 }
 
 model Article {
-  id          String   @id @default(cuid())
-  slug        String   @unique
-  category    String
-  date        DateTime
-  authorName  String
-  authorRole  String?
-  sourcesJson String
-  imageUrl    String?
-  videoUrl    String?
+  id           String               @id @default(cuid())
+  slug         String               @unique
+  category     String
+  date         DateTime
+  authorName   String
+  authorRole   String?
+  sourcesJson  String
+  imageUrl     String?
   expertQuote  String?
   keyFactsJson String?
-  isVerified   Boolean @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  isVerified   Boolean              @default(false)
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  videoUrl     String?
   translations ArticleTranslation[]
 
   @@index([category])
@@ -35,11 +35,11 @@ model ArticleTranslation {
   title           String
   excerpt         String
   contentHtml     String
-  expertQuote     String?
-  keyFactsJson    String?
   metaTitle       String?
   metaDescription String?
   updatedAt       DateTime @updatedAt
+  expertQuote     String?
+  keyFactsJson    String?
   article         Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
 
   @@unique([articleId, locale])
@@ -52,33 +52,38 @@ model NewsletterSubscription {
   source     String
   leadMagnet String?
   createdAt  DateTime @default(now())
+
   @@index([email])
 }
 
 model MarketSnapshot {
-  id          Int      @id @default(autoincrement())
-  createdAt   String   @map("created_at")
-  payloadJson String   @map("payload_json")
+  id          Int    @id @default(autoincrement())
+  createdAt   String @map("created_at")
+  payloadJson String @map("payload_json")
+
   @@map("market_snapshots")
 }
 
 model MacroSnapshot {
-  id          Int      @id @default(autoincrement())
-  createdAt   String   @map("created_at")
-  payloadJson String   @map("payload_json")
+  id          Int    @id @default(autoincrement())
+  createdAt   String @map("created_at")
+  payloadJson String @map("payload_json")
+
   @@map("macro_snapshots")
 }
 
 model SnbSnapshot {
-  id          Int      @id @default(autoincrement())
-  createdAt   String   @map("created_at")
-  payloadJson String   @map("payload_json")
+  id          Int    @id @default(autoincrement())
+  createdAt   String @map("created_at")
+  payloadJson String @map("payload_json")
+
   @@map("snb_snapshots")
 }
 
 model SwissOpenDataSnapshot {
-  id          Int      @id @default(autoincrement())
-  createdAt   String   @map("created_at")
-  payloadJson String   @map("payload_json")
+  id          Int    @id @default(autoincrement())
+  createdAt   String @map("created_at")
+  payloadJson String @map("payload_json")
+
   @@map("swiss_open_data_snapshots")
 }

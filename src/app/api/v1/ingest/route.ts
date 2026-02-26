@@ -10,22 +10,42 @@ import path from "path";
 export async function POST(req: NextRequest) {
     try {
         const authHeader = req.headers.get("x-ai-secret")?.trim();
-        const AI_SECRET = (process.env.AI_INGESTION_SECRET || "SwissTech_AI_Secret_2026_!#").trim();
+        const AI_SECRET = (process.env.AI_INGESTION_SECRET)?.trim();
 
-        if (authHeader !== AI_SECRET) {
+        if (!AI_SECRET || authHeader !== AI_SECRET) {
             return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
         }
 
         const formData = await req.formData();
         const articleJson = formData.get("article") as string;
-        const imageFile = formData.get("image") as File;
-        const videoFile = formData.get("video") as File;
 
-        if (!articleJson || !imageFile) {
-            return NextResponse.json({ error: "Missing article data or image" }, { status: 400 });
+        if (!articleJson) {
+            return NextResponse.json({ error: "Missing article data" }, { status: 400 });
         }
 
         const articleData = JSON.parse(articleJson);
+
+        // --- IDEMPOTENCY CHECK ---
+        const existing = await prisma.article.findUnique({
+            where: { slug: articleData.slug }
+        });
+
+        if (existing) {
+            console.log(`[AI Ingestion] 🛡️ Idempotency: Article ${articleData.slug} already exists. Returning success.`);
+            return NextResponse.json({
+                success: true,
+                slug: existing.slug,
+                url: `https://swisstechbriefing.ch/de-CH/artikel/${existing.slug}`,
+                idempotent: true
+            });
+        }
+
+        const imageFile = formData.get("image") as File;
+        const videoFile = formData.get("video") as File;
+
+        if (!imageFile) {
+            return NextResponse.json({ error: "Missing article image" }, { status: 400 });
+        }
         const translations = articleData.translations || [];
 
         // Ensure directory exists
@@ -67,10 +87,30 @@ export async function POST(req: NextRequest) {
         const normalizeFacts = (facts: any): string => {
             if (!facts) return JSON.stringify([]);
             try {
-                const parsed = typeof facts === 'string' ? JSON.parse(facts) : facts;
-                const array = Array.isArray(parsed) ? parsed : [parsed];
-                return JSON.stringify(array.map(f => typeof f === 'object' ? f : { fact: String(f) }));
-            } catch {
+                let items: string[] = [];
+
+                if (typeof facts === 'string') {
+                    // Si es un string con saltos de línea (como lo que genera el agente)
+                    if (facts.includes('\n')) {
+                        items = facts.split('\n').map(l => l.replace(/^[-*•\d.]+\s*/, '').trim()).filter(l => l.length > 3);
+                    } else {
+                        try {
+                            const parsed = JSON.parse(facts);
+                            items = Array.isArray(parsed) ? parsed : [parsed];
+                        } catch {
+                            items = [facts];
+                        }
+                    }
+                } else if (Array.isArray(facts)) {
+                    items = facts;
+                }
+
+                return JSON.stringify(items.slice(0, 5).map(f => {
+                    const content = typeof f === 'object' && f !== null ? ((f as any).fact || JSON.stringify(f)) : String(f);
+                    return { fact: content.replace(/^[-*•\d.]+\s*/, '').trim() };
+                }));
+            } catch (e) {
+                console.error("[Ingest] Fact normalization error:", e);
                 return JSON.stringify([]);
             }
         };
