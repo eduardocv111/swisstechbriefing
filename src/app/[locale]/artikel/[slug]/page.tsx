@@ -291,17 +291,17 @@ export default async function ArticlePage({ params }: Props) {
                         <div className="mt-6" dangerouslySetInnerHTML={{ __html: article.contentHtml }} />
 
                         {/* Key Facts / Hard Data Section */}
-                        {article.keyFacts && (
+                        {article.keyFacts && article.keyFacts.length > 0 && (
                             <div className="my-10 rounded-2xl border border-slate-100 p-8 dark:border-slate-800">
                                 <h3 className="mb-6 flex items-center gap-2 text-sm font-black uppercase tracking-widest text-slate-900 dark:text-white">
                                     <span className="material-symbols-outlined text-primary">data_usage</span>
                                     {dict.article.hardDataTitle || 'Fakten & Daten'}
                                 </h3>
                                 <div className="space-y-4 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                                    {article.keyFacts.split('\n').filter(line => line.trim()).map((fact, i) => (
+                                    {article.keyFacts.map((item, i) => (
                                         <div key={i} className="flex gap-3">
                                             <span className="text-primary mt-1">•</span>
-                                            <p>{fact.replace(/^[*-]\s*/, '')}</p>
+                                            <p>{item.fact}</p>
                                         </div>
                                     ))}
                                 </div>

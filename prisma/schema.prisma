@@ -35,6 +35,8 @@ model ArticleTranslation {
   title           String
   excerpt         String
   contentHtml     String
+  expertQuote     String?
+  keyFactsJson    String?
   metaTitle       String?
   metaDescription String?
   updatedAt       DateTime @updatedAt

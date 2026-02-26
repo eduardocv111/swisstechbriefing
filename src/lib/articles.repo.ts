@@ -24,7 +24,7 @@ export type UiArticle = {
   };
   contentHtml: string;
   expertQuote?: string | null;
-  keyFacts?: string | null;
+  keyFacts?: Array<{ fact: string }> | null;
   isVerified: boolean;
   videoUrl?: string | null;
   // i18n metadata
@@ -91,6 +91,8 @@ interface DbArticle {
     title: string;
     excerpt: string | null;
     contentHtml: string;
+    expertQuote?: string | null;
+    keyFactsJson?: string | null;
   }>;
 }
 
@@ -120,6 +122,20 @@ function mapDbToUi(article: DbArticle, locale: string): UiArticle {
   const sources = safeJsonParseSources(article.sourcesJson);
   const image = article.imageUrl && article.imageUrl.trim() !== "" ? article.imageUrl : FALLBACK_IMAGE;
 
+  // Facts Normalization
+  const rawFacts = trans?.keyFactsJson || article.keyFactsJson || "[]";
+  let keyFacts: Array<{ fact: string }> | null = null;
+  try {
+    const parsed = JSON.parse(rawFacts);
+    if (Array.isArray(parsed)) {
+      keyFacts = parsed.map(f => typeof f === 'object' ? f : { fact: String(f) });
+    } else {
+      keyFacts = [{ fact: String(rawFacts) }];
+    }
+  } catch {
+    keyFacts = [{ fact: String(rawFacts) }];
+  }
+
   return {
     id: article.id,
     slug: article.slug,
@@ -136,8 +152,8 @@ function mapDbToUi(article: DbArticle, locale: string): UiArticle {
       role: article.authorRole ?? null,
     },
     contentHtml: sanitizeText(trans?.title && trans?.contentHtml ? trans.contentHtml : ""),
-    expertQuote: sanitizeText(article.expertQuote || null),
-    keyFacts: sanitizeText(article.keyFactsJson || null),
+    expertQuote: sanitizeText(trans?.expertQuote || article.expertQuote || null),
+    keyFacts: keyFacts,
     isVerified: article.isVerified,
     videoUrl: article.videoUrl || null,
     locale: trans?.locale || normLocale,

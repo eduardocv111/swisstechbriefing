@@ -63,6 +63,20 @@ export async function POST(req: NextRequest) {
 
         const publicImageUrl = `/assets/images/news/${mainFilename}`;
 
+        // Helper to normalize facts
+        const normalizeFacts = (facts: any): string => {
+            if (!facts) return JSON.stringify([]);
+            try {
+                const parsed = typeof facts === 'string' ? JSON.parse(facts) : facts;
+                const array = Array.isArray(parsed) ? parsed : [parsed];
+                return JSON.stringify(array.map(f => typeof f === 'object' ? f : { fact: String(f) }));
+            } catch {
+                return JSON.stringify([]);
+            }
+        };
+
+        const keyFactsJson = normalizeFacts(articleData.keyFactsJson);
+
         // 2. Create the article and all translations in the Database
         const result = await prisma.$transaction(async (tx) => {
             return await tx.article.create({
@@ -76,7 +90,7 @@ export async function POST(req: NextRequest) {
                     videoUrl: publicVideoUrl,
                     sourcesJson: articleData.sourcesJson,
                     expertQuote: articleData.expertQuote,
-                    keyFactsJson: articleData.keyFactsJson,
+                    keyFactsJson: keyFactsJson,
                     isVerified: articleData.isVerified || false,
                     translations: {
                         create: [
@@ -86,6 +100,8 @@ export async function POST(req: NextRequest) {
                                 title: articleData.title,
                                 excerpt: articleData.excerpt,
                                 contentHtml: articleData.contentHtml,
+                                expertQuote: articleData.expertQuote,
+                                keyFactsJson: keyFactsJson,
                                 metaTitle: articleData.metaTitle,
                                 metaDescription: articleData.metaDescription
                             },
@@ -95,6 +111,8 @@ export async function POST(req: NextRequest) {
                                 title: t.title,
                                 excerpt: t.excerpt,
                                 contentHtml: t.contentHtml,
+                                expertQuote: t.expertQuote,
+                                keyFactsJson: normalizeFacts(t.keyFactsJson),
                                 metaTitle: t.metaTitle,
                                 metaDescription: t.metaDescription
                             }))
