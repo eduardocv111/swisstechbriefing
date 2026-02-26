@@ -3,7 +3,8 @@
         "home": "Home",
         "about": "About Us",
         "newsletter": "Newsletter",
-        "search": "Search"
+        "search": "Search",
+        "languageSelector": "Select Language"
     },
     "categories": {
         "all": "All",
@@ -26,7 +27,9 @@
         "sourcesTitle": "Sources & References",
         "fallbackNotice": "This article is currently only available in German.",
         "factChecked": "Fact-Checked & Verified",
-        "hardDataTitle": "Hard Data & Figures"
+        "hardDataTitle": "Hard Data & Figures",
+        "analystInsight": "Analyst Insight",
+        "imageCredit": "Credit:"
     },
     "footer": {
         "description": "Curated medium for AI, startups, and technology in Switzerland. Daily insights into the digital transformation.",
@@ -127,5 +130,13 @@
         "banner_note": "You can change your selection at any time via \"Cookie Settings\" in the footer.",
         "settings": "Settings",
         "only_necessary": "Only necessary"
+    },
+    "mobile_app": {
+        "badge": "Mobile App Beta",
+        "headline": "SwissTech Briefing <br /> <span class='text-primary'>always with you.</span>",
+        "description": "Get the latest analyses and news directly on your smartphone. Fast, premium, and independent. Available for free for Android.",
+        "download_title": "Download App",
+        "download_subtitle": "Android Preview v1.0.0",
+        "ios_notice": "* iOS version coming soon via TestFlight."
     }
 }

@@ -3,7 +3,8 @@
         "home": "Inicio",
         "about": "Sobre nosotros",
         "newsletter": "Newsletter",
-        "search": "Buscar"
+        "search": "Buscar",
+        "languageSelector": "Cambiar idioma"
     },
     "categories": {
         "all": "Todo",
@@ -26,7 +27,9 @@
         "sourcesTitle": "Fuentes y referencias",
         "fallbackNotice": "Este artículo actualmente solo está disponible en alemán.",
         "factChecked": "Verificado & Validado",
-        "hardDataTitle": "Datos y Cifras"
+        "hardDataTitle": "Datos y Cifras",
+        "analystInsight": "Perspectiva del Analista",
+        "imageCredit": "Crédito:"
     },
     "footer": {
         "description": "Medio curado para IA, startups y tecnología en Suiza. Información diaria sobre la transformación digital.",
@@ -127,5 +130,13 @@
         "banner_note": "Puedes cambiar tu selección en cualquier momento a través de la \"Configuración de cookies\" en el pie de página.",
         "settings": "Ajustes",
         "only_necessary": "Solo necesarias"
+    },
+    "mobile_app": {
+        "badge": "Mobile App Beta",
+        "headline": "SwissTech Briefing <br /> siempe contigo.",
+        "description": "Recibe los últimos análisis y noticias directamente en tu smartphone. Rápido, premium e independiente. Disponible gratis para Android.",
+        "download_title": "Descargar App",
+        "download_subtitle": "Android Preview v1.0.0",
+        "ios_notice": "* Versión de iOS próximamente vía TestFlight."
     }
 }

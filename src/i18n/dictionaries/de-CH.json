@@ -3,14 +3,15 @@
         "home": "Home",
         "about": "Über uns",
         "newsletter": "Newsletter",
-        "search": "Suche"
+        "search": "Suche",
+        "languageSelector": "Sprache wählen"
     },
     "categories": {
         "all": "Alle",
         "ki": "KI",
         "startups": "Startups",
         "regulation": "Regulierung",
-        "defense": "Defense Tech"
+        "defense": "Defense-Technologie"
     },
     "home": {
         "featured_title": "Aktuelle Analysen",
@@ -26,7 +27,9 @@
         "sourcesTitle": "Quellen & Referenzen",
         "fallbackNotice": "Dieser Artikel ist derzeit nur auf Deutsch verfügbar.",
         "factChecked": "Faktencheck bestanden",
-        "hardDataTitle": "Fakten & Daten"
+        "hardDataTitle": "Fakten & Daten",
+        "analystInsight": "Analysteneinschätzung",
+        "imageCredit": "Bild:"
     },
     "footer": {
         "description": "Kuratiertes Medium für KI, Startups und Technologie in der Schweiz. Tägliche Einblicke in die digitale Transformation.",
@@ -127,5 +130,13 @@
         "banner_note": "Sie können Ihre Auswahl jederzeit über «Cookie-Einstellungen» im Footer ändern.",
         "settings": "Einstellungen",
         "only_necessary": "Nur notwendige"
+    },
+    "mobile_app": {
+        "badge": "Mobile App Beta",
+        "headline": "SwissTech Briefing <br /> <span class='text-primary'>immer dabei.</span>",
+        "description": "Holen Sie sich die neuesten Analysen und Nachrichten direkt auf Ihr Smartphone. Schnell, premium und unabhängig. Kostenlos für Android verfügbar.",
+        "download_title": "App herunterladen",
+        "download_subtitle": "Android Preview v1.0.0",
+        "ios_notice": "* iOS Version folgt in Kürze via TestFlight."
     }
 }

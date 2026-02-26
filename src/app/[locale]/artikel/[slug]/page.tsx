@@ -254,7 +254,7 @@ export default async function ArticlePage({ params }: Props) {
                                 </div>
                             </div>
                             <div className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
-                                Foto: <span className="text-primary/80">Archivos SwissTech Briefing</span>
+                                {dict.article.imageCredit} <span className="text-primary/80">Archiv SwissTech Briefing</span>
                             </div>
                         </div>
 
@@ -283,7 +283,7 @@ export default async function ArticlePage({ params }: Props) {
                                 </p>
                                 <div className="mt-4 flex items-center gap-3">
                                     <div className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
-                                    <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Analyst Insight</span>
+                                    <span className="text-xs font-bold uppercase tracking-widest text-slate-500">{dict.article.analystInsight}</span>
                                 </div>
                             </div>
                         )}

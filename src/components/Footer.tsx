@@ -5,6 +5,7 @@ import { CATEGORIES } from '@/lib/categories';
 import { getDictionary } from '@/i18n/get-dictionary';
 import { Locale } from '@/i18n/config';
 import NewsletterBox from './newsletter/NewsletterBox';
+import CookieSettingsTrigger from './consent/CookieSettingsTrigger';
 
 interface FooterProps {
     locale?: string;
@@ -78,6 +79,7 @@ export default async function Footer({ locale = 'de-CH' }: FooterProps) {
                                 <li><Link href={`/${locale}/impressum`} className="hover:text-primary transition-colors">{dict.footer.imprint}</Link></li>
                                 <li><Link href={`/${locale}/datenschutz`} className="hover:text-primary transition-colors">{dict.footer.privacy}</Link></li>
                                 <li><Link href={`/${locale}/kontakt`} className="hover:text-primary transition-colors">{dict.footer.contact}</Link></li>
+                                <li><CookieSettingsTrigger label={dict.cookies.settings} /></li>
                             </ul>
                         </div>
                     </div>

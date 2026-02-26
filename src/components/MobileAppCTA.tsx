@@ -20,15 +20,11 @@ const MobileAppCTA: React.FC<MobileAppCTAProps> = async ({ locale }) => {
             <div className="relative flex flex-col items-center justify-between gap-12 lg:flex-row">
                 <div className="flex-1 text-center lg:text-left">
                     <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-primary">
-                        Mobile App Beta
+                        {dict.mobile_app.badge}
                     </span>
-                    <h2 className="mb-6 text-3xl font-bold leading-tight text-white md:text-5xl">
-                        SwissTech Briefing <br />
-                        <span className="text-primary">immer dabei.</span>
-                    </h2>
+                    <h2 className="mb-6 text-3xl font-bold leading-tight text-white md:text-5xl" dangerouslySetInnerHTML={{ __html: dict.mobile_app.headline }} />
                     <p className="mb-8 max-w-lg text-lg text-slate-400">
-                        Holen Sie sich die neuesten Analysen und Nachrichten direkt auf Ihr Smartphone.
-                        Snel, premium und unabhängig. Distribución gratuita para Android.
+                        {dict.mobile_app.description}
                     </p>
 
                     <div className="flex flex-col items-center gap-4 sm:flex-row lg:justify-start">
@@ -39,13 +35,13 @@ const MobileAppCTA: React.FC<MobileAppCTAProps> = async ({ locale }) => {
                         >
                             <span className="material-symbols-outlined text-2xl notranslate">install_mobile</span>
                             <div className="flex flex-col items-start leading-none">
-                                <span className="text-[10px] uppercase tracking-wider opacity-80">Descargar App Móvil</span>
-                                <span className="text-base">Android Preview v1.0.0</span>
+                                <span className="text-[10px] uppercase tracking-wider opacity-80">{dict.mobile_app.download_title}</span>
+                                <span className="text-base">{dict.mobile_app.download_subtitle}</span>
                             </div>
                         </Link>
 
                         <div className="text-xs text-slate-500 max-w-[200px] text-center sm:text-left">
-                            * iOS Version próximamente vía TestFlight.
+                            {dict.mobile_app.ios_notice}
                         </div>
                     </div>
                 </div>

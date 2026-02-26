@@ -7,8 +7,8 @@ export function formatSwissDate(date: string | Date, locale: string = 'de-CH'): 
     const normalizedLocale = locale.replace('_', '-');
 
     return d.toLocaleDateString(normalizedLocale, {
-        day: 'numeric',
-        month: 'long',
+        day: '2-digit',
+        month: '2-digit',
         year: 'numeric'
     });
 }

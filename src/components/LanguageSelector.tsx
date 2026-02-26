@@ -8,6 +8,7 @@ import { getPathnameWithoutLocale } from '@/lib/i18n';
 
 interface LanguageSelectorProps {
     currentLocale: string;
+    label?: string;
 }
 
 const FULL_LOCALE_NAMES: Record<Locale, string> = {
@@ -18,7 +19,7 @@ const FULL_LOCALE_NAMES: Record<Locale, string> = {
     'en': 'English',
 };
 
-export default function LanguageSelector({ currentLocale }: LanguageSelectorProps) {
+export default function LanguageSelector({ currentLocale, label }: LanguageSelectorProps) {
     const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -44,7 +45,7 @@ export default function LanguageSelector({ currentLocale }: LanguageSelectorProp
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-white/10 transition-colors text-slate-300 hover:text-white"
-                aria-label="Sprache wählen / Select Language"
+                aria-label={label || (currentLocale === 'de-CH' ? "Sprache wählen" : "Select Language")}
                 aria-expanded={isOpen}
                 aria-haspopup="true"
             >
@@ -61,7 +62,7 @@ export default function LanguageSelector({ currentLocale }: LanguageSelectorProp
                 <div className="absolute right-0 mt-2 w-48 bg-[#1a1f2e] border border-white/10 rounded-xl shadow-2xl py-2 z-[60] animate-in fade-in zoom-in duration-200">
                     <div className="px-3 py-1.5 mb-1 border-b border-white/5">
                         <span className="text-[10px] font-black uppercase tracking-[0.15em] text-slate-500">
-                            Language / Sprache
+                            {currentLocale === 'de-CH' ? 'Sprache' : 'Language'}
                         </span>
                     </div>
                     {locales.map((loc) => (

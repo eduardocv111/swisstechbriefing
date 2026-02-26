@@ -36,7 +36,7 @@ export default async function Header({ locale = 'de-CH' }: HeaderProps) {
                 {/* Language Selector */}
                 <div className="border-r border-white/10 pr-2 sm:pr-4 mr-1">
                     <Suspense fallback={<div className="w-10 h-8" />}>
-                        <LanguageSelector currentLocale={locale} />
+                        <LanguageSelector currentLocale={locale} label={dict.nav.languageSelector} />
                     </Suspense>
                 </div>
 
