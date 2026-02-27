@@ -3,7 +3,7 @@ import { promisify } from 'util';
 
 const execAsync = promisify(exec);
 
-const UPDATE_INTERVAL_MS = 40 * 60 * 1000; // 40 minutes
+const UPDATE_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 
 const scripts = [
     'scripts/update-macro-snapshot.mjs',
