@@ -76,6 +76,27 @@ export async function POST(req: NextRequest) {
             }
         }
 
+        // 2.5 Process Audio (The Podcast) - TOP TIER LOGIC
+        const audioDir = path.join(process.cwd(), "public", "assets", "audio", "podcasts");
+        try {
+            await mkdir(audioDir, { recursive: true });
+        } catch (e: any) {
+            console.warn(`[Ingest] ⚠️ audio mkdir warning: ${e.message}`);
+        }
+
+        // Main Audio
+        let publicAudioUrl = articleData.audioUrl || null;
+        const mainAudioFile = formData.get("audio") as File;
+        if (mainAudioFile) {
+            const aBytes = await mainAudioFile.arrayBuffer();
+            const aBuffer = Buffer.from(aBytes);
+            const audioFilename = `stb_${articleData.slug}_main.mp3`;
+            const aSavePath = path.join(audioDir, audioFilename);
+            await writeFile(aSavePath, aBuffer);
+            publicAudioUrl = `/assets/audio/podcasts/${audioFilename}`;
+            console.log(`[Ingest] 🎙️ Saved main audio: ${aSavePath}`);
+        }
+
         // Helper to normalize facts
         const normalizeFacts = (facts: any): string => {
             if (!facts) return JSON.stringify([]);
@@ -118,6 +139,7 @@ export async function POST(req: NextRequest) {
                     authorRole: articleData.authorRole || "Automated Insight Engine",
                     imageUrl: publicImageUrl,
                     videoUrl: publicVideoUrl,
+                    audioUrl: publicAudioUrl,
                     sourcesJson: articleData.sourcesJson,
                     expertQuote: articleData.expertQuote,
                     keyFactsJson: keyFactsJson,
@@ -131,6 +153,7 @@ export async function POST(req: NextRequest) {
                     authorRole: articleData.authorRole || "Automated Insight Engine",
                     imageUrl: publicImageUrl,
                     videoUrl: publicVideoUrl,
+                    audioUrl: publicAudioUrl,
                     sourcesJson: articleData.sourcesJson,
                     expertQuote: articleData.expertQuote,
                     keyFactsJson: keyFactsJson,
@@ -148,7 +171,8 @@ export async function POST(req: NextRequest) {
                     expertQuote: articleData.expertQuote,
                     keyFactsJson: keyFactsJson,
                     metaTitle: articleData.metaTitle,
-                    metaDescription: articleData.metaDescription
+                    metaDescription: articleData.metaDescription,
+                    audioUrl: publicAudioUrl
                 },
                 create: {
                     articleId: article.id,
@@ -159,12 +183,27 @@ export async function POST(req: NextRequest) {
                     expertQuote: articleData.expertQuote,
                     keyFactsJson: keyFactsJson,
                     metaTitle: articleData.metaTitle,
-                    metaDescription: articleData.metaDescription
+                    metaDescription: articleData.metaDescription,
+                    audioUrl: publicAudioUrl
                 }
             });
 
             // Upsert professional translations
             for (const t of translations) {
+                // Check localized audio in FormData
+                const locAudioFile = formData.get(`audio_${t.locale}`) as File;
+                let locAudioUrl = t.audioUrl || null;
+
+                if (locAudioFile) {
+                    const lBytes = await locAudioFile.arrayBuffer();
+                    const lBuffer = Buffer.from(lBytes);
+                    const locFilename = `stb_${articleData.slug}_${t.locale}.mp3`;
+                    const lSavePath = path.join(audioDir, locFilename);
+                    await writeFile(lSavePath, lBuffer);
+                    locAudioUrl = `/assets/audio/podcasts/${locFilename}`;
+                    console.log(`[Ingest] 🎙️ Saved localized audio [${t.locale}]: ${lSavePath}`);
+                }
+
                 await tx.articleTranslation.upsert({
                     where: { articleId_locale: { articleId: article.id, locale: t.locale } },
                     update: {
@@ -174,7 +213,8 @@ export async function POST(req: NextRequest) {
                         expertQuote: t.expertQuote,
                         keyFactsJson: normalizeFacts(t.keyFactsJson),
                         metaTitle: t.metaTitle,
-                        metaDescription: t.metaDescription
+                        metaDescription: t.metaDescription,
+                        audioUrl: locAudioUrl
                     },
                     create: {
                         articleId: article.id,
@@ -185,7 +225,8 @@ export async function POST(req: NextRequest) {
                         expertQuote: t.expertQuote,
                         keyFactsJson: normalizeFacts(t.keyFactsJson),
                         metaTitle: t.metaTitle,
-                        metaDescription: t.metaDescription
+                        metaDescription: t.metaDescription,
+                        audioUrl: locAudioUrl
                     }
                 });
             }

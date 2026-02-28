@@ -32,7 +32,11 @@
         "factChecked": "Faktencheck bestanden",
         "hardDataTitle": "Fakten & Daten",
         "analystInsight": "Analysteneinschätzung",
-        "imageCredit": "Bild:"
+        "imageCredit": "Bild:",
+        "play": "Abspielen",
+        "pause": "Pause",
+        "listen": "KI-Audio Version hören",
+        "audioInvite": "Lieber hören statt lesen? Geniessen Sie unsere KI-Audio-Version."
     },
     "footer": {
         "description": "Kuratiertes Medium für KI, Startups und Technologie in der Schweiz. Tägliche Einblicke in die digitale Transformation.",

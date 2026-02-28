@@ -32,7 +32,11 @@
         "factChecked": "Fact-Checked & Verified",
         "hardDataTitle": "Hard Data & Figures",
         "analystInsight": "Analyst Insight",
-        "imageCredit": "Credit:"
+        "imageCredit": "Credit:",
+        "play": "Play",
+        "pause": "Pause",
+        "listen": "Listen to AI audio",
+        "audioInvite": "Prefer listening instead of reading? Enjoy our AI-generated audio version."
     },
     "footer": {
         "description": "Curated medium for AI, startups, and technology in Switzerland. Daily insights into the digital transformation.",

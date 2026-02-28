@@ -12,7 +12,9 @@
         "startups": "Startup",
         "regulation": "Regolamento",
         "defense": "Difesa",
-        "analyse": "Analisi e Approfondimenti"
+        "analyse": "Analisi e Approfondimenti",
+        "podcasts": "Podcast",
+        "space": "Spazio e Scoperta"
     },
     "home": {
         "featured_title": "Analisi Attuali",
@@ -30,7 +32,11 @@
         "factChecked": "Verificato & Validato",
         "hardDataTitle": "Dati e Cifre",
         "analystInsight": "Analyst Insight",
-        "imageCredit": "Credito:"
+        "imageCredit": "Credito:",
+        "play": "Riproduci",
+        "pause": "Pausa",
+        "listen": "Ascolta la versione IA",
+        "audioInvite": "Preferisci ascoltare invece de leggere? Goditi la nostra versione audio generata dall'IA."
     },
     "footer": {
         "description": "Media curato per AI, startup e tecnologia in Svizzera. Approfondimenti quotidiani sulla trasformazione digitale.",

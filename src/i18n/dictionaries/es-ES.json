@@ -32,7 +32,11 @@
         "factChecked": "Verificado & Validado",
         "hardDataTitle": "Datos y Cifras",
         "analystInsight": "Perspectiva del Analista",
-        "imageCredit": "Crédito:"
+        "imageCredit": "Crédito:",
+        "play": "Reproducir",
+        "pause": "Pausa",
+        "listen": "Escuchar versión de IA",
+        "audioInvite": "¿Prefieres escuchar en vez de leer? Disfruta de nuestra versión de audio generada por IA."
     },
     "footer": {
         "description": "Medio curado para IA, startups y tecnología en Suiza. Información diaria sobre la transformación digital.",

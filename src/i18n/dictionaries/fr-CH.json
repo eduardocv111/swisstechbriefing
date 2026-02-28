@@ -12,7 +12,9 @@
         "startups": "Startups",
         "regulation": "Régulation",
         "defense": "Défense",
-        "analyse": "Analyses et Perspectives"
+        "analyse": "Analyses et Perspectives",
+        "podcasts": "Podcasts",
+        "space": "Espace et Découverte"
     },
     "home": {
         "featured_title": "Analyses Actuelles",
@@ -30,7 +32,11 @@
         "factChecked": "Vérifié & Validé",
         "hardDataTitle": "Données et Chiffres",
         "analystInsight": "Perspective de l'analyste",
-        "imageCredit": "Crédit :"
+        "imageCredit": "Crédit :",
+        "play": "Lire",
+        "pause": "Pause",
+        "listen": "Écouter la version IA",
+        "audioInvite": "Vous préférez écouter plutôt que lire ? Profitez de notre version audio générée par l'IA."
     },
     "footer": {
         "description": "Média curaté pour l'IA, les startups et la technologie en Suisse. Un aperçu quotidien de la transformation numérique.",

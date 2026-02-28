@@ -19,6 +19,7 @@ import GoogleRrmScript from "@/components/analytics/GoogleRrmScript";
 import { Locale, defaultLocale, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { estimateReadingTime } from "@/lib/seo/read-time";
+import AudioPlayer from "@/components/AudioPlayer";
 
 export const runtime = "nodejs";
 export const revalidate = 3600;
@@ -195,6 +196,8 @@ export default async function ArticlePage({ params }: Props) {
                                 if (key.includes('startup')) return dict.categories.startups;
                                 if (key.includes('regulierung') || key.includes('regulation')) return dict.categories.regulation;
                                 if (key.includes('defense') || key.includes('security')) return dict.categories.defense;
+                                if (key.includes('podcast')) return dict.categories.podcasts;
+                                if (key.includes('space') || key.includes('discovery')) return dict.categories.space;
                                 return article.category;
                             })()}
                         </span>
@@ -222,6 +225,26 @@ export default async function ArticlePage({ params }: Props) {
                     </div>
 
                     <ShareButtons url={articleUrl} title={article.title} />
+
+                    {article.audioUrl && (
+                        <div className="mt-8 mb-10 p-6 rounded-3xl bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/50 shadow-sm shadow-slate-200/50 dark:shadow-none transition-all hover:shadow-md">
+                            <div className="flex items-center gap-3 mb-5">
+                                <span className="material-symbols-outlined text-primary text-xl">brand_awareness</span>
+                                <p className="text-sm font-bold text-slate-700 dark:text-slate-300 italic">
+                                    {dict.article.audioInvite || 'Prefer listening instead of reading? Enjoy our AI-generated audio version.'}
+                                </p>
+                            </div>
+                            <AudioPlayer
+                                src={article.audioUrl}
+                                locale={locale}
+                                dict={{
+                                    play: dict.article.play,
+                                    pause: dict.article.pause,
+                                    listen: dict.article.listen
+                                }}
+                            />
+                        </div>
+                    )}
 
                     <div className="relative mt-10 mb-5 aspect-video overflow-hidden rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800">
                         {article.videoUrl ? (

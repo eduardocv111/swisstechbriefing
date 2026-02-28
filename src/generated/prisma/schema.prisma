@@ -16,12 +16,13 @@ model Article {
   authorRole   String?
   sourcesJson  String
   imageUrl     String?
+  videoUrl     String?
+  audioUrl     String?
   expertQuote  String?
   keyFactsJson String?
   isVerified   Boolean              @default(false)
   createdAt    DateTime             @default(now())
   updatedAt    DateTime             @updatedAt
-  videoUrl     String?
   translations ArticleTranslation[]
 
   @@index([category])
@@ -40,6 +41,7 @@ model ArticleTranslation {
   updatedAt       DateTime @updatedAt
   expertQuote     String?
   keyFactsJson    String?
+  audioUrl        String?
   article         Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
 
   @@unique([articleId, locale])
