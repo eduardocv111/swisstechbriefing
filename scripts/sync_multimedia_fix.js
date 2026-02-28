@@ -43,9 +43,6 @@ async function reSyncWithBinaries() {
         // 2) Prepare FormData (Node 18+ has global FormData/Blob)
         const formData = new FormData();
 
-        // IMPORTANT:
-        // - expertQuote/keyFactsJson should come from the PRIMARY translation (de-CH) if Article model doesn't have them
-        // - keep per-translation expertQuote/keyFactsJson as well
         const uploadData = {
             slug: article.slug,
             category: article.category,
@@ -61,8 +58,7 @@ async function reSyncWithBinaries() {
             metaTitle: deTrans.metaTitle,
             metaDescription: deTrans.metaDescription,
 
-            // Optional: keep top-level expertQuote/keyFactsJson aligned with primary translation
-            // (Only if your ingest endpoint expects them at root)
+            // Optional at root (only if ingest expects them)
             expertQuote: deTrans.expertQuote ?? null,
             keyFactsJson: deTrans.keyFactsJson ?? null,
 
@@ -108,14 +104,19 @@ async function reSyncWithBinaries() {
         };
 
         // Naming convention used by your pipeline
-        const heroPosterRel = `/assets/images/news/stb_${slug}_hero.png`;     // optional poster
+        const heroVideoRel = `/assets/images/news/stb_${slug}_hero.mp4`; // force video name
+        const heroPosterRel = `/assets/images/news/stb_${slug}_hero.png`; // poster
         const detailRel = `/assets/images/news/stb_${slug}_detail.png`;
         const contextRel = `/assets/images/news/stb_${slug}_context.png`;
 
         // HERO RULE:
-        // - HERO is the video (2s mp4) -> always attach as "video"
-        // - "image" is a poster/fallback (recommended for UX + OG). If poster not found, fallback to detail image.
-        attach('video', article.videoUrl, 'video/mp4');
+        // - HERO is the video (mp4) -> always attach as "video"
+        // - "image" is a poster/fallback. If poster not found, fallback to detail image.
+        const videoAttached = attach('video', heroVideoRel, 'video/mp4');
+        if (!videoAttached && article.videoUrl) {
+            // fallback to DB path if naming differs
+            attach('video', article.videoUrl, 'video/mp4');
+        }
 
         const posterAttached = attach('image', heroPosterRel, 'image/png');
         if (!posterAttached) {
@@ -155,5 +156,5 @@ async function reSyncWithBinaries() {
         await prisma.$disconnect();
     }
 }
-
+// ✅ RUN
 reSyncWithBinaries();

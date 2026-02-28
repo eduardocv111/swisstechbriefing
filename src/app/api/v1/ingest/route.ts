@@ -31,9 +31,12 @@ export async function POST(req: NextRequest) {
 
         // Ensure directory exists
         const uploadDir = path.join(process.cwd(), "public", "assets", "images", "news");
+        console.log(`[Ingest] 📁 Target directory: ${uploadDir}`);
         try {
             await mkdir(uploadDir, { recursive: true });
-        } catch (e) { }
+        } catch (e: any) {
+            console.warn(`[Ingest] ⚠️ mkdir warning (might exist): ${e.message}`);
+        }
 
         // 1. Process Main Image (Hero)
         let publicImageUrl = articleData.imageUrl;
@@ -41,8 +44,10 @@ export async function POST(req: NextRequest) {
             const bytes = await imageFile.arrayBuffer();
             const buffer = Buffer.from(bytes);
             const mainFilename = `stb_${articleData.slug}_hero.png`;
-            await writeFile(path.join(uploadDir, mainFilename), buffer);
+            const savePath = path.join(uploadDir, mainFilename);
+            await writeFile(savePath, buffer);
             publicImageUrl = `/assets/images/news/${mainFilename}`;
+            console.log(`[Ingest] 📸 Saved hero image: ${savePath}`);
         }
 
         // 1.1 Process Video (if exists)
@@ -51,8 +56,10 @@ export async function POST(req: NextRequest) {
             const vBytes = await videoFile.arrayBuffer();
             const vBuffer = Buffer.from(vBytes);
             const videoFilename = `stb_${articleData.slug}_hero.mp4`;
-            await writeFile(path.join(uploadDir, videoFilename), vBuffer);
+            const vSavePath = path.join(uploadDir, videoFilename);
+            await writeFile(vSavePath, vBuffer);
             publicVideoUrl = `/assets/images/news/${videoFilename}`;
+            console.log(`[Ingest] 🎥 Saved hero video: ${vSavePath}`);
         }
 
         // 2. Process Support Images (Detail & Context)
@@ -62,7 +69,10 @@ export async function POST(req: NextRequest) {
             if (supportFile) {
                 const sBytes = await supportFile.arrayBuffer();
                 const sBuffer = Buffer.from(sBytes);
-                await writeFile(path.join(uploadDir, `stb_${articleData.slug}_${type}.png`), sBuffer);
+                const sFilename = `stb_${articleData.slug}_${type}.png`;
+                const sSavePath = path.join(uploadDir, sFilename);
+                await writeFile(sSavePath, sBuffer);
+                console.log(`[Ingest] 🖼️ Saved ${type} image: ${sSavePath}`);
             }
         }
 
