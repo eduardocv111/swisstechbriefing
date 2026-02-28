@@ -44,6 +44,9 @@ export async function POST(req: Request) {
         authorRole: data.author.role,
         sourcesJson: JSON.stringify(data.sources),
         imageUrl: data.imageUrl && data.imageUrl.length > 0 ? data.imageUrl : null,
+        videoUrl: data.videoUrl && data.videoUrl.length > 0 ? data.videoUrl : null,
+        expertQuote: data.expertQuote || null,
+        keyFactsJson: data.keyFacts ? JSON.stringify(data.keyFacts) : null,
       },
       create: {
         slug: data.slug,
@@ -53,6 +56,9 @@ export async function POST(req: Request) {
         authorRole: data.author.role,
         sourcesJson: JSON.stringify(data.sources),
         imageUrl: data.imageUrl && data.imageUrl.length > 0 ? data.imageUrl : null,
+        videoUrl: data.videoUrl && data.videoUrl.length > 0 ? data.videoUrl : null,
+        expertQuote: data.expertQuote || null,
+        keyFactsJson: data.keyFacts ? JSON.stringify(data.keyFacts) : null,
       },
     });
 
@@ -68,6 +74,8 @@ export async function POST(req: Request) {
         title: data.title,
         excerpt: data.excerpt,
         contentHtml: data.contentHtml,
+        expertQuote: data.expertQuote || null,
+        keyFactsJson: data.keyFacts ? JSON.stringify(data.keyFacts) : null,
       },
       create: {
         articleId: article.id,
@@ -75,6 +83,8 @@ export async function POST(req: Request) {
         title: data.title,
         excerpt: data.excerpt,
         contentHtml: data.contentHtml,
+        expertQuote: data.expertQuote || null,
+        keyFactsJson: data.keyFacts ? JSON.stringify(data.keyFacts) : null,
       },
     });
 

@@ -33,6 +33,25 @@ export const articleSchema = z.object({
         .optional()
         .nullable(),
 
+    expertQuote: z.string().optional().nullable(),
+    keyFacts: z
+        .array(
+            z.object({
+                fact: z.string().min(1).trim(),
+            })
+        )
+        .optional()
+        .nullable(),
+
+    videoUrl: z
+        .union([
+            z.string().url(),
+            z.string().regex(/^\/.+/, "videoUrl must be an absolute URL or start with /"),
+            z.literal(""),
+        ])
+        .optional()
+        .nullable(),
+
     sources: z
         .array(
             z.object({

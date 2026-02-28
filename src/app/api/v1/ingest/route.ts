@@ -25,28 +25,9 @@ export async function POST(req: NextRequest) {
 
         const articleData = JSON.parse(articleJson);
 
-        // --- IDEMPOTENCY CHECK ---
-        const existing = await prisma.article.findUnique({
-            where: { slug: articleData.slug }
-        });
-
-        if (existing) {
-            console.log(`[AI Ingestion] 🛡️ Idempotency: Article ${articleData.slug} already exists. Returning success.`);
-            return NextResponse.json({
-                success: true,
-                slug: existing.slug,
-                url: `https://swisstechbriefing.ch/de-CH/artikel/${existing.slug}`,
-                idempotent: true
-            });
-        }
-
+        // --- PRE-PROCESS DATA ---
         const imageFile = formData.get("image") as File;
         const videoFile = formData.get("video") as File;
-
-        if (!imageFile) {
-            return NextResponse.json({ error: "Missing article image" }, { status: 400 });
-        }
-        const translations = articleData.translations || [];
 
         // Ensure directory exists
         const uploadDir = path.join(process.cwd(), "public", "assets", "images", "news");
@@ -55,13 +36,17 @@ export async function POST(req: NextRequest) {
         } catch (e) { }
 
         // 1. Process Main Image (Hero)
-        const bytes = await imageFile.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-        const mainFilename = `stb_${articleData.slug}_hero.png`;
-        await writeFile(path.join(uploadDir, mainFilename), buffer);
+        let publicImageUrl = articleData.imageUrl;
+        if (imageFile) {
+            const bytes = await imageFile.arrayBuffer();
+            const buffer = Buffer.from(bytes);
+            const mainFilename = `stb_${articleData.slug}_hero.png`;
+            await writeFile(path.join(uploadDir, mainFilename), buffer);
+            publicImageUrl = `/assets/images/news/${mainFilename}`;
+        }
 
         // 1.1 Process Video (if exists)
-        let publicVideoUrl = null;
+        let publicVideoUrl = articleData.videoUrl;
         if (videoFile) {
             const vBytes = await videoFile.arrayBuffer();
             const vBuffer = Buffer.from(vBytes);
@@ -81,16 +66,12 @@ export async function POST(req: NextRequest) {
             }
         }
 
-        const publicImageUrl = `/assets/images/news/${mainFilename}`;
-
         // Helper to normalize facts
         const normalizeFacts = (facts: any): string => {
             if (!facts) return JSON.stringify([]);
             try {
-                let items: string[] = [];
-
+                let items: any[] = [];
                 if (typeof facts === 'string') {
-                    // Si es un string con saltos de línea (como lo que genera el agente)
                     if (facts.includes('\n')) {
                         items = facts.split('\n').map(l => l.replace(/^[-*•\d.]+\s*/, '').trim()).filter(l => l.length > 3);
                     } else {
@@ -104,23 +85,35 @@ export async function POST(req: NextRequest) {
                 } else if (Array.isArray(facts)) {
                     items = facts;
                 }
-
                 return JSON.stringify(items.slice(0, 5).map(f => {
-                    const content = typeof f === 'object' && f !== null ? ((f as any).fact || JSON.stringify(f)) : String(f);
+                    const content = typeof f === 'object' && f !== null ? (f.fact || JSON.stringify(f)) : String(f);
                     return { fact: content.replace(/^[-*•\d.]+\s*/, '').trim() };
                 }));
             } catch (e) {
-                console.error("[Ingest] Fact normalization error:", e);
                 return JSON.stringify([]);
             }
         };
 
         const keyFactsJson = normalizeFacts(articleData.keyFactsJson);
+        const translations = articleData.translations || [];
 
-        // 2. Create the article and all translations in the Database
+        // 2. Upsert the article and all translations in the Database
         const result = await prisma.$transaction(async (tx) => {
-            return await tx.article.create({
-                data: {
+            // First, find or create the article
+            const article = await tx.article.upsert({
+                where: { slug: articleData.slug },
+                update: {
+                    category: articleData.category,
+                    authorName: articleData.authorName || "SwissTech AI Editor",
+                    authorRole: articleData.authorRole || "Automated Insight Engine",
+                    imageUrl: publicImageUrl,
+                    videoUrl: publicVideoUrl,
+                    sourcesJson: articleData.sourcesJson,
+                    expertQuote: articleData.expertQuote,
+                    keyFactsJson: keyFactsJson,
+                    isVerified: articleData.isVerified || false,
+                },
+                create: {
                     slug: articleData.slug,
                     category: articleData.category,
                     date: new Date(),
@@ -132,34 +125,62 @@ export async function POST(req: NextRequest) {
                     expertQuote: articleData.expertQuote,
                     keyFactsJson: keyFactsJson,
                     isVerified: articleData.isVerified || false,
-                    translations: {
-                        create: [
-                            // Include the primary translation (usually de-CH)
-                            {
-                                locale: 'de-CH',
-                                title: articleData.title,
-                                excerpt: articleData.excerpt,
-                                contentHtml: articleData.contentHtml,
-                                expertQuote: articleData.expertQuote,
-                                keyFactsJson: keyFactsJson,
-                                metaTitle: articleData.metaTitle,
-                                metaDescription: articleData.metaDescription
-                            },
-                            // Include all additional professional translations
-                            ...translations.map((t: any) => ({
-                                locale: t.locale,
-                                title: t.title,
-                                excerpt: t.excerpt,
-                                contentHtml: t.contentHtml,
-                                expertQuote: t.expertQuote,
-                                keyFactsJson: normalizeFacts(t.keyFactsJson),
-                                metaTitle: t.metaTitle,
-                                metaDescription: t.metaDescription
-                            }))
-                        ]
-                    }
                 }
             });
+
+            // Upsert primary translation (de-CH)
+            await tx.articleTranslation.upsert({
+                where: { articleId_locale: { articleId: article.id, locale: 'de-CH' } },
+                update: {
+                    title: articleData.title,
+                    excerpt: articleData.excerpt,
+                    contentHtml: articleData.contentHtml,
+                    expertQuote: articleData.expertQuote,
+                    keyFactsJson: keyFactsJson,
+                    metaTitle: articleData.metaTitle,
+                    metaDescription: articleData.metaDescription
+                },
+                create: {
+                    articleId: article.id,
+                    locale: 'de-CH',
+                    title: articleData.title,
+                    excerpt: articleData.excerpt,
+                    contentHtml: articleData.contentHtml,
+                    expertQuote: articleData.expertQuote,
+                    keyFactsJson: keyFactsJson,
+                    metaTitle: articleData.metaTitle,
+                    metaDescription: articleData.metaDescription
+                }
+            });
+
+            // Upsert professional translations
+            for (const t of translations) {
+                await tx.articleTranslation.upsert({
+                    where: { articleId_locale: { articleId: article.id, locale: t.locale } },
+                    update: {
+                        title: t.title,
+                        excerpt: t.excerpt,
+                        contentHtml: t.contentHtml,
+                        expertQuote: t.expertQuote,
+                        keyFactsJson: normalizeFacts(t.keyFactsJson),
+                        metaTitle: t.metaTitle,
+                        metaDescription: t.metaDescription
+                    },
+                    create: {
+                        articleId: article.id,
+                        locale: t.locale,
+                        title: t.title,
+                        excerpt: t.excerpt,
+                        contentHtml: t.contentHtml,
+                        expertQuote: t.expertQuote,
+                        keyFactsJson: normalizeFacts(t.keyFactsJson),
+                        metaTitle: t.metaTitle,
+                        metaDescription: t.metaDescription
+                    }
+                });
+            }
+
+            return article;
         });
 
         console.log(`[AI Ingestion] Successfully published: ${result.slug}`);
