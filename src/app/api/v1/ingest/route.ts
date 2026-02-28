@@ -30,12 +30,16 @@ export async function POST(req: NextRequest) {
         const videoFile = formData.get("video") as File;
 
         // Ensure directory exists
-        const uploadDir = path.join(process.cwd(), "public", "assets", "images", "news");
-        console.log(`[Ingest] 📁 Target directory: ${uploadDir}`);
+        const DEFAULT_UPLOAD_DIR = path.join(process.cwd(), "public", "assets", "images", "news");
+        const uploadDir = process.env.STB_ASSETS_PATH
+            ? path.join(process.env.STB_ASSETS_PATH, "news")
+            : DEFAULT_UPLOAD_DIR;
+
+        console.log(`[Ingest] 📁 Target directory (Absolute): ${path.resolve(uploadDir)}`);
         try {
             await mkdir(uploadDir, { recursive: true });
         } catch (e: any) {
-            console.warn(`[Ingest] ⚠️ mkdir warning (might exist): ${e.message}`);
+            console.warn(`[Ingest] ⚠️ mkdir warning: ${e.message}`);
         }
 
         // 1. Process Main Image (Hero)
@@ -77,7 +81,11 @@ export async function POST(req: NextRequest) {
         }
 
         // 2.5 Process Audio (The Podcast) - TOP TIER LOGIC
-        const audioDir = path.join(process.cwd(), "public", "assets", "audio", "podcasts");
+        const DEFAULT_AUDIO_DIR = path.join(process.cwd(), "public", "assets", "audio", "podcasts");
+        const audioDir = process.env.STB_ASSETS_PATH
+            ? path.join(process.env.STB_ASSETS_PATH, "audio", "podcasts")
+            : DEFAULT_AUDIO_DIR;
+
         try {
             await mkdir(audioDir, { recursive: true });
         } catch (e: any) {
@@ -241,29 +249,35 @@ export async function POST(req: NextRequest) {
             const { revalidatePath } = await import("next/cache");
             const { locales } = await import("@/i18n/config");
 
-            console.log(`[AI Ingestion] 🔄 Triggering global revalidation for ${result.slug}...`);
+            console.log(`[AI Ingestion] 🔄 Triggering deep revalidation for ${result.slug}...`);
+
+            // 1. Flush the Layout and Home (Global Update)
             revalidatePath("/", "layout");
 
-            // Revalidate the Root for all locales (The News Lists)
+            // 2. Specific article routes for ALL regions
             for (const loc of locales) {
-                revalidatePath(`/${loc}`);
+                // Revalidate the translated article
                 revalidatePath(`/${loc}/artikel/${result.slug}`);
+                // Revalidate the home list for that language
+                revalidatePath(`/${loc}`);
+                // Revalidate the category/news feeds
                 revalidatePath(`/${loc}/sitemap.xml`);
-                console.log(`[AI Ingestion] -> Revalidated: /${loc}`);
+                console.log(`   -> Revalidated: /${loc}`);
             }
 
-            revalidatePath("/");
+            // 3. Fallback for root sitemaps
             revalidatePath("/sitemap.xml");
 
-            console.log(`[AI Ingestion] ✅ All cache tags cleared.`);
+            console.log(`[AI Ingestion] ✅ Cache invalidated successfully.`);
         } catch (revErr) {
             console.error("[AI Ingestion] ❌ Cache revalidation failed:", revErr);
         }
 
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://swisstechbriefing.ch';
         return NextResponse.json({
             success: true,
             slug: result.slug,
-            url: `https://swisstechbriefing.ch/de-CH/artikel/${result.slug}`
+            url: `${siteUrl}/de-CH/artikel/${result.slug}`
         });
 
     } catch (error: any) {

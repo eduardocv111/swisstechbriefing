@@ -22,7 +22,7 @@ import { estimateReadingTime } from "@/lib/seo/read-time";
 import AudioPlayer from "@/components/AudioPlayer";
 
 export const runtime = "nodejs";
-export const revalidate = 3600;
+export const revalidate = 60; // 60 seconds safety revalidation
 
 type Props = {
     params: Promise<{ slug: string; locale: string }>;
