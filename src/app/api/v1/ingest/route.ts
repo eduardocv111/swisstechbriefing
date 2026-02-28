@@ -201,6 +201,7 @@ export async function POST(req: NextRequest) {
             const { locales } = await import("@/i18n/config");
 
             console.log(`[AI Ingestion] 🔄 Triggering global revalidation for ${result.slug}...`);
+            revalidatePath("/", "layout");
 
             // Revalidate the Root for all locales (The News Lists)
             for (const loc of locales) {

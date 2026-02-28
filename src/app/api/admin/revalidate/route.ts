@@ -21,19 +21,24 @@ export async function POST(req: NextRequest) {
 
         // 1. Revalidate Home for all locales (Default behavior)
         if (!path && !slug && !category) {
+            revalidatePath("/", "layout"); // Reset EVERYTHING
             locales.forEach(loc => {
                 revalidatePath(`/${loc}`);
                 revalidatePath(`/${loc}/sitemap.xml`);
             });
             revalidatePath("/sitemap.xml");
-            return NextResponse.json({ ok: true, message: "General revalidation triggered" });
+            return NextResponse.json({ ok: true, message: "Full site revalidation triggered" });
         }
 
         // 2. Revalidate specific article
         if (slug) {
+            revalidatePath("/", "layout"); // Forced global flush for safety
             locales.forEach(loc => {
                 revalidatePath(`/${loc}/artikel/${slug}`);
                 revalidatePath(`/${loc}`); // Update lists too
+                if (category) {
+                    revalidatePath(`/${loc}/kategorie/${category}`);
+                }
             });
         }
 
