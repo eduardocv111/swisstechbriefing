@@ -54,6 +54,15 @@ export default async function RootLayout({
                 />
                 <meta name="google-adsense-account" content="ca-pub-1495161909176032" />
 
+                {/* --- Google AdSense Verification --- */}
+                <Script
+                    id="adsense"
+                    async
+                    strategy="afterInteractive"
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1495161909176032"
+                    crossOrigin="anonymous"
+                />
+
                 {/* 1. Consent Mode Default Initialization - MUST be beforeInteractive */}
                 <Script id="google-consent-default" strategy="beforeInteractive">
                     {`
