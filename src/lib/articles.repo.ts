@@ -27,6 +27,7 @@ export type UiArticle = {
   keyFacts?: Array<{ fact: string }> | null;
   isVerified: boolean;
   videoUrl?: string | null;
+  audioUrl?: string | null;
   // i18n metadata
   locale: string;
   isFallback: boolean;
@@ -86,6 +87,7 @@ interface DbArticle {
   keyFactsJson?: string | null;
   isVerified: boolean;
   videoUrl?: string | null;
+  audioUrl?: string | null;
   translations?: Array<{
     locale: string;
     title: string;
@@ -93,6 +95,7 @@ interface DbArticle {
     contentHtml: string;
     expertQuote?: string | null;
     keyFactsJson?: string | null;
+    audioUrl?: string | null;
   }>;
 }
 
@@ -156,6 +159,7 @@ function mapDbToUi(article: DbArticle, locale: string): UiArticle {
     keyFacts: keyFacts,
     isVerified: article.isVerified,
     videoUrl: article.videoUrl || null,
+    audioUrl: trans?.audioUrl || article.audioUrl || null,
     locale: trans?.locale || normLocale,
     isFallback,
     availableLocales,

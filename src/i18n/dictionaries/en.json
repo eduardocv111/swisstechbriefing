@@ -12,7 +12,9 @@
         "startups": "Startups",
         "regulation": "Regulation",
         "defense": "Defense Tech",
-        "analyse": "Analysis & Insights"
+        "analyse": "Analysis & Insights",
+        "podcasts": "Podcasts",
+        "space": "Space & Discovery"
     },
     "home": {
         "featured_title": "Current Analyses",

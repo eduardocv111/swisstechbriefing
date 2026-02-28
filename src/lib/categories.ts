@@ -4,6 +4,8 @@ export const CATEGORIES = [
   { slug: "regulierung", label: "Regulierung" },
   { slug: "defense-security-tech", label: "Defense & Security Tech" },
   { slug: "analyse-insights", label: "Analyse & Insights" },
+  { slug: "podcast", label: "Podcasts" },
+  { slug: "space-tech", label: "Space & Discovery" },
 ] as const;
 
 export type Category = (typeof CATEGORIES)[number];
@@ -46,6 +48,8 @@ export function getTranslatedCategoryLabel(label: string, dict: any): string {
   if (key.includes('regulierung') || key.includes('regulation')) return dict.categories.regulation;
   if (key.includes('defense') || key.includes('security')) return dict.categories.defense;
   if (key.includes('analyse') || key.includes('insights')) return dict.categories.analyse;
+  if (key.includes('podcast')) return dict.categories.podcasts;
+  if (key.includes('space') || key.includes('discovery') || key.includes('mars')) return dict.categories.space;
 
   return label;
 }
