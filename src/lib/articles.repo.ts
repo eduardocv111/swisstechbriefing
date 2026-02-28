@@ -131,9 +131,14 @@ function mapDbToUi(article: DbArticle, locale: string): UiArticle {
   try {
     const parsed = JSON.parse(rawFacts);
     if (Array.isArray(parsed)) {
-      keyFacts = parsed.map(f => typeof f === 'object' ? f : { fact: String(f) });
+      keyFacts = parsed.map(f => {
+        if (typeof f === 'object' && f !== null) {
+          return { fact: String(f.fact || f.text || f.content || JSON.stringify(f)) };
+        }
+        return { fact: String(f) };
+      });
     } else {
-      keyFacts = [{ fact: String(rawFacts) }];
+      keyFacts = [{ fact: String(rawFacts || "No hard data available") }];
     }
   } catch {
     keyFacts = [{ fact: String(rawFacts) }];

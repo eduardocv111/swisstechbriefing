@@ -117,7 +117,7 @@ export async function POST(req: NextRequest) {
                     items = facts;
                 }
                 return JSON.stringify(items.slice(0, 5).map(f => {
-                    const content = typeof f === 'object' && f !== null ? (f.fact || JSON.stringify(f)) : String(f);
+                    const content = typeof f === 'object' && f !== null ? (f.fact || f.text || f.content || JSON.stringify(f)) : String(f);
                     return { fact: content.replace(/^[-*•\d.]+\s*/, '').trim() };
                 }));
             } catch (e) {
