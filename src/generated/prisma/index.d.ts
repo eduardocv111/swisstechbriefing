@@ -1457,12 +1457,12 @@ export namespace Prisma {
     authorRole: string | null
     sourcesJson: string | null
     imageUrl: string | null
-    videoUrl: string | null
     expertQuote: string | null
     keyFactsJson: string | null
     isVerified: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
+    videoUrl: string | null
   }
 
   export type ArticleMaxAggregateOutputType = {
@@ -1474,12 +1474,12 @@ export namespace Prisma {
     authorRole: string | null
     sourcesJson: string | null
     imageUrl: string | null
-    videoUrl: string | null
     expertQuote: string | null
     keyFactsJson: string | null
     isVerified: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
+    videoUrl: string | null
   }
 
   export type ArticleCountAggregateOutputType = {
@@ -1491,12 +1491,12 @@ export namespace Prisma {
     authorRole: number
     sourcesJson: number
     imageUrl: number
-    videoUrl: number
     expertQuote: number
     keyFactsJson: number
     isVerified: number
     createdAt: number
     updatedAt: number
+    videoUrl: number
     _all: number
   }
 
@@ -1510,12 +1510,12 @@ export namespace Prisma {
     authorRole?: true
     sourcesJson?: true
     imageUrl?: true
-    videoUrl?: true
     expertQuote?: true
     keyFactsJson?: true
     isVerified?: true
     createdAt?: true
     updatedAt?: true
+    videoUrl?: true
   }
 
   export type ArticleMaxAggregateInputType = {
@@ -1527,12 +1527,12 @@ export namespace Prisma {
     authorRole?: true
     sourcesJson?: true
     imageUrl?: true
-    videoUrl?: true
     expertQuote?: true
     keyFactsJson?: true
     isVerified?: true
     createdAt?: true
     updatedAt?: true
+    videoUrl?: true
   }
 
   export type ArticleCountAggregateInputType = {
@@ -1544,12 +1544,12 @@ export namespace Prisma {
     authorRole?: true
     sourcesJson?: true
     imageUrl?: true
-    videoUrl?: true
     expertQuote?: true
     keyFactsJson?: true
     isVerified?: true
     createdAt?: true
     updatedAt?: true
+    videoUrl?: true
     _all?: true
   }
 
@@ -1634,12 +1634,12 @@ export namespace Prisma {
     authorRole: string | null
     sourcesJson: string
     imageUrl: string | null
-    videoUrl: string | null
     expertQuote: string | null
     keyFactsJson: string | null
     isVerified: boolean
     createdAt: Date
     updatedAt: Date
+    videoUrl: string | null
     _count: ArticleCountAggregateOutputType | null
     _min: ArticleMinAggregateOutputType | null
     _max: ArticleMaxAggregateOutputType | null
@@ -1668,12 +1668,12 @@ export namespace Prisma {
     authorRole?: boolean
     sourcesJson?: boolean
     imageUrl?: boolean
-    videoUrl?: boolean
     expertQuote?: boolean
     keyFactsJson?: boolean
     isVerified?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    videoUrl?: boolean
     translations?: boolean | Article$translationsArgs<ExtArgs>
     _count?: boolean | ArticleCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["article"]>
@@ -1687,12 +1687,12 @@ export namespace Prisma {
     authorRole?: boolean
     sourcesJson?: boolean
     imageUrl?: boolean
-    videoUrl?: boolean
     expertQuote?: boolean
     keyFactsJson?: boolean
     isVerified?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    videoUrl?: boolean
   }, ExtArgs["result"]["article"]>
 
   export type ArticleSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1704,12 +1704,12 @@ export namespace Prisma {
     authorRole?: boolean
     sourcesJson?: boolean
     imageUrl?: boolean
-    videoUrl?: boolean
     expertQuote?: boolean
     keyFactsJson?: boolean
     isVerified?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    videoUrl?: boolean
   }, ExtArgs["result"]["article"]>
 
   export type ArticleSelectScalar = {
@@ -1721,15 +1721,15 @@ export namespace Prisma {
     authorRole?: boolean
     sourcesJson?: boolean
     imageUrl?: boolean
-    videoUrl?: boolean
     expertQuote?: boolean
     keyFactsJson?: boolean
     isVerified?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    videoUrl?: boolean
   }
 
-  export type ArticleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "category" | "date" | "authorName" | "authorRole" | "sourcesJson" | "imageUrl" | "videoUrl" | "expertQuote" | "keyFactsJson" | "isVerified" | "createdAt" | "updatedAt", ExtArgs["result"]["article"]>
+  export type ArticleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "category" | "date" | "authorName" | "authorRole" | "sourcesJson" | "imageUrl" | "expertQuote" | "keyFactsJson" | "isVerified" | "createdAt" | "updatedAt" | "videoUrl", ExtArgs["result"]["article"]>
   export type ArticleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     translations?: boolean | Article$translationsArgs<ExtArgs>
     _count?: boolean | ArticleCountOutputTypeDefaultArgs<ExtArgs>
@@ -1751,12 +1751,12 @@ export namespace Prisma {
       authorRole: string | null
       sourcesJson: string
       imageUrl: string | null
-      videoUrl: string | null
       expertQuote: string | null
       keyFactsJson: string | null
       isVerified: boolean
       createdAt: Date
       updatedAt: Date
+      videoUrl: string | null
     }, ExtArgs["result"]["article"]>
     composites: {}
   }
@@ -2189,12 +2189,12 @@ export namespace Prisma {
     readonly authorRole: FieldRef<"Article", 'String'>
     readonly sourcesJson: FieldRef<"Article", 'String'>
     readonly imageUrl: FieldRef<"Article", 'String'>
-    readonly videoUrl: FieldRef<"Article", 'String'>
     readonly expertQuote: FieldRef<"Article", 'String'>
     readonly keyFactsJson: FieldRef<"Article", 'String'>
     readonly isVerified: FieldRef<"Article", 'Boolean'>
     readonly createdAt: FieldRef<"Article", 'DateTime'>
     readonly updatedAt: FieldRef<"Article", 'DateTime'>
+    readonly videoUrl: FieldRef<"Article", 'String'>
   }
     
 
@@ -2643,6 +2643,8 @@ export namespace Prisma {
     metaTitle: string | null
     metaDescription: string | null
     updatedAt: Date | null
+    expertQuote: string | null
+    keyFactsJson: string | null
   }
 
   export type ArticleTranslationMaxAggregateOutputType = {
@@ -2655,6 +2657,8 @@ export namespace Prisma {
     metaTitle: string | null
     metaDescription: string | null
     updatedAt: Date | null
+    expertQuote: string | null
+    keyFactsJson: string | null
   }
 
   export type ArticleTranslationCountAggregateOutputType = {
@@ -2667,6 +2671,8 @@ export namespace Prisma {
     metaTitle: number
     metaDescription: number
     updatedAt: number
+    expertQuote: number
+    keyFactsJson: number
     _all: number
   }
 
@@ -2681,6 +2687,8 @@ export namespace Prisma {
     metaTitle?: true
     metaDescription?: true
     updatedAt?: true
+    expertQuote?: true
+    keyFactsJson?: true
   }
 
   export type ArticleTranslationMaxAggregateInputType = {
@@ -2693,6 +2701,8 @@ export namespace Prisma {
     metaTitle?: true
     metaDescription?: true
     updatedAt?: true
+    expertQuote?: true
+    keyFactsJson?: true
   }
 
   export type ArticleTranslationCountAggregateInputType = {
@@ -2705,6 +2715,8 @@ export namespace Prisma {
     metaTitle?: true
     metaDescription?: true
     updatedAt?: true
+    expertQuote?: true
+    keyFactsJson?: true
     _all?: true
   }
 
@@ -2790,6 +2802,8 @@ export namespace Prisma {
     metaTitle: string | null
     metaDescription: string | null
     updatedAt: Date
+    expertQuote: string | null
+    keyFactsJson: string | null
     _count: ArticleTranslationCountAggregateOutputType | null
     _min: ArticleTranslationMinAggregateOutputType | null
     _max: ArticleTranslationMaxAggregateOutputType | null
@@ -2819,6 +2833,8 @@ export namespace Prisma {
     metaTitle?: boolean
     metaDescription?: boolean
     updatedAt?: boolean
+    expertQuote?: boolean
+    keyFactsJson?: boolean
     article?: boolean | ArticleDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["articleTranslation"]>
 
@@ -2832,6 +2848,8 @@ export namespace Prisma {
     metaTitle?: boolean
     metaDescription?: boolean
     updatedAt?: boolean
+    expertQuote?: boolean
+    keyFactsJson?: boolean
     article?: boolean | ArticleDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["articleTranslation"]>
 
@@ -2845,6 +2863,8 @@ export namespace Prisma {
     metaTitle?: boolean
     metaDescription?: boolean
     updatedAt?: boolean
+    expertQuote?: boolean
+    keyFactsJson?: boolean
     article?: boolean | ArticleDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["articleTranslation"]>
 
@@ -2858,9 +2878,11 @@ export namespace Prisma {
     metaTitle?: boolean
     metaDescription?: boolean
     updatedAt?: boolean
+    expertQuote?: boolean
+    keyFactsJson?: boolean
   }
 
-  export type ArticleTranslationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "articleId" | "locale" | "title" | "excerpt" | "contentHtml" | "metaTitle" | "metaDescription" | "updatedAt", ExtArgs["result"]["articleTranslation"]>
+  export type ArticleTranslationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "articleId" | "locale" | "title" | "excerpt" | "contentHtml" | "metaTitle" | "metaDescription" | "updatedAt" | "expertQuote" | "keyFactsJson", ExtArgs["result"]["articleTranslation"]>
   export type ArticleTranslationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     article?: boolean | ArticleDefaultArgs<ExtArgs>
   }
@@ -2886,6 +2908,8 @@ export namespace Prisma {
       metaTitle: string | null
       metaDescription: string | null
       updatedAt: Date
+      expertQuote: string | null
+      keyFactsJson: string | null
     }, ExtArgs["result"]["articleTranslation"]>
     composites: {}
   }
@@ -3319,6 +3343,8 @@ export namespace Prisma {
     readonly metaTitle: FieldRef<"ArticleTranslation", 'String'>
     readonly metaDescription: FieldRef<"ArticleTranslation", 'String'>
     readonly updatedAt: FieldRef<"ArticleTranslation", 'DateTime'>
+    readonly expertQuote: FieldRef<"ArticleTranslation", 'String'>
+    readonly keyFactsJson: FieldRef<"ArticleTranslation", 'String'>
   }
     
 
@@ -8748,12 +8774,12 @@ export namespace Prisma {
     authorRole: 'authorRole',
     sourcesJson: 'sourcesJson',
     imageUrl: 'imageUrl',
-    videoUrl: 'videoUrl',
     expertQuote: 'expertQuote',
     keyFactsJson: 'keyFactsJson',
     isVerified: 'isVerified',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    videoUrl: 'videoUrl'
   };
 
   export type ArticleScalarFieldEnum = (typeof ArticleScalarFieldEnum)[keyof typeof ArticleScalarFieldEnum]
@@ -8768,7 +8794,9 @@ export namespace Prisma {
     contentHtml: 'contentHtml',
     metaTitle: 'metaTitle',
     metaDescription: 'metaDescription',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    expertQuote: 'expertQuote',
+    keyFactsJson: 'keyFactsJson'
   };
 
   export type ArticleTranslationScalarFieldEnum = (typeof ArticleTranslationScalarFieldEnum)[keyof typeof ArticleTranslationScalarFieldEnum]
@@ -8892,12 +8920,12 @@ export namespace Prisma {
     authorRole?: StringNullableFilter<"Article"> | string | null
     sourcesJson?: StringFilter<"Article"> | string
     imageUrl?: StringNullableFilter<"Article"> | string | null
-    videoUrl?: StringNullableFilter<"Article"> | string | null
     expertQuote?: StringNullableFilter<"Article"> | string | null
     keyFactsJson?: StringNullableFilter<"Article"> | string | null
     isVerified?: BoolFilter<"Article"> | boolean
     createdAt?: DateTimeFilter<"Article"> | Date | string
     updatedAt?: DateTimeFilter<"Article"> | Date | string
+    videoUrl?: StringNullableFilter<"Article"> | string | null
     translations?: ArticleTranslationListRelationFilter
   }
 
@@ -8910,12 +8938,12 @@ export namespace Prisma {
     authorRole?: SortOrderInput | SortOrder
     sourcesJson?: SortOrder
     imageUrl?: SortOrderInput | SortOrder
-    videoUrl?: SortOrderInput | SortOrder
     expertQuote?: SortOrderInput | SortOrder
     keyFactsJson?: SortOrderInput | SortOrder
     isVerified?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    videoUrl?: SortOrderInput | SortOrder
     translations?: ArticleTranslationOrderByRelationAggregateInput
   }
 
@@ -8931,12 +8959,12 @@ export namespace Prisma {
     authorRole?: StringNullableFilter<"Article"> | string | null
     sourcesJson?: StringFilter<"Article"> | string
     imageUrl?: StringNullableFilter<"Article"> | string | null
-    videoUrl?: StringNullableFilter<"Article"> | string | null
     expertQuote?: StringNullableFilter<"Article"> | string | null
     keyFactsJson?: StringNullableFilter<"Article"> | string | null
     isVerified?: BoolFilter<"Article"> | boolean
     createdAt?: DateTimeFilter<"Article"> | Date | string
     updatedAt?: DateTimeFilter<"Article"> | Date | string
+    videoUrl?: StringNullableFilter<"Article"> | string | null
     translations?: ArticleTranslationListRelationFilter
   }, "id" | "slug">
 
@@ -8949,12 +8977,12 @@ export namespace Prisma {
     authorRole?: SortOrderInput | SortOrder
     sourcesJson?: SortOrder
     imageUrl?: SortOrderInput | SortOrder
-    videoUrl?: SortOrderInput | SortOrder
     expertQuote?: SortOrderInput | SortOrder
     keyFactsJson?: SortOrderInput | SortOrder
     isVerified?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    videoUrl?: SortOrderInput | SortOrder
     _count?: ArticleCountOrderByAggregateInput
     _max?: ArticleMaxOrderByAggregateInput
     _min?: ArticleMinOrderByAggregateInput
@@ -8972,12 +9000,12 @@ export namespace Prisma {
     authorRole?: StringNullableWithAggregatesFilter<"Article"> | string | null
     sourcesJson?: StringWithAggregatesFilter<"Article"> | string
     imageUrl?: StringNullableWithAggregatesFilter<"Article"> | string | null
-    videoUrl?: StringNullableWithAggregatesFilter<"Article"> | string | null
     expertQuote?: StringNullableWithAggregatesFilter<"Article"> | string | null
     keyFactsJson?: StringNullableWithAggregatesFilter<"Article"> | string | null
     isVerified?: BoolWithAggregatesFilter<"Article"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Article"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Article"> | Date | string
+    videoUrl?: StringNullableWithAggregatesFilter<"Article"> | string | null
   }
 
   export type ArticleTranslationWhereInput = {
@@ -8993,6 +9021,8 @@ export namespace Prisma {
     metaTitle?: StringNullableFilter<"ArticleTranslation"> | string | null
     metaDescription?: StringNullableFilter<"ArticleTranslation"> | string | null
     updatedAt?: DateTimeFilter<"ArticleTranslation"> | Date | string
+    expertQuote?: StringNullableFilter<"ArticleTranslation"> | string | null
+    keyFactsJson?: StringNullableFilter<"ArticleTranslation"> | string | null
     article?: XOR<ArticleScalarRelationFilter, ArticleWhereInput>
   }
 
@@ -9006,6 +9036,8 @@ export namespace Prisma {
     metaTitle?: SortOrderInput | SortOrder
     metaDescription?: SortOrderInput | SortOrder
     updatedAt?: SortOrder
+    expertQuote?: SortOrderInput | SortOrder
+    keyFactsJson?: SortOrderInput | SortOrder
     article?: ArticleOrderByWithRelationInput
   }
 
@@ -9023,6 +9055,8 @@ export namespace Prisma {
     metaTitle?: StringNullableFilter<"ArticleTranslation"> | string | null
     metaDescription?: StringNullableFilter<"ArticleTranslation"> | string | null
     updatedAt?: DateTimeFilter<"ArticleTranslation"> | Date | string
+    expertQuote?: StringNullableFilter<"ArticleTranslation"> | string | null
+    keyFactsJson?: StringNullableFilter<"ArticleTranslation"> | string | null
     article?: XOR<ArticleScalarRelationFilter, ArticleWhereInput>
   }, "id" | "articleId_locale">
 
@@ -9036,6 +9070,8 @@ export namespace Prisma {
     metaTitle?: SortOrderInput | SortOrder
     metaDescription?: SortOrderInput | SortOrder
     updatedAt?: SortOrder
+    expertQuote?: SortOrderInput | SortOrder
+    keyFactsJson?: SortOrderInput | SortOrder
     _count?: ArticleTranslationCountOrderByAggregateInput
     _max?: ArticleTranslationMaxOrderByAggregateInput
     _min?: ArticleTranslationMinOrderByAggregateInput
@@ -9054,6 +9090,8 @@ export namespace Prisma {
     metaTitle?: StringNullableWithAggregatesFilter<"ArticleTranslation"> | string | null
     metaDescription?: StringNullableWithAggregatesFilter<"ArticleTranslation"> | string | null
     updatedAt?: DateTimeWithAggregatesFilter<"ArticleTranslation"> | Date | string
+    expertQuote?: StringNullableWithAggregatesFilter<"ArticleTranslation"> | string | null
+    keyFactsJson?: StringNullableWithAggregatesFilter<"ArticleTranslation"> | string | null
   }
 
   export type NewsletterSubscriptionWhereInput = {
@@ -9293,12 +9331,12 @@ export namespace Prisma {
     authorRole?: string | null
     sourcesJson: string
     imageUrl?: string | null
-    videoUrl?: string | null
     expertQuote?: string | null
     keyFactsJson?: string | null
     isVerified?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    videoUrl?: string | null
     translations?: ArticleTranslationCreateNestedManyWithoutArticleInput
   }
 
@@ -9311,12 +9349,12 @@ export namespace Prisma {
     authorRole?: string | null
     sourcesJson: string
     imageUrl?: string | null
-    videoUrl?: string | null
     expertQuote?: string | null
     keyFactsJson?: string | null
     isVerified?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    videoUrl?: string | null
     translations?: ArticleTranslationUncheckedCreateNestedManyWithoutArticleInput
   }
 
@@ -9329,12 +9367,12 @@ export namespace Prisma {
     authorRole?: NullableStringFieldUpdateOperationsInput | string | null
     sourcesJson?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     expertQuote?: NullableStringFieldUpdateOperationsInput | string | null
     keyFactsJson?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     translations?: ArticleTranslationUpdateManyWithoutArticleNestedInput
   }
 
@@ -9347,12 +9385,12 @@ export namespace Prisma {
     authorRole?: NullableStringFieldUpdateOperationsInput | string | null
     sourcesJson?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     expertQuote?: NullableStringFieldUpdateOperationsInput | string | null
     keyFactsJson?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     translations?: ArticleTranslationUncheckedUpdateManyWithoutArticleNestedInput
   }
 
@@ -9365,12 +9403,12 @@ export namespace Prisma {
     authorRole?: string | null
     sourcesJson: string
     imageUrl?: string | null
-    videoUrl?: string | null
     expertQuote?: string | null
     keyFactsJson?: string | null
     isVerified?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    videoUrl?: string | null
   }
 
   export type ArticleUpdateManyMutationInput = {
@@ -9382,12 +9420,12 @@ export namespace Prisma {
     authorRole?: NullableStringFieldUpdateOperationsInput | string | null
     sourcesJson?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     expertQuote?: NullableStringFieldUpdateOperationsInput | string | null
     keyFactsJson?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ArticleUncheckedUpdateManyInput = {
@@ -9399,12 +9437,12 @@ export namespace Prisma {
     authorRole?: NullableStringFieldUpdateOperationsInput | string | null
     sourcesJson?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     expertQuote?: NullableStringFieldUpdateOperationsInput | string | null
     keyFactsJson?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ArticleTranslationCreateInput = {
@@ -9416,6 +9454,8 @@ export namespace Prisma {
     metaTitle?: string | null
     metaDescription?: string | null
     updatedAt?: Date | string
+    expertQuote?: string | null
+    keyFactsJson?: string | null
     article: ArticleCreateNestedOneWithoutTranslationsInput
   }
 
@@ -9429,6 +9469,8 @@ export namespace Prisma {
     metaTitle?: string | null
     metaDescription?: string | null
     updatedAt?: Date | string
+    expertQuote?: string | null
+    keyFactsJson?: string | null
   }
 
   export type ArticleTranslationUpdateInput = {
@@ -9440,6 +9482,8 @@ export namespace Prisma {
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expertQuote?: NullableStringFieldUpdateOperationsInput | string | null
+    keyFactsJson?: NullableStringFieldUpdateOperationsInput | string | null
     article?: ArticleUpdateOneRequiredWithoutTranslationsNestedInput
   }
 
@@ -9453,6 +9497,8 @@ export namespace Prisma {
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expertQuote?: NullableStringFieldUpdateOperationsInput | string | null
+    keyFactsJson?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ArticleTranslationCreateManyInput = {
@@ -9465,6 +9511,8 @@ export namespace Prisma {
     metaTitle?: string | null
     metaDescription?: string | null
     updatedAt?: Date | string
+    expertQuote?: string | null
+    keyFactsJson?: string | null
   }
 
   export type ArticleTranslationUpdateManyMutationInput = {
@@ -9476,6 +9524,8 @@ export namespace Prisma {
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expertQuote?: NullableStringFieldUpdateOperationsInput | string | null
+    keyFactsJson?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ArticleTranslationUncheckedUpdateManyInput = {
@@ -9488,6 +9538,8 @@ export namespace Prisma {
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expertQuote?: NullableStringFieldUpdateOperationsInput | string | null
+    keyFactsJson?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type NewsletterSubscriptionCreateInput = {
@@ -9770,12 +9822,12 @@ export namespace Prisma {
     authorRole?: SortOrder
     sourcesJson?: SortOrder
     imageUrl?: SortOrder
-    videoUrl?: SortOrder
     expertQuote?: SortOrder
     keyFactsJson?: SortOrder
     isVerified?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    videoUrl?: SortOrder
   }
 
   export type ArticleMaxOrderByAggregateInput = {
@@ -9787,12 +9839,12 @@ export namespace Prisma {
     authorRole?: SortOrder
     sourcesJson?: SortOrder
     imageUrl?: SortOrder
-    videoUrl?: SortOrder
     expertQuote?: SortOrder
     keyFactsJson?: SortOrder
     isVerified?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    videoUrl?: SortOrder
   }
 
   export type ArticleMinOrderByAggregateInput = {
@@ -9804,12 +9856,12 @@ export namespace Prisma {
     authorRole?: SortOrder
     sourcesJson?: SortOrder
     imageUrl?: SortOrder
-    videoUrl?: SortOrder
     expertQuote?: SortOrder
     keyFactsJson?: SortOrder
     isVerified?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    videoUrl?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -9888,6 +9940,8 @@ export namespace Prisma {
     metaTitle?: SortOrder
     metaDescription?: SortOrder
     updatedAt?: SortOrder
+    expertQuote?: SortOrder
+    keyFactsJson?: SortOrder
   }
 
   export type ArticleTranslationMaxOrderByAggregateInput = {
@@ -9900,6 +9954,8 @@ export namespace Prisma {
     metaTitle?: SortOrder
     metaDescription?: SortOrder
     updatedAt?: SortOrder
+    expertQuote?: SortOrder
+    keyFactsJson?: SortOrder
   }
 
   export type ArticleTranslationMinOrderByAggregateInput = {
@@ -9912,6 +9968,8 @@ export namespace Prisma {
     metaTitle?: SortOrder
     metaDescription?: SortOrder
     updatedAt?: SortOrder
+    expertQuote?: SortOrder
+    keyFactsJson?: SortOrder
   }
 
   export type NewsletterSubscriptionCountOrderByAggregateInput = {
@@ -10307,6 +10365,8 @@ export namespace Prisma {
     metaTitle?: string | null
     metaDescription?: string | null
     updatedAt?: Date | string
+    expertQuote?: string | null
+    keyFactsJson?: string | null
   }
 
   export type ArticleTranslationUncheckedCreateWithoutArticleInput = {
@@ -10318,6 +10378,8 @@ export namespace Prisma {
     metaTitle?: string | null
     metaDescription?: string | null
     updatedAt?: Date | string
+    expertQuote?: string | null
+    keyFactsJson?: string | null
   }
 
   export type ArticleTranslationCreateOrConnectWithoutArticleInput = {
@@ -10358,6 +10420,8 @@ export namespace Prisma {
     metaTitle?: StringNullableFilter<"ArticleTranslation"> | string | null
     metaDescription?: StringNullableFilter<"ArticleTranslation"> | string | null
     updatedAt?: DateTimeFilter<"ArticleTranslation"> | Date | string
+    expertQuote?: StringNullableFilter<"ArticleTranslation"> | string | null
+    keyFactsJson?: StringNullableFilter<"ArticleTranslation"> | string | null
   }
 
   export type ArticleCreateWithoutTranslationsInput = {
@@ -10369,12 +10433,12 @@ export namespace Prisma {
     authorRole?: string | null
     sourcesJson: string
     imageUrl?: string | null
-    videoUrl?: string | null
     expertQuote?: string | null
     keyFactsJson?: string | null
     isVerified?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    videoUrl?: string | null
   }
 
   export type ArticleUncheckedCreateWithoutTranslationsInput = {
@@ -10386,12 +10450,12 @@ export namespace Prisma {
     authorRole?: string | null
     sourcesJson: string
     imageUrl?: string | null
-    videoUrl?: string | null
     expertQuote?: string | null
     keyFactsJson?: string | null
     isVerified?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    videoUrl?: string | null
   }
 
   export type ArticleCreateOrConnectWithoutTranslationsInput = {
@@ -10419,12 +10483,12 @@ export namespace Prisma {
     authorRole?: NullableStringFieldUpdateOperationsInput | string | null
     sourcesJson?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     expertQuote?: NullableStringFieldUpdateOperationsInput | string | null
     keyFactsJson?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ArticleUncheckedUpdateWithoutTranslationsInput = {
@@ -10436,12 +10500,12 @@ export namespace Prisma {
     authorRole?: NullableStringFieldUpdateOperationsInput | string | null
     sourcesJson?: StringFieldUpdateOperationsInput | string
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     expertQuote?: NullableStringFieldUpdateOperationsInput | string | null
     keyFactsJson?: NullableStringFieldUpdateOperationsInput | string | null
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ArticleTranslationCreateManyArticleInput = {
@@ -10453,6 +10517,8 @@ export namespace Prisma {
     metaTitle?: string | null
     metaDescription?: string | null
     updatedAt?: Date | string
+    expertQuote?: string | null
+    keyFactsJson?: string | null
   }
 
   export type ArticleTranslationUpdateWithoutArticleInput = {
@@ -10464,6 +10530,8 @@ export namespace Prisma {
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expertQuote?: NullableStringFieldUpdateOperationsInput | string | null
+    keyFactsJson?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ArticleTranslationUncheckedUpdateWithoutArticleInput = {
@@ -10475,6 +10543,8 @@ export namespace Prisma {
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expertQuote?: NullableStringFieldUpdateOperationsInput | string | null
+    keyFactsJson?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ArticleTranslationUncheckedUpdateManyWithoutArticleInput = {
@@ -10486,6 +10556,8 @@ export namespace Prisma {
     metaTitle?: NullableStringFieldUpdateOperationsInput | string | null
     metaDescription?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expertQuote?: NullableStringFieldUpdateOperationsInput | string | null
+    keyFactsJson?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
 

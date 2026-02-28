@@ -126,12 +126,12 @@ exports.Prisma.ArticleScalarFieldEnum = {
   authorRole: 'authorRole',
   sourcesJson: 'sourcesJson',
   imageUrl: 'imageUrl',
-  videoUrl: 'videoUrl',
   expertQuote: 'expertQuote',
   keyFactsJson: 'keyFactsJson',
   isVerified: 'isVerified',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  videoUrl: 'videoUrl'
 };
 
 exports.Prisma.ArticleTranslationScalarFieldEnum = {
@@ -143,7 +143,9 @@ exports.Prisma.ArticleTranslationScalarFieldEnum = {
   contentHtml: 'contentHtml',
   metaTitle: 'metaTitle',
   metaDescription: 'metaDescription',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  expertQuote: 'expertQuote',
+  keyFactsJson: 'keyFactsJson'
 };
 
 exports.Prisma.NewsletterSubscriptionScalarFieldEnum = {
