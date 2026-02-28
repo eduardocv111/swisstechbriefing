@@ -4,7 +4,7 @@ import CategoryTabs from "@/components/CategoryTabs";
 import ArticleCard from "@/components/ArticleCard";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getCategoryBySlug } from "@/lib/categories";
+import { getCategoryBySlug, getTranslatedCategoryLabel } from "@/lib/categories";
 import { getArticlesByCategory } from "@/lib/articles.repo";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { Locale, locales } from "@/i18n/config";
@@ -18,14 +18,6 @@ type Props = {
     params: Promise<{ slug: string; locale: string }>;
 };
 
-const getTranslatedCategoryLabel = (label: string, dict: Record<string, any>) => {
-    const key = label.toLowerCase();
-    if (key.includes('ki') || key.includes('ai')) return dict.categories.ki;
-    if (key.includes('startup')) return dict.categories.startups;
-    if (key.includes('regulierung') || key.includes('regulation')) return dict.categories.regulation;
-    if (key.includes('defense')) return dict.categories.defense;
-    return label;
-};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { slug, locale } = await params;

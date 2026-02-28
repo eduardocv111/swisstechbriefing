@@ -11,8 +11,8 @@ export async function GET() {
     .map((article: UiArticle) => `
     <item>
       <title><![CDATA[${article.title}]]></title>
-      <link>${SITE_CONFIG.url}/artikel/${article.slug}</link>
-      <guid isPermaLink="true">${SITE_CONFIG.url}/artikel/${article.slug}</guid>
+      <link>${SITE_CONFIG.url}/de-CH/artikel/${article.slug}</link>
+      <guid isPermaLink="true">${SITE_CONFIG.url}/de-CH/artikel/${article.slug}</guid>
       <pubDate>${new Date(article.publishedAt).toUTCString()}</pubDate>
       <description><![CDATA[${article.excerpt}]]></description>
       <category><![CDATA[${article.category}]]></category>

@@ -33,7 +33,7 @@ export async function GET() {
       const t = article.translations[0];
       const title = t?.title ?? article.slug;
       const excerpt = t?.excerpt ?? "";
-      const path = `${DEFAULT_LOCALE}/artikel/${article.slug}`;
+      const path = `/${DEFAULT_LOCALE}/artikel/${article.slug}`;
 
       return `
     <item>

@@ -11,6 +11,7 @@ import { formatSwissDate } from "@/lib/formatDate";
 import { getLatestArticles } from "@/lib/articles.repo";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { Locale } from "@/i18n/config";
+import { estimateReadingTime } from "@/lib/seo/read-time";
 
 export const revalidate = 60; // Refresh page every 60 seconds to show new AI news
 
@@ -22,11 +23,6 @@ interface PageProps {
     params: Promise<{ locale: string }>;
 }
 
-function estimateReadingTime(html: string = ""): number {
-    const text = html.replace(/<[^>]*>/g, "").trim();
-    const words = text ? text.split(/\s+/).length : 0;
-    return Math.max(1, Math.ceil(words / 200));
-}
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -67,7 +63,6 @@ export default async function Home({ params }: PageProps) {
                                             alt={featured.title}
                                             fill
                                             priority
-                                            unoptimized
                                             sizes="(max-width: 1024px) 100vw, 60vw"
                                             className="object-cover transition-transform duration-700 group-hover:scale-105"
                                         />
@@ -137,7 +132,6 @@ export default async function Home({ params }: PageProps) {
                                             src={getArticleImage(article.image)}
                                             alt={article.title}
                                             fill
-                                            unoptimized
                                             sizes="(max-width: 640px) 50vw, 25vw"
                                             priority={idx < 2}
                                             className="object-cover transition-transform duration-500 group-hover:scale-105"

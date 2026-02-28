@@ -18,6 +18,7 @@ import AdSlot from "@/components/consent/AdSlot";
 import GoogleRrmScript from "@/components/analytics/GoogleRrmScript";
 import { Locale, defaultLocale, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { estimateReadingTime } from "@/lib/seo/read-time";
 
 export const runtime = "nodejs";
 export const revalidate = 3600;
@@ -33,11 +34,6 @@ function stripHtml(html: string = ""): string {
     return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 }
 
-function estimateReadingTimeFromHtml(html: string = ""): number {
-    const plainText = stripHtml(html);
-    const wordCount = plainText ? plainText.split(/\s+/).length : 0;
-    return Math.max(1, Math.ceil(wordCount / 200));
-}
 
 function toAbsoluteUrl(pathOrUrl?: string | null): string | undefined {
     if (!pathOrUrl) return undefined;
@@ -146,7 +142,7 @@ export default async function ArticlePage({ params }: Props) {
     const imageUrl = toAbsoluteUrl(getArticleImageOrFallback(article.image));
     const publishedTime = toIsoDate(article.publishedAt);
     const modifiedTime = toIsoDate(article.dateModified);
-    const readingTime = estimateReadingTimeFromHtml(article.contentHtml);
+    const readingTime = estimateReadingTime(article.contentHtml);
 
     const newsArticleJsonLd = {
         "@context": "https://schema.org",
@@ -239,7 +235,7 @@ export default async function ArticlePage({ params }: Props) {
                                 className="h-full w-full object-cover"
                             />
                         ) : (
-                            <Image src={getArticleImageOrFallback(article.image)} alt={article.title} fill className="object-cover transition group-hover:scale-105" sizes="100vw" unoptimized />
+                            <Image src={getArticleImageOrFallback(article.image)} alt={article.title} fill className="object-cover transition group-hover:scale-105" sizes="100vw" />
                         )}
                     </div>
 

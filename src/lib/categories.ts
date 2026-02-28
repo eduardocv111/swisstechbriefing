@@ -32,3 +32,18 @@ export function getSlugFromCategory(label: string) {
 export function isValidCategory(label: string): boolean {
   return getCategoryByLabel(label) !== null;
 }
+
+/**
+ * 🔹 Traducir label de categoría usando el diccionario
+ */
+export function getTranslatedCategoryLabel(label: string, dict: any): string {
+  if (!dict || !dict.categories) return label;
+
+  const key = label.toLowerCase();
+  if (key.includes('ki') || key.includes('ai')) return dict.categories.ki;
+  if (key.includes('startup')) return dict.categories.startups;
+  if (key.includes('regulierung') || key.includes('regulation')) return dict.categories.regulation;
+  if (key.includes('defense') || key.includes('security')) return dict.categories.defense;
+
+  return label;
+}

@@ -29,17 +29,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ];
 
     staticPages.forEach(p => {
+      // Build alternates for static pages
+      const languages: Record<string, string> = {};
+      locales.forEach(l => {
+        languages[l] = `${BASE}/${l}${p}`;
+      });
+
       routes.push({
         url: `${BASE}/${locale}${p}`,
         lastModified: new Date(),
+        alternates: {
+          languages,
+        }
       });
     });
 
     // Categories for each locale
     CATEGORIES.forEach(cat => {
+      const languages: Record<string, string> = {};
+      locales.forEach(l => {
+        languages[l] = `${BASE}/${l}/kategorie/${cat.slug}`;
+      });
+
       routes.push({
         url: `${BASE}/${locale}/kategorie/${cat.slug}`,
         lastModified: new Date(),
+        alternates: {
+          languages,
+        }
       });
     });
 
@@ -48,9 +65,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       // Only include if translation exists for this locale
       const hasTranslation = a.translations.some(t => t.locale === locale);
       if (hasTranslation) {
+        const languages: Record<string, string> = {};
+        // Only point to locales that have this specific translation
+        a.translations.forEach(t => {
+          languages[t.locale] = `${BASE}/${t.locale}/artikel/${a.slug}`;
+        });
+
         routes.push({
           url: `${BASE}/${locale}/artikel/${a.slug}`,
           lastModified: a.updatedAt,
+          alternates: {
+            languages,
+          }
         });
       }
     });

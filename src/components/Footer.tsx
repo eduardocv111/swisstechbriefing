@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { CATEGORIES } from '@/lib/categories';
+import { CATEGORIES, getTranslatedCategoryLabel } from '@/lib/categories';
 
 import { getDictionary } from '@/i18n/get-dictionary';
 import { Locale } from '@/i18n/config';
@@ -47,25 +47,13 @@ export default async function Footer({ locale = 'de-CH' }: FooterProps) {
                         <ul className="space-y-3 text-sm">
                             <li><Link href={`/${locale}`} className="hover:text-primary transition-colors">{dict.nav.home}</Link></li>
                             <li><Link href={`/${locale}/ueber-uns`} className="hover:text-primary transition-colors">{dict.nav.about}</Link></li>
-                            {CATEGORIES.map((cat) => {
-                                // Map internal category labels to dictionary keys
-                                const getTranslatedLabel = (label: string) => {
-                                    const key = label.toLowerCase();
-                                    if (key.includes('ki') || key.includes('ai')) return dict.categories.ki;
-                                    if (key.includes('startup')) return dict.categories.startups;
-                                    if (key.includes('regulierung') || key.includes('regulation')) return dict.categories.regulation;
-                                    if (key.includes('defense')) return dict.categories.defense;
-                                    return label;
-                                };
-
-                                return (
-                                    <li key={cat.slug}>
-                                        <Link href={`/${locale}/kategorie/${cat.slug}`} className="hover:text-primary transition-colors">
-                                            {getTranslatedLabel(cat.label)}
-                                        </Link>
-                                    </li>
-                                );
-                            })}
+                            {CATEGORIES.map((cat) => (
+                                <li key={cat.slug}>
+                                    <Link href={`/${locale}/kategorie/${cat.slug}`} className="hover:text-primary transition-colors">
+                                        {getTranslatedCategoryLabel(cat.label, dict)}
+                                    </Link>
+                                </li>
+                            ))}
                             <li><Link href={`/${locale}/newsletter`} className="hover:text-primary transition-colors font-medium text-white">{dict.nav.newsletter}</Link></li>
                         </ul>
                     </div>
