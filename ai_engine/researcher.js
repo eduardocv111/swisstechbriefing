@@ -21,7 +21,7 @@ class Researcher {
 
             const feed = await parser.parseURL(url);
             console.log(`[Researcher] ⚡ Found ${feed.items.length} related links.`);
-            return feed.items.slice(0, 4).map(item => item.link);
+            return feed.items.slice(0, 8).map(item => item.link);
         } catch (error) {
             console.error('[Researcher] ⚠️ Search failed:', error.message);
             return [];

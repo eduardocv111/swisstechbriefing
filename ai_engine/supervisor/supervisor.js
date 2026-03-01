@@ -136,13 +136,27 @@ class Supervisor {
             const trends = trendsRaw.sort(() => Math.random() - 0.5);
 
             let selectedNews = null;
+            let research = null;
+
+            // 🚀 ADVANCED SELECTION LOOP: Try multiple trends until one succeeds in research
             for (const news of trends) {
                 const existing = await prisma.article.findFirst({ where: { sourcesJson: { contains: news.link } } });
-                if (!existing) { selectedNews = news; break; }
+                if (existing) continue;
+
+                this.log(`Attempting research for: ${news.title}`);
+                const res = await Researcher.deepResearch(news.link, news.title);
+
+                if (res.success) {
+                    selectedNews = news;
+                    research = res;
+                    break;
+                } else {
+                    this.log(`⚠️ Research failed for "${news.title}". Trying next trend...`, { reason: res.reason });
+                }
             }
 
-            if (!selectedNews) {
-                this.log('All trends processed. Standing down.');
+            if (!selectedNews || !research) {
+                this.log('All available trends failed research or already processed. Standing down.');
                 this.isPipelineRunning = false;
                 return;
             }
@@ -153,14 +167,8 @@ class Supervisor {
             if (state.count === 3) cycleMode = "TECHNICAL_EDITORIAL";
             if (state.count === 4) cycleMode = "PODCAST_SPECIAL";
 
-            this.log(`Cycle State: ${state.count}/5. Mode: ${cycleMode}`);
+            this.log(`Selected Trend: ${selectedNews.title}. Mode: ${cycleMode}`);
 
-            const research = await Researcher.deepResearch(selectedNews.link, selectedNews.title);
-            if (!research.success) {
-                this.log('⚠️ Research failed or insufficient content. Skipping this trend.', { reason: research.reason });
-                this.isPipelineRunning = false;
-                return;
-            }
             const articleData = await withRetry(async () => AIBridge.generateArticle(selectedNews.title, "", research.rawText, cycleMode), { maxRetries: 3 });
 
             // Force categories based on Cycle Mode
