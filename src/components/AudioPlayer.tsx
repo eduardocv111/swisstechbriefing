@@ -86,11 +86,14 @@ export default function AudioPlayer({ src, locale, dict }: AudioPlayerProps) {
             </div>
             <audio
                 ref={audioRef}
-                src={src}
                 onTimeUpdate={handleTimeUpdate}
                 onEnded={() => setIsPlaying(false)}
                 className="hidden"
-            />
+                preload="metadata"
+            >
+                <source src={src} type="audio/mpeg" />
+                Your browser does not support the audio element.
+            </audio>
         </div>
     );
 }
