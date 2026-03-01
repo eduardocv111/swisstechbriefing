@@ -16,6 +16,16 @@ const { PrismaClient } = require('../../src/generated/prisma');
 const { PrismaBetterSqlite3 } = require('@prisma/adapter-better-sqlite3');
 const openclawClient = require('./openclawClient');
 
+// --- DATABASE INITIALIZATION (Prisma + Absolute Path) ---
+const repoRoot = path.resolve(__dirname, '..', '..');
+if (!process.env.DATABASE_URL) {
+    process.env.DATABASE_URL = `file:${path.join(repoRoot, 'data', 'stb.db').replace(/\\/g, '/')}`;
+} else if (process.env.DATABASE_URL.startsWith('file:./')) {
+    const abs = path.join(repoRoot, process.env.DATABASE_URL.replace('file:./', ''));
+    process.env.DATABASE_URL = `file:${abs.replace(/\\/g, '/')}`;
+}
+const prisma = new PrismaClient({ adapter: new PrismaBetterSqlite3({ url: process.env.DATABASE_URL }) });
+
 /**
  * PRODUCTION-GRADE AI PIPELINE SUPERVISOR
  * Roles: Orchestration, Health Management, Mutex Control, Cleanup
