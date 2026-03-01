@@ -138,57 +138,72 @@ class Supervisor {
             let selectedNews = null;
             let research = null;
 
-            // 🚀 ADVANCED SELECTION LOOP: Try multiple trends until one succeeds in research
+                        let articleData = null;
+
+            // 🚀 ADVANCED SELECTION LOOP: Try multiple trends until one succeeds in research AND generation
             for (const news of trends) {
                 const existing = await prisma.article.findFirst({ where: { sourcesJson: { contains: news.link } } });
                 if (existing) continue;
 
                 this.log(`Attempting research for: ${news.title}`);
                 const res = await Researcher.deepResearch(news.link, news.title);
-
+                
                 if (res.success) {
-                    selectedNews = news;
-                    research = res;
-                    break;
+                    const state = this.getCycleState();
+                    /* 🚀 ELITE 3-1-1 CYCLE LOGIC: 3 News, 1 Technical, 1 Podcast Special */
+                    let cycleMode = "NEWS";
+                    if (state.count === 3) cycleMode = "TECHNICAL_EDITORIAL";
+                    if (state.count === 4) cycleMode = "PODCAST_SPECIAL";
+
+                    this.log(`Research successful. Drafting "${news.title}" in ${cycleMode} mode...`);
+                    
+                    try {
+                        const draft = await withRetry(async () => AIBridge.generateArticle(news.title, "", res.rawText, cycleMode), { maxRetries: 2 });
+                        const articleBody = draft?.contentHtml ?? draft?.content ?? draft?.html ?? "";
+
+                        // Validation Guardrail
+                        if (!articleBody || String(articleBody).trim().length < 500) {
+                            this.log(`🛑 Draft too thin (${articleBody?.length} chars) for "${news.title}". Trying next trend...`);
+                            continue;
+                        }
+
+                        if (articleBody.toLowerCase().includes("i apologize") || articleBody.toLowerCase().includes("unable to generate")) {
+                            this.log(`🛑 LLM refused to generate content for "${news.title}". Trying next trend...`);
+                            continue;
+                        }
+
+                        // Success!
+                        selectedNews = news;
+                        research = res;
+                        articleData = draft;
+                        break; 
+                    } catch (draftError) {
+                        this.log(`❌ Drafting failed for "${news.title}": ${draftError.message}. Trying next trend...`);
+                        continue;
+                    }
                 } else {
                     this.log(`⚠️ Research failed for "${news.title}". Trying next trend...`, { reason: res.reason });
                 }
             }
 
-            if (!selectedNews || !research) {
+            if (!selectedNews || !articleData) {
                 this.log('All available trends failed research or already processed. Standing down.');
                 this.isPipelineRunning = false;
                 return;
             }
 
             const state = this.getCycleState();
-            /* 🚀 ELITE 3-1-1 CYCLE LOGIC: 3 News, 1 Technical, 1 Podcast Special */
             let cycleMode = "NEWS";
             if (state.count === 3) cycleMode = "TECHNICAL_EDITORIAL";
             if (state.count === 4) cycleMode = "PODCAST_SPECIAL";
 
-            this.log(`Selected Trend: ${selectedNews.title}. Mode: ${cycleMode}`);
-
-            const articleData = await withRetry(async () => AIBridge.generateArticle(selectedNews.title, "", research.rawText, cycleMode), { maxRetries: 3 });
+            this.log(`Final Selection: ${selectedNews.title}. Proceeding with visuals.`);
 
             // Force categories based on Cycle Mode
             if (cycleMode === "TECHNICAL_EDITORIAL") {
                 selectedNews.category = "Analyse & Insights";
             } else if (cycleMode === "PODCAST_SPECIAL") {
                 selectedNews.category = "Podcast";
-            }
-
-            // Guardrail: Abort if content is empty or contains placeholder failures
-            const articleBody = articleData?.contentHtml ?? articleData?.content ?? articleData?.html ?? "";
-
-            if (!articleBody || String(articleBody).trim().length < 500) {
-                this.log('🛑 Aborting publish: contentHtml is empty or too short (Draft issue).', { length: articleBody?.length });
-                throw new Error("Aborting publish: Article content is dangerously thin (LLM hallucination or empty response).");
-            }
-
-            if (articleBody.toLowerCase().includes("i apologize") || articleBody.toLowerCase().includes("unable to generate")) {
-                this.log('🛑 Aborting publish: content contains LLM refusal message.');
-                throw new Error("Aborting publish: Content contains LLM refusal/error message.");
             }
 
             const slug = this.generateSlug(selectedNews.title);
