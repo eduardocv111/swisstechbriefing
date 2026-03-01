@@ -301,7 +301,18 @@ SCHEMA: {
             });
 
             if (cleanResponse.includes("```")) cleanResponse = cleanResponse.replace(/```[a-z]*\n?/, "").replace(/\n?```/g, "");
-            return JSON.parse(cleanResponse.trim());
+            const article = JSON.parse(cleanResponse.trim());
+
+            // --- NORMALIZATION: Shield against LLM key variance ---
+            article.imagePrompts = article.imagePrompts || article.image_prompts || {};
+            article.keyFacts = article.keyFacts || article.key_facts || [];
+            article.expertQuote = article.expertQuote || article.expert_quote || "";
+
+            if (!article.imagePrompts.hero && !article.imagePrompts.detail) {
+                console.warn("[AI Bridge] ⚠️ LLM article is missing image prompts. Visuals will be skipped.");
+            }
+
+            return article;
         } catch (error) {
             console.error("[AI Bridge] Elite Workflow Error:", error);
             throw error;

@@ -195,24 +195,42 @@ class Supervisor {
                 return;
             }
 
-            // 4. Asset Generation (Visuals + Audio)
+            // 4. Asset Generation (Visuals)
             const slug = this.generateSlug(selectedNews.title);
             const loraPath = path.join(__dirname, '..', 'loras', 'super_realism.safetensors');
-            this.log(`Generating Assets for ${slug}...`);
 
-            const images = await withRetry(async () => AIBridge.generateImagesBatch(articleData.imagePrompts, slug, loraPath), { maxRetries: 1 });
+            this.log(`--- STEP 4: VISUAL ASSETS [${slug}] ---`);
+
+            if (!articleData.imagePrompts?.hero) {
+                this.log('⚠️ Critical: Article data is missing HERO image prompt. Attempting fallback...');
+                articleData.imagePrompts = articleData.imagePrompts || {};
+                articleData.imagePrompts.hero = selectedNews.title;
+            }
+
+            const images = await withRetry(async () => {
+                this.log('🎨 Calling FLUX Image Engine...');
+                return await AIBridge.generateImagesBatch(articleData.imagePrompts, slug, loraPath);
+            }, { maxRetries: 1 });
 
             let video = null;
-            if (images.hero) {
+            if (images && images.hero) {
                 try {
+                    this.log('🎬 Starting LTX Video Animation from Hero image...');
                     video = await AIBridge.generateVideoAnimation('ltx_cover', articleData.title, `stb_${slug}_hero.mp4`, images.hero);
                 } catch (vErr) { this.log('Video non-critical fail'); }
+            } else {
+                this.log('⚠️ Skipping Video: No hero image generated.');
             }
 
             // 5. Localization & Audio
+            this.log('--- STEP 5: LOCALIZATION & AUDIO BATCH ---');
+            this.log(`🌐 Translating content to 4 languages...`);
             const translations = await Translator.translateArticle(articleData, ['fr-CH', 'it-CH', 'es-ES', 'en']);
-            this.log('🎙️ Batch Audio Generation starting...');
-            const podcasts = await withRetry(async () => AIBridge.generatePodcastBatch(articleData, slug), { maxRetries: 1 });
+
+            this.log('🎙️ Starting AI Voice Synthesis (XTTS Batch)...');
+            const podcasts = await withRetry(async () => {
+                return await AIBridge.generatePodcastBatch(articleData, slug);
+            }, { maxRetries: 1 });
 
             articleData.audioUrl = podcasts['de-CH'] || null;
             translations.forEach(t => t.audioUrl = podcasts[t.locale] || null);
