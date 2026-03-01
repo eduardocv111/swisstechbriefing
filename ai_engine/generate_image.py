@@ -19,6 +19,7 @@ def sanitize_prompt(p: str) -> str:
     return p
 
 def build_pipe(model_path: str):
+    print(f"Loading Flux model from {model_path}...")
     dtype = torch.float16 if torch.cuda.is_available() else torch.float32
     pipe = FluxPipeline.from_pretrained(
         model_path,
@@ -26,6 +27,7 @@ def build_pipe(model_path: str):
         use_safetensors=True,
         low_cpu_mem_usage=True
     )
+    print("Pipeline loaded. Enabling CPU offload...")
     if torch.cuda.is_available():
         pipe.enable_model_cpu_offload()
     else:

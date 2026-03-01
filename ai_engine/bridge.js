@@ -136,7 +136,11 @@ class AIBridge {
                     const args = [scriptPath, cleanPrompt, outPath];
                     if (loraPath) args.push(loraPath);
 
-                    const py = spawn(pythonPath, args);
+                    const py = spawn(pythonPath, args, { stdio: ["pipe", "pipe", "pipe"] });
+
+                    py.stdout.on("data", (data) => console.log(`[Python] ${data.toString().trim()}`));
+                    py.stderr.on("data", (data) => console.error(`[Python Error] ${data.toString().trim()}`));
+
                     py.on("close", (code) => {
                         if (code === 0 || fs.existsSync(outPath)) {
                             results[job.key] = `/assets/images/news/${job.filename}`;

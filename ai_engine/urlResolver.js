@@ -1,12 +1,29 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
+const net = require("net");
 
 const BLOCKED_HOSTS = new Set([
     "google.com", "www.google.com", "consent.google.com", "accounts.google.com",
     "google-analytics.com", "googletagmanager.com", "gstatic.com", "www.gstatic.com",
     "facebook.com", "twitter.com", "instagram.com", "linkedin.com", "apple.com", "microsoft.com",
-    "w3.org", "schema.org", "wikipedia.org"
+    "w3.org", "schema.org", "wikipedia.org",
+    "localhost", "127.0.0.1", "[::1]", "0.0.0.0"
 ]);
+
+function isPrivateIP(hostname) {
+    if (net.isIP(hostname)) {
+        const ip = hostname;
+        // RFC 1918 & Local
+        if (ip.startsWith('10.') || ip.startsWith('192.168.')) return true;
+        if (ip === '127.0.0.1' || ip === '::1' || ip === '0.0.0.0' || ip.startsWith('169.254.')) return true;
+        if (ip.startsWith('172.')) {
+            const parts = ip.split('.');
+            const second = parseInt(parts[1], 10);
+            if (second >= 16 && second <= 31) return true;
+        }
+    }
+    return false;
+}
 
 const ASSET_EXT_RE = /\.(js|css|png|jpg|jpeg|webp|svg|gif|ico|map|xml|json|txt|pdf|zip|gz)(\?|#|$)/i;
 
@@ -21,6 +38,7 @@ function isPublisherLike(urlStr) {
 
     // Fast block for Google/Social/Tech giants
     if (BLOCKED_HOSTS.has(host)) return false;
+    if (isPrivateIP(host)) return false;
     for (const blocked of BLOCKED_HOSTS) {
         if (host.endsWith("." + blocked)) return false;
     }
