@@ -27,9 +27,14 @@ venv/
 Thumbs.db
 
 # AI Engine Assets (Local Only)
-ai_engine/
+ai_engine/*
+!ai_engine/*.js
+!ai_engine/*.py
+!ai_engine/supervisor/
+!ai_engine/models/
+ai_engine/models/*
+!ai_engine/models/podcast_engine/
 ai_engine/.venv-flux/
-ai_engine/models/
 ai_engine/knowledge/
 ai_engine/google_news_sample.html
 ai_engine/*.log

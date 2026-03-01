@@ -1,0 +1,93 @@
+const axios = require("axios");
+const cheerio = require("cheerio");
+
+const BLOCKED_HOSTS = new Set([
+    "news.google.com", "google.com", "www.google.com", "consent.google.com",
+    "accounts.google.com", "google-analytics.com", "googletagmanager.com",
+    "doubleclick.net", "gstatic.com", "www.gstatic.com", "googleusercontent.com",
+    "w3.org", "schema.org", "facebook.com", "twitter.com", "linkedin.com", "instagram.com"
+]);
+
+const ASSET_EXT_RE = /\.(js|css|png|jpg|jpeg|webp|svg|gif|ico|map|xml|json|txt|pdf|woff|woff2|ttf|eot|mp4|webm|mp3|zip|gz)(\?|#|$)/i;
+const TRACKING_HINT_RE = /(analytics|gtm|collect|tagmanager|doubleclick|pixel|adservice|ads|tracking|count|log)/i;
+
+function safeURL(u) {
+    try { return new URL(u); } catch { return null; }
+}
+
+function isPublisherLike(urlStr) {
+    const u = safeURL(urlStr);
+    if (!u) return false;
+    const host = u.hostname.toLowerCase();
+
+    if (BLOCKED_HOSTS.has(host)) return false;
+    if (host.includes('google')) return false;
+    if (ASSET_EXT_RE.test(urlStr)) return false;
+    if (TRACKING_HINT_RE.test(urlStr)) return false;
+
+    if (u.pathname.length < 5) return false;
+
+    return true;
+}
+
+function decodeGoogleNewsLink(googleLink) {
+    if (!googleLink || typeof googleLink !== 'string') return null;
+    try {
+        const match = googleLink.match(/\/(?:rss\/)?articles\/([A-Za-z0-9_-]+)/);
+        if (!match) return null;
+
+        let token = match[1];
+        token = token.replace(/-/g, '+').replace(/_/g, '/');
+        while (token.length % 4 !== 0) token += '=';
+
+        const buffer = Buffer.from(token, 'base64');
+        const binary = buffer.toString('binary');
+        const urlMatch = binary.match(/https?:\/\/[^\s\x00-\x1F\x7F"'<>]+/i);
+
+        if (urlMatch) {
+            let url = urlMatch[0].split(/[^\w\d\.\/\-\:\?\=\&\%\#\+]/)[0];
+            if (isPublisherLike(url)) return url;
+        }
+    } catch (e) { return null; }
+    return null;
+}
+
+async function resolveGoogleNewsToPublisher(initialUrl) {
+    const decoded = decodeGoogleNewsLink(initialUrl);
+    if (decoded) return { ok: true, url: decoded, method: "decode:token" };
+
+    const headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+        "Accept-Language": "de-CH,de;q=0.9,en-US;q=0.8,en;q=0.7",
+        "Referer": "https://news.google.com/"
+    };
+
+    try {
+        const res = await axios.get(initialUrl, {
+            headers,
+            maxRedirects: 15,
+            timeout: 8000,
+            validateStatus: (status) => status < 500,
+        });
+
+        const responseUrl = res?.request?.res?.responseUrl || initialUrl;
+        if (isPublisherLike(responseUrl)) return { ok: true, url: responseUrl, method: "redirect" };
+
+        const html = typeof res.data === "string" ? res.data : "";
+        const allUrls = html.match(/https?:\/\/[^\s\x00-\x1F\x7F"'<>]+/gi) || [];
+
+        for (let cand of allUrls) {
+            let clean = cand.replace(/\\x2f/g, '/').replace(/\\/g, '').split(/[^\w\d\.\/\-\:\?\=\&\%\#\+]/)[0];
+            if (isPublisherLike(clean) && clean.length > 50) {
+                return { ok: true, url: clean, method: "regex:heuristics" };
+            }
+        }
+
+        return { ok: false, url: responseUrl, reason: "unresolved_publisher" };
+    } catch (e) {
+        return { ok: false, url: initialUrl, reason: `error:${e.message}` };
+    }
+}
+
+module.exports = { resolveGoogleNewsToPublisher, decodeGoogleNewsLink };

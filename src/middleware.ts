@@ -56,12 +56,15 @@ export default function proxy(request: NextRequest) {
     }
 
     // ── 2. Skip paths that don't need locale prefixes ──
-    if (
+    const isPublicFile = pathname.includes('.') ||
         pathname.startsWith("/_next") ||
         pathname.startsWith("/assets") ||
-        pathname === "/favicon.ico" ||
-        pathname.includes(".")
-    ) {
+        pathname.startsWith("/images") ||
+        pathname.startsWith("/audio") ||
+        pathname.startsWith("/video") ||
+        pathname === "/favicon.ico";
+
+    if (isPublicFile) {
         return NextResponse.next();
     }
 
@@ -100,6 +103,6 @@ export default function proxy(request: NextRequest) {
 
 export const config = {
     matcher: [
-        "/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js|robots.txt|sitemap.xml|ads.txt|rss.xml).*)",
+        "/((?!api|_next/static|_next/image|assets|images|audio|video|favicon.ico|sw.js|robots.txt|sitemap.xml|ads.txt|rss.xml).*)",
     ],
 };
