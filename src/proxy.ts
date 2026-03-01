@@ -15,7 +15,7 @@ const shortToFull: Record<string, string> = {
  * 1. CORS for API v1
  * 2. Locale-based redirections and normalization
  */
-export default function proxy(request: NextRequest) {
+export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     // ── 0. EXEMPT API FROM ALL MIDDLEWARE LOGIC ──
