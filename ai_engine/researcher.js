@@ -75,47 +75,75 @@ class Researcher {
 
     async deepResearch(mainUrl, topic = "") {
         console.log(`[Researcher] 🛡️ Starting Elite Multi-Source Investigation...`);
-
+        const searchTopic = topic || "Swiss Tech News";
         const results = [];
         let finalMainUrl = mainUrl;
 
-        // 1. Resolver fuente principal
-        const resolution = await resolveGoogleNewsToPublisher(mainUrl);
-        if (resolution.ok) {
-            finalMainUrl = resolution.url;
-            console.log(`[Researcher] 💎 Main source resolved: ${finalMainUrl}`);
-            const mainText = await this.scrapeUrl(finalMainUrl);
-            if (mainText && mainText.length > 200) {
-                results.push(`SOURCE_MASTER: ${finalMainUrl}\nCONTENT:\n${mainText.substring(0, 6000)}`);
+        // 1. Intentar resolver la fuente principal (Google News Link)
+        try {
+            const resolution = await resolveGoogleNewsToPublisher(mainUrl);
+            if (resolution.ok) {
+                finalMainUrl = resolution.url;
+                console.log(`[Researcher] 💎 Main source resolved: ${finalMainUrl}`);
+                const mainText = await this.scrapeUrl(finalMainUrl);
+                if (mainText && mainText.length > 500) {
+                    results.push(`SOURCE_MASTER (${new URL(finalMainUrl).hostname}):\n${mainText.substring(0, 6000)}`);
+                }
+            } else {
+                console.warn(`[Researcher] ⚠️ Main resolution failed: ${resolution.reason}. Pivoting to full search mode...`);
             }
-        } else {
-            console.warn(`[Researcher] ⚠️ Main resolution failed: ${resolution.reason}`);
+        } catch (e) {
+            console.error(`[Researcher] ❌ Critical error resolving main source: ${e.message}`);
         }
 
-        // 2. BÚSQUEDA DE CONTEXTO
-        const searchTopic = topic || "Swiss Tech News";
+        // 2. AGENTIC SEARCH: Si no hay suficiente contenido, buscar agresivamente en los resultados relacionados
+        // (Similar a como ChatGPT busca en la web)
+        console.log(`[Researcher] 🔍 Agentic Search: Investigating "${searchTopic}" across multiple portals...`);
         const extraLinks = await this.searchRelatedContext(searchTopic);
 
-        for (const link of extraLinks) {
-            if (results.length >= 3) break;
+        if (extraLinks.length === 0) {
+            console.warn(`[Researcher] ⚠️ No search results found for the topic.`);
+        }
 
-            const resExtra = await resolveGoogleNewsToPublisher(link);
-            if (resExtra.ok && resExtra.url !== finalMainUrl) {
-                console.log(`[Researcher] 📖 Resolved extra: ${resExtra.url}`);
-                const extraText = await this.scrapeUrl(resExtra.url);
-                if (extraText && extraText.length > 300) {
-                    results.push(`SOURCE_CONTEXT: ${resExtra.url}\nCONTENT:\n${extraText.substring(0, 3500)}`);
+        for (const link of extraLinks) {
+            // Buscamos tener al menos 6000 caracteres de contexto total
+            const currentTotalLength = results.reduce((acc, curr) => acc + curr.length, 0);
+            if (results.length >= 5 || currentTotalLength > 8000) break;
+
+            try {
+                const resExtra = await resolveGoogleNewsToPublisher(link);
+                if (resExtra.ok) {
+                    // Evitar scrapear dos veces la misma si ya la tenemos
+                    const hostname = new URL(resExtra.url).hostname;
+                    if (results.some(r => r.includes(hostname))) continue;
+
+                    console.log(`[Researcher] 📖 Extracting from: ${hostname}...`);
+                    const extraText = await this.scrapeUrl(resExtra.url);
+                    if (extraText && extraText.length > 300) {
+                        results.push(`SOURCE_ALTERNATE (${hostname}):\n${extraText.substring(0, 4000)}`);
+                    }
                 }
+            } catch (e) {
+                // Silently continue to next link
             }
         }
 
-        if (results.length === 0) {
-            return { success: false, error: 'insufficient_content', reason: "No content from any source" };
+        // 3. Evaluación final de "Suficiencia"
+        const finalCombinedText = results.join('\n\n' + '='.repeat(30) + '\n\n');
+
+        if (results.length === 0 || finalCombinedText.length < 800) {
+            console.error(`[Researcher] ❌ Investigation failed: found only ${finalCombinedText.length} chars from ${results.length} sources.`);
+            return {
+                success: false,
+                error: 'insufficient_content',
+                reason: results.length === 0 ? "No sources could be scraped" : "Content too thin for elite editorial"
+            };
         }
 
-        const combinedText = results.join('\n\n' + '='.repeat(30) + '\n\n');
+        console.log(`[Researcher] ✅ Multi-Source Success: Compiled ${finalCombinedText.length} chars from ${results.length} different perspectives.`);
+
         return {
-            rawText: combinedText,
+            rawText: finalCombinedText,
             sourceUrl: finalMainUrl,
             success: true,
             sourceCount: results.length
