@@ -15,13 +15,25 @@ class Researcher {
 
     async searchRelatedContext(topic) {
         try {
-            const query = encodeURIComponent((topic ?? "").toString().split(' - ')[0]);
-            const url = `https://news.google.com/rss/search?q=${query}&hl=de-CH&gl=CH&ceid=CH:de`;
-            console.log(`[Researcher] 📡 Searching related: ${url}`);
+            const cleanTopic = (topic ?? "").toString().split(' - ')[0];
+            const executeSearch = async (q) => {
+                const url = `https://news.google.com/rss/search?q=${encodeURIComponent(q)}&hl=de-CH&gl=CH&ceid=CH:de`;
+                console.log(`[Researcher] 📡 Searching related: ${url}`);
+                const feed = await parser.parseURL(url);
+                return feed.items;
+            };
 
-            const feed = await parser.parseURL(url);
-            console.log(`[Researcher] ⚡ Found ${feed.items.length} related links.`);
-            return feed.items.slice(0, 8).map(item => item.link);
+            let items = await executeSearch(cleanTopic);
+
+            // Fallback: If no results, try a broader search with just the first 5 words
+            if (items.length === 0) {
+                const broadTopic = cleanTopic.split(/\s+/).slice(0, 5).join(' ');
+                console.log(`[Researcher] ⚠️ No results for full title. Broadening query to: "${broadTopic}"`);
+                items = await executeSearch(broadTopic);
+            }
+
+            console.log(`[Researcher] ⚡ Found ${items.length} related links.`);
+            return items.slice(0, 15).map(item => item.link);
         } catch (error) {
             console.error('[Researcher] ⚠️ Search failed:', error.message);
             return [];
