@@ -25,7 +25,8 @@ function isPublisherLike(urlStr) {
     if (ASSET_EXT_RE.test(urlStr)) return false;
     if (TRACKING_HINT_RE.test(urlStr)) return false;
 
-    if (u.pathname.length < 5) return false;
+    // Relaxed length for short news URLs (e.g. news.ch/123)
+    if (u.pathname.length < 2) return false;
 
     return true;
 }
@@ -42,10 +43,19 @@ function decodeGoogleNewsLink(googleLink) {
 
         const buffer = Buffer.from(token, 'base64');
         const binary = buffer.toString('binary');
-        const urlMatch = binary.match(/https?:\/\/[^\s\x00-\x1F\x7F"'<>]+/i);
 
+        // Pattern 1: Simple HTTP match
+        const urlMatch = binary.match(/https?:\/\/[^\s\x00-\x1F\x7F"'<>]+/i);
         if (urlMatch) {
             let url = urlMatch[0].split(/[^\w\d\.\/\-\:\?\=\&\%\#\+]/)[0];
+            if (isPublisherLike(url)) return url;
+        }
+
+        // Pattern 2: Binary scrubbing for hidden URLs
+        const scrubbed = binary.replace(/[^\x20-\x7E]/g, ' ');
+        const secondMatch = scrubbed.match(/https?:\/\/[^\s"'<>]+/i);
+        if (secondMatch) {
+            let url = secondMatch[0].split(/[^\w\d\.\/\-\:\?\=\&\%\#\+]/)[0];
             if (isPublisherLike(url)) return url;
         }
     } catch (e) { return null; }
@@ -71,15 +81,25 @@ async function resolveGoogleNewsToPublisher(initialUrl) {
             validateStatus: (status) => status < 500,
         });
 
+        // 1. Follow standard redirect
         const responseUrl = res?.request?.res?.responseUrl || initialUrl;
         if (isPublisherLike(responseUrl)) return { ok: true, url: responseUrl, method: "redirect" };
 
+        // 2. Scan HTML for Meta Refreshes or encoded JS redirects
         const html = typeof res.data === "string" ? res.data : "";
+
+        // Pattern: <meta http-equiv="refresh" content="0;url=https://..."
+        const metaMatch = html.match(/url=(https?:\/\/[^"'>\s]+)/i);
+        if (metaMatch && isPublisherLike(metaMatch[1])) {
+            return { ok: true, url: metaMatch[1], method: "meta-refresh" };
+        }
+
         const allUrls = html.match(/https?:\/\/[^\s\x00-\x1F\x7F"'<>]+/gi) || [];
 
         for (let cand of allUrls) {
             let clean = cand.replace(/\\x2f/g, '/').replace(/\\/g, '').split(/[^\w\d\.\/\-\:\?\=\&\%\#\+]/)[0];
-            if (isPublisherLike(clean) && clean.length > 50) {
+            // Lowered length requirement from 50 to 20 for more flexibility
+            if (isPublisherLike(clean) && clean.length > 20) {
                 return { ok: true, url: clean, method: "regex:heuristics" };
             }
         }
