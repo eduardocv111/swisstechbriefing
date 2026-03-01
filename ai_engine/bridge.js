@@ -260,9 +260,10 @@ class AIBridge {
 6. THE FUTURE: A speculative but grounded outlook.
 7. MARKERS: Inject [IMAGE_2] and [IMAGE_3] organically.`;
 
+            // ✅ FIX: use `mode` (the actual parameter), not `cycleMode` (undefined)
             let requirements = newsReq;
-            if (cycleMode === "TECHNICAL_EDITORIAL") requirements = techReq;
-            else if (cycleMode === "PODCAST_SPECIAL") requirements = podcastReq;
+            if (mode === "TECHNICAL_EDITORIAL") requirements = techReq;
+            else if (mode === "PODCAST_SPECIAL") requirements = podcastReq;
 
             const initialDraft = await AIBridge.callLLM({
                 model: "llama3.1:8b", system: writerSystem,
