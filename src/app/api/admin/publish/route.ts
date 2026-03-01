@@ -100,7 +100,6 @@ export async function POST(req: Request) {
         revalidatePath(`/${loc}/kategorie/${categorySlug}`);
       }
       revalidatePath(`/${loc}/sitemap.xml`);
-      revalidatePath(`/${loc}/feed.xml`);
     });
 
     revalidatePath("/sitemap.xml");

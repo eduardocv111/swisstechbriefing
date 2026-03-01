@@ -87,6 +87,14 @@ export default function proxy(request: NextRequest) {
         return NextResponse.redirect(url, 308);
     }
 
+    // ── 5. Fix common 404s (Aliases / Redirects) ──
+    const targetPath = pathname.replace(`/${first}/`, "/");
+    if (targetPath === "/podcasts" || targetPath === "podcasts") {
+        const url = request.nextUrl.clone();
+        url.pathname = `/${first}/kategorie/podcast`;
+        return NextResponse.redirect(url, 308);
+    }
+
     return NextResponse.next();
 }
 
