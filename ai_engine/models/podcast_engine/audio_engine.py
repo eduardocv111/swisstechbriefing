@@ -62,8 +62,16 @@ def main():
         data = json.loads(args.article)
         title = data.get('title', 'News')
         excerpt = data.get('excerpt', '')
-        # Construct the text to speak
-        raw_text = f"{title}. {excerpt}"
+        content_html = data.get('contentHtml', '')
+        
+        # Clean HTML tags for narration
+        import re
+        clean_content = re.sub(r'<[^>]+>', '', content_html)
+        # Remove multiple newlines and spaces
+        clean_content = re.sub(r'\s+', ' ', clean_content).strip()
+        
+        # Construct the text to speak (Full Article)
+        raw_text = f"{title}. {excerpt}. {clean_content}"
         
         # Dialect refinement if needed
         text_to_speak = refine_to_dialect(raw_text, args.locale)

@@ -390,7 +390,7 @@ SCHEMA: {
 
             const runLocale = async (loc) => {
                 const textData = loc === "de-CH"
-                    ? { title: articleData.title, excerpt: articleData.excerpt }
+                    ? { title: articleData.title, excerpt: articleData.excerpt, contentHtml: articleData.contentHtml }
                     : articleData.translations.find(t => t.locale === loc);
 
                 if (!textData) return;
@@ -404,7 +404,11 @@ SCHEMA: {
 
                     const args = [
                         scriptPath,
-                        "--article", JSON.stringify({ title: textData.title, excerpt: textData.excerpt }),
+                        "--article", JSON.stringify({
+                            title: textData.title,
+                            excerpt: textData.excerpt,
+                            contentHtml: textData.contentHtml
+                        }),
                         "--locale", loc,
                         "--output", outputPath
                     ];
