@@ -156,6 +156,11 @@ class Supervisor {
             this.log(`Cycle State: ${state.count}/5. Mode: ${cycleMode}`);
 
             const research = await Researcher.deepResearch(selectedNews.link, selectedNews.title);
+            if (!research.success) {
+                this.log('⚠️ Research failed or insufficient content. Skipping this trend.', { reason: research.reason });
+                this.isPipelineRunning = false;
+                return;
+            }
             const articleData = await withRetry(async () => AIBridge.generateArticle(selectedNews.title, "", research.rawText, cycleMode), { maxRetries: 3 });
 
             // Force categories based on Cycle Mode

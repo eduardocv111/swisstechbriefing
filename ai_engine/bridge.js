@@ -284,8 +284,23 @@ class AIBridge {
 
             console.log(`[AI Bridge] ✨ Step 4: Final JSON Polishing...`);
             let cleanResponse = await AIBridge.callLLM({
-                model: "llama3.1:8b", format: "json", system: "JSON converter.",
-                prompt: `Refactor into JSON. DRAFT: ${initialDraft}. FACTS: ${extractedFacts}. INSIGHT: ${expertComment}. SCHEMA: { "title": "...", "excerpt": "...", "contentHtml": "...", "expertQuote": "...", "keyFacts": [], "imagePrompts": { "hero": "...", "detail": "...", "context": "..." } }`
+                model: "llama3.1:8b",
+                format: "json",
+                system: "You are a professional JSON Schema Architect. Your task is to refactor the provided article draft into a valid JSON object without losing ANY of the technical depth, original styling (bolding, etc.), or content length. DO NOT summarize or truncate.",
+                prompt: `Convert the following article components into a STRICT JSON object. 
+RETAIN ALL TEXT VOLUME in 'contentHtml'. 
+DRAFT CONTENT: ${initialDraft}
+EXTRACTED FACTS: ${extractedFacts}
+EXPERT INSIGHT: ${expertComment}
+
+SCHEMA: { 
+  "title": "...", 
+  "excerpt": "...", 
+  "contentHtml": "...", 
+  "expertQuote": "...", 
+  "keyFacts": [], 
+  "imagePrompts": { "hero": "...", "detail": "...", "context": "..." } 
+}`
             });
 
             if (cleanResponse.includes("```")) cleanResponse = cleanResponse.replace(/```[a-z]*\n?/, "").replace(/\n?```/g, "");
