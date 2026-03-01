@@ -17,6 +17,7 @@ class AIBridge {
     static sanitizePrompt(p) {
         if (!p) return "";
         return String(p)
+            .replace(/<[^>]*>/g, "") // Strip HTML tags
             .replace(/^Here is the refined image prompt:\s*/i, "")
             .replace(/^"+|"+$/g, "")
             .trim();

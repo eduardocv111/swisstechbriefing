@@ -4,6 +4,7 @@ import sys
 import json
 import torch
 import time
+import gc
 from diffusers import FluxPipeline
 
 # Fix for Windows console UnicodeEncodeError
@@ -37,6 +38,8 @@ print(f"----------------------------------------")
 
 def sanitize_prompt(p: str) -> str:
     p = (p or "").strip()
+    # Remove HTML tags if present
+    p = re.sub(r"<[^>]*>", "", p)
     # Remove metadata/instructions that confuse the model
     p = re.sub(r"^Here is the refined image prompt:\s*", "", p, flags=re.I)
     p = re.sub(r"\*\*Hero Image for.*?\*\*", "", p, flags=re.I | re.S)
@@ -145,20 +148,27 @@ def generate_one(pipe: FluxPipeline, device: str, prompt: str, output_path: str,
     gen = torch.Generator(device="cpu").manual_seed(seed) # CPU generator is safer for offloading
 
     start_t = time.time()
-    out = pipe(
-        prompt,
-        width=width,
-        height=height,
-        guidance_scale=0.0,
-        num_inference_steps=steps,
-        max_sequence_length=256,
-        generator=gen
-    )
+    with torch.inference_mode():
+        out = pipe(
+            prompt,
+            width=width,
+            height=height,
+            guidance_scale=0.0,
+            num_inference_steps=steps,
+            max_sequence_length=256,
+            generator=gen
+        )
     end_t = time.time()
 
     image = out.images[0]
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     image.save(output_path)
+    
+    # Cleanup memory after each generation
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+    gc.collect()
+    
     print(f"✅ Image saved to {output_path} (seed={seed}, time={end_t - start_t:.1f}s)")
 
 
