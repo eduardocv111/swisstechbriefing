@@ -114,53 +114,45 @@ class AIBridge {
      * imagePrompts = { hero: "...", detail: "...", context: "..." }
      */
     static async generateImagesBatch(imagePrompts, slug, loraPath = null) {
-        await AIBridge.acquireGPULock(`batch_imgs_${slug}`);
-        return new Promise((resolve, reject) => {
-            const pythonPath = path.join(__dirname, ".venv-flux", "Scripts", "python.exe");
-            const scriptPath = path.join(__dirname, "generate_image.py");
-            const outputDir = path.join(__dirname, "..", "public", "assets", "images", "news");
+        const outputDir = path.join(__dirname, "..", "public", "assets", "images", "news");
+        const jobs = [
+            { key: "hero", filename: `stb_${slug}_hero.png`, prompt: imagePrompts?.hero },
+            { key: "detail", filename: `stb_${slug}_detail.png`, prompt: imagePrompts?.detail },
+            { key: "context", filename: `stb_${slug}_context.png`, prompt: imagePrompts?.context },
+        ].filter((j) => j.prompt);
 
-            const jobs = [
-                { key: "hero", filename: `stb_${slug}_hero.png`, prompt: AIBridge.sanitizePrompt(imagePrompts?.hero), width: 1024, height: 576 },
-                { key: "detail", filename: `stb_${slug}_detail.png`, prompt: AIBridge.sanitizePrompt(imagePrompts?.detail), width: 1024, height: 576 },
-                { key: "context", filename: `stb_${slug}_context.png`, prompt: AIBridge.sanitizePrompt(imagePrompts?.context), width: 1024, height: 576 },
-            ].filter((j) => j.prompt && j.prompt.length > 0);
+        const results = {};
+        for (const job of jobs) {
+            await AIBridge.acquireGPULock(`img_${slug}_${job.key}`);
+            try {
+                const pythonPath = path.join(__dirname, ".venv-flux", "Scripts", "python.exe");
+                const scriptPath = path.join(__dirname, "generate_image.py");
+                const outPath = path.join(outputDir, job.filename);
+                const cleanPrompt = AIBridge.sanitizePrompt(job.prompt);
 
-            if (!jobs.length) {
+                console.log(`[AI Bridge] Generating ${job.key} for ${slug}...`);
+
+                await new Promise((resolve) => {
+                    const args = [scriptPath, cleanPrompt, outPath];
+                    if (loraPath) args.push(loraPath);
+
+                    const py = spawn(pythonPath, args);
+                    py.on("close", (code) => {
+                        if (code === 0 || fs.existsSync(outPath)) {
+                            results[job.key] = `/assets/images/news/${job.filename}`;
+                        } else {
+                            console.error(`[AI Bridge] ❌ Failed ${job.key} (Code ${code})`);
+                        }
+                        resolve();
+                    });
+                });
+            } catch (err) {
+                console.error(`[AI Bridge] ⚠️ Error ${job.key}: ${err.message}`);
+            } finally {
                 AIBridge.releaseGPULock();
-                return resolve({});
             }
-
-            console.log(`[AI Bridge] Starting BATCH image generation for slug=${slug}`);
-
-            const args = [scriptPath, "--batch", outputDir];
-            if (loraPath) args.push(loraPath);
-
-            const pyProcess = spawn(pythonPath, args, { stdio: ["pipe", "pipe", "pipe"] });
-
-            const killTimer = setTimeout(() => {
-                console.error(`[AI Bridge] 🛑 BATCH TIMEOUT killing: ${slug}`);
-                pyProcess.kill('SIGKILL');
-            }, 2700000); // 45 min for batch (3 images)
-
-            pyProcess.stdout.on("data", (data) => console.log(`[Python] ${data.toString().trim()}`));
-            pyProcess.stderr.on("data", (data) => console.error(`[Python Error] ${data.toString().trim()}`));
-
-            pyProcess.on("close", (code) => {
-                clearTimeout(killTimer);
-                AIBridge.releaseGPULock();
-                if (code === 0) {
-                    const out = {};
-                    for (const j of jobs) out[j.key] = `/assets/images/news/${j.filename}`;
-                    resolve(out);
-                } else {
-                    reject(new Error(`Python process exited with code ${code}`));
-                }
-            });
-
-            pyProcess.stdin.write(JSON.stringify({ jobs }));
-            pyProcess.stdin.end();
-        });
+        }
+        return results;
     }
 
     /**
