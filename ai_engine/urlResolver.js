@@ -6,12 +6,14 @@ const BLOCKED_HOSTS = new Set([
     "accounts.google.com", "google-analytics.com", "googletagmanager.com",
     "doubleclick.net", "gstatic.com", "www.gstatic.com", "googleusercontent.com",
     "w3.org", "www.w3.org", "schema.org", "www.schema.org", "facebook.com", "twitter.com",
-    "linkedin.com", "instagram.com", "apple.com", "microsoft.com", "adobe.com"
+    "linkedin.com", "instagram.com", "apple.com", "microsoft.com", "adobe.com",
+    "angular.dev", "react.dev", "vuejs.org", "github.com", "npmjs.com", "stackoverflow.com", "wikipedia.org", "w3schools.com"
 ]);
 
 const ASSET_EXT_RE = /\.(js|css|png|jpg|jpeg|webp|svg|gif|ico|map|xml|json|txt|pdf|woff|woff2|ttf|eot|mp4|webm|mp3|zip|gz)(\?|#|$)/i;
 const TRACKING_HINT_RE = /(analytics|gtm|collect|tagmanager|doubleclick|pixel|adservice|ads|tracking|count|log)/i;
 const NAMESPACE_RE = /(2000\/svg|ns\.adobe\.com|w3\.org\/1999|purl\.org)/i;
+const JUNK_PATH_RE = /\/(license|privacy|terms|cookie|about|contact|search|login|signup|auth|legal|impressum|datenschutz|docs)/i;
 
 function safeURL(u) {
     try { return new URL(u); } catch { return null; }
@@ -32,6 +34,7 @@ function isPublisherLike(urlStr) {
     if (ASSET_EXT_RE.test(urlStr)) return false;
     if (TRACKING_HINT_RE.test(urlStr)) return false;
     if (NAMESPACE_RE.test(urlStr)) return false;
+    if (JUNK_PATH_RE.test(u.pathname)) return false;
 
     // Relaxed length for short news URLs (e.g. news.ch/123)
     if (u.pathname.length < 2) return false;
