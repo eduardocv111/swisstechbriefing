@@ -32,6 +32,7 @@ ai_engine/*
 !ai_engine/*.py
 !ai_engine/supervisor/
 !ai_engine/models/
+!ai_engine/web_research/
 ai_engine/models/*
 !ai_engine/models/podcast_engine/
 ai_engine/.venv-flux/

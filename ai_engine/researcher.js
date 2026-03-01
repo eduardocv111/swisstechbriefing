@@ -2,6 +2,7 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const Parser = require('rss-parser');
 const { resolveGoogleNewsToPublisher } = require('./urlResolver');
+const { researchFromTitle } = require('./web_research');
 
 const parser = new Parser();
 
@@ -88,6 +89,26 @@ class Researcher {
     async deepResearch(mainUrl, topic = "") {
         console.log(`[Researcher] 🛡️ Starting Elite Multi-Source Investigation...`);
         const searchTopic = topic || "Swiss Tech News";
+
+        // --- NEW: GOOGLE CSE ELITE TIER ---
+        if (process.env.GOOGLE_CSE_API_KEY && process.env.GOOGLE_CSE_ID) {
+            try {
+                console.log(`[Researcher] 🚀 Pivoting to Elite Web Search (Google CSE)...`);
+                const cseResult = await researchFromTitle(searchTopic);
+                if (cseResult.ok && cseResult.bundleText.length > 1200) {
+                    return {
+                        rawText: cseResult.bundleText,
+                        sourceUrl: cseResult.sources[0] || mainUrl,
+                        success: true,
+                        sourceCount: cseResult.stats.sourcesExtracted
+                    };
+                }
+                console.warn(`[Researcher] ⚠️ Elite Search insufficient (${cseResult.reason}). Falling back to RSS/Scrape...`);
+            } catch (e) {
+                console.error(`[Researcher] ❌ Elite Search Error: ${e.message}`);
+            }
+        }
+
         const results = [];
         let finalMainUrl = mainUrl;
 
